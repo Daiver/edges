@@ -1,0 +1,1 @@
+/usr/bin/clang++   -Wall --std=c++11    CMakeFiles/bin/main.dir/main.cpp.o CMakeFiles/bin/main.dir/decisiontree.cpp.o CMakeFiles/bin/main.dir/treenode.cpp.o CMakeFiles/bin/main.dir/randomforest.cpp.o  -o bin/main -rdynamic 

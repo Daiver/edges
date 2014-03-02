@@ -1,0 +1,1 @@
+/usr/bin/clang++   -Wall --std=c++11    CMakeFiles/bin/wine.dir/wine.cpp.o CMakeFiles/bin/wine.dir/decisiontree.cpp.o CMakeFiles/bin/wine.dir/treenode.cpp.o CMakeFiles/bin/wine.dir/randomforest.cpp.o  -o bin/wine -rdynamic 

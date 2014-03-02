@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/daiver/coding/jff/sfd/common.h
+iostream
+-
+
+/home/daiver/coding/jff/sfd/decisiontree.cpp
+decisiontree.h
+/home/daiver/coding/jff/sfd/decisiontree.h
+stdio.h
+-
+string.h
+-
+vector
+-
+unordered_set
+-
+common.h
+/home/daiver/coding/jff/sfd/common.h
+
+/home/daiver/coding/jff/sfd/decisiontree.h
+dtreetypedefs.h
+/home/daiver/coding/jff/sfd/dtreetypedefs.h
+vector
+-
+unordered_set
+-
+treenode.h
+/home/daiver/coding/jff/sfd/treenode.h
+
+/home/daiver/coding/jff/sfd/dtreetypedefs.h
+vector
+-
+
+/home/daiver/coding/jff/sfd/treenode.h
+dtreetypedefs.h
+/home/daiver/coding/jff/sfd/dtreetypedefs.h
+stdio.h
+-
+

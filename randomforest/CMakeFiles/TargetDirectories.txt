@@ -1,0 +1,3 @@
+/home/daiver/coding/jff/sfd/CMakeFiles/bin/main.dir
+/home/daiver/coding/jff/sfd/CMakeFiles/bin/spam.dir
+/home/daiver/coding/jff/sfd/CMakeFiles/bin/wine.dir

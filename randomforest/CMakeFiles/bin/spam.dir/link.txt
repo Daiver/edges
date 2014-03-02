@@ -1,0 +1,1 @@
+/usr/bin/clang++   -Wall --std=c++11    CMakeFiles/bin/spam.dir/spam.cpp.o CMakeFiles/bin/spam.dir/decisiontree.cpp.o CMakeFiles/bin/spam.dir/treenode.cpp.o CMakeFiles/bin/spam.dir/randomforest.cpp.o  -o bin/spam -rdynamic 
