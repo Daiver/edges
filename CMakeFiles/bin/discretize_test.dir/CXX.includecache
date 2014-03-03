@@ -13,4 +13,14 @@ opencv2/core/core.hpp
 -
 opencv2/highgui/highgui.hpp
 -
+iostream
+-
+fstream
+-
+sstream
+-
+vector
+-
+string
+-
 

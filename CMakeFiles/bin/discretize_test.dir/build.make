@@ -53,15 +53,15 @@ CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: CMakeFiles/bin/discret
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: discretize_test.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o -c /home/daiver/coding/edges/discretize_test.cpp
+	/usr/bin/clang++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o -c /home/daiver/coding/edges/discretize_test.cpp
 
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/daiver/coding/edges/discretize_test.cpp > CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.i
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/daiver/coding/edges/discretize_test.cpp > CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.i
 
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/daiver/coding/edges/discretize_test.cpp -o CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/daiver/coding/edges/discretize_test.cpp -o CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s
 
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o.requires:
 .PHONY : CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o.requires
