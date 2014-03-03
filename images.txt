@@ -1,0 +1,3 @@
+/home/daiver/BSR/BSDS500/data/groundImages/train/100075.mat_1.png
+/home/daiver/BSR/BSDS500/data/groundImages/train/376020.mat_5.png
+/home/daiver/BSR/BSDS500/data/groundImages/train/97017.mat_6.png

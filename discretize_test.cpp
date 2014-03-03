@@ -7,14 +7,20 @@
 #include <vector>
 #include <string>
 
-void read_imgList(const std::string& filename, std::vector<cv::Mat>& images) {
+void read_imgList(const std::string& filename, std::vector<cv::Mat>* images) {
     std::ifstream file(filename.c_str(), std::ifstream::in);
     std::string line;
     while (std::getline(file, line)) {
-        images.push_back(cv::imread(line, 0));
+        images->push_back(cv::imread(line, 0));
     }
 }
 
 int main(){
+    std::vector<cv::Mat> images;
+    read_imgList("images.txt", &images);
+    for(auto& img : images){
+        cv::imshow("", img);
+        cv::waitKey();
+    }
     return 0;
 }
