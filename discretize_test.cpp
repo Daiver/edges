@@ -17,12 +17,12 @@ void read_imgList(const std::string& filename, std::vector<cv::Mat>* images) {
 
 void cutPatchesFromImage(cv::Mat img, std::vector<cv::Mat>* patches){
     int w = 16;
-    for (int i = 0; i < img.rows; i+=100){
-        for (int j = 0; j < img.cols; j+=100){
+    for (int i = 0; i < img.rows; i+=200){
+        for (int j = 0; j < img.cols; j+=200){
             cv::Mat tileCopy = img(cv::Range(i, std::min(i + w, img.rows)),
                  cv::Range(j, std::min(j + w, img.cols))).clone();
             if (tileCopy.rows != w || tileCopy.cols != w) continue;
-                patches->push_back(tileCopy);
+            patches->push_back(tileCopy);
         }
     }
 }
@@ -39,12 +39,28 @@ void selectFeaturesFromPatches(std::vector<cv::Mat>& images){
     for(int i = 0; i < 256; i++){
         indxs.push_back((int)(rand() % (256*256)));
     }
-    std::vector<std::vector<int>> zs(images.size());
+    std::vector<std::vector<double>> zs(images.size());
     for(int i = 0; i < images.size(); i++){
         for(int j = 0; j < 256; j++){
             zs[i].push_back(images[i].data[indxs[j]/256] == images[i].data[indxs[j]%256]);
-            printf("%d %d %d\n", zs[i][j], images[i].data[indxs[j]/256], images[i].data[indxs[j]%256]);
+            //printf("%d %d %d\n", zs[i][j], 
+            //        images[i].data[indxs[j] / 256], 
+            //        images[i].data[indxs[j] % 256]);
         }
+    }
+    for(int j = 0; j < 256; j++){
+        int sum = 0;
+        for(int i = 0; i < images.size(); i++){
+            sum += zs[i][j];
+            printf("%0.2f ", zs[i][j]);
+        }
+        printf("\n");
+        double norm_cnst = (double)sum/images.size();
+        for(int i = 0; i < images.size(); i++){
+            zs[i][j] -= norm_cnst;
+            printf("%0.2f ", zs[i][j]);
+        }
+        printf("\n");
     }
     //for(auto &i : indxs){
     //    printf("%d %d %d\n", i, i / 256, i % 256);
@@ -63,6 +79,7 @@ int main(){
             //cv::waitKey();
         //}
     }
+    printf("%d \n", patches.size());
     selectFeaturesFromPatches(patches);
     return 0;
 }
