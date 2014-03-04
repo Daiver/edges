@@ -67,7 +67,7 @@ int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs
         }
     }
 
-    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.89);
+    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.72);
     printf("PCA # %d\n", pca.eigenvectors.rows);
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
     for(int i = 0; i < images.size(); i++){
@@ -75,21 +75,21 @@ int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs
         for(int j = 0; j < pca.eigenvectors.rows; j++){
             zs2.at<float>(i, j) = res.at<float>(0,j);
         }
-        double mean = cv::mean(images[i])[0];
+        /*double mean = cv::mean(images[i])[0];
         double mean2 = cv::mean(zs.row(i))[0];
         double mean3 = cv::mean(zs2.row(i))[0];
         printf("+ %f %f %f\n", mean/images[i].at<uchar>(0,0), mean2, mean3);
         for(int j = 0; j < 10; j++){
             printf("%f ", zs.at<float>(i, j));
         }
-        printf("\n");
+        printf("\n");*/
         //printf("%d>", i);
         //for(int j = 0; j < zs2.row(i).cols; j++){
         //    printf("%f ", zs2.at<float>(i, j));
         //}
         //printf("\n");
     }
-    int boundary = std::min(pca.eigenvectors.rows, 10);
+    int boundary = std::min(pca.eigenvectors.rows, 5);
     std::vector<int> hs2(images.size(), 0);
     for(int i = 0; i < images.size(); i++){
         //for(int j = 0; j < pca.eigenvectors.rows; j++){

@@ -21,10 +21,10 @@ int main(){
         int counter = 0;
         for(int j = 0; j < hs.size(); j++){
             if (i != hs[j]) continue;
-            if (counter > 40) continue;
+            if (counter > 50) continue;
             char name[100];
             sprintf(name, "a %d", j);
-            int sum = 0;
+            /*int sum = 0;
             float disp = 0;
             for(int r = 0; r < patches[j].rows; r++){
                 for(int c = 0; c < patches[j].cols; c++){
@@ -36,7 +36,8 @@ int main(){
                     disp += pow(patches[j].at<uchar>(r,c) - ((float)sum/(256)), 2);
                 }
             }
-            printf("%d %d %f\n", j, sum, disp/(16*16));
+            //printf("%d %d %f\n", j, sum, disp/(16*16));
+            */
             cv::Mat tmp2;
             cv::normalize(patches[j], tmp2, 0, 255, cv::NORM_MINMAX, CV_8UC1);
             cv::pyrUp(tmp2, tmp2);
