@@ -17,8 +17,8 @@ void read_imgList(const std::string& filename, std::vector<cv::Mat>* images) {
 
 void cutPatchesFromImage(cv::Mat img, std::vector<cv::Mat>* patches){
     int w = 16;
-    for (int i = 0; i < img.rows; i+=200){
-        for (int j = 0; j < img.cols; j+=200){
+    for (int i = 0; i < img.rows; i+=20){
+        for (int j = 0; j < img.cols; j+=20){
             cv::Mat tileCopy = img(cv::Range(i, std::min(i + w, img.rows)),
                  cv::Range(j, std::min(j + w, img.cols))).clone();
             if (tileCopy.rows != w || tileCopy.cols != w) continue;
@@ -39,29 +39,35 @@ void selectFeaturesFromPatches(std::vector<cv::Mat>& images){
     for(int i = 0; i < 256; i++){
         indxs.push_back((int)(rand() % (256*256)));
     }
-    std::vector<std::vector<double>> zs(images.size());
+    //std::vector<std::vector<double>> zs(images.size());
+    cv::Mat zs(images.size(), 256, CV_32F);
     for(int i = 0; i < images.size(); i++){
         for(int j = 0; j < 256; j++){
-            zs[i].push_back(images[i].data[indxs[j]/256] == images[i].data[indxs[j]%256]);
+            zs.at<float>(i, j) = images[i].data[indxs[j]/256] == images[i].data[indxs[j]%256];
+            //zs[i].push_back(images[i].data[indxs[j]/256] == images[i].data[indxs[j]%256]);
             //printf("%d %d %d\n", zs[i][j], 
             //        images[i].data[indxs[j] / 256], 
             //        images[i].data[indxs[j] % 256]);
         }
     }
     for(int j = 0; j < 256; j++){
-        int sum = 0;
+        float sum = 0;
         for(int i = 0; i < images.size(); i++){
-            sum += zs[i][j];
-            printf("%0.2f ", zs[i][j]);
+            sum += zs.at<float>(i, j);
+            //sum += zs[i][j];
+            //printf("%0.2f ", zs.at<float>(i, j));
         }
-        printf("\n");
-        double norm_cnst = (double)sum/images.size();
+        //printf("\n");
+        float norm_cnst = (float)sum/images.size();
         for(int i = 0; i < images.size(); i++){
-            zs[i][j] -= norm_cnst;
-            printf("%0.2f ", zs[i][j]);
+            //zs[i][j] -= norm_cnst;
+            zs.at<float>(i, j) -= norm_cnst;
+            //printf("%0.2f ", zs.at<float>(i, j));
         }
-        printf("\n");
+        //printf("\n");
     }
+    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.71);
+    printf("PCA # %d\n", pca.eigenvectors.rows);
     //for(auto &i : indxs){
     //    printf("%d %d %d\n", i, i / 256, i % 256);
     //} 
