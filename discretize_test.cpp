@@ -66,8 +66,26 @@ void selectFeaturesFromPatches(std::vector<cv::Mat>& images){
         }
         //printf("\n");
     }
-    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.71);
+    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.81);
     printf("PCA # %d\n", pca.eigenvectors.rows);
+    cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
+    for(int i = 0; i < images.size(); i++){
+        zs2.row(i) = pca.project(zs.row(i));
+        for(int j = 0; j < pca.eigenvectors.rows; j++){
+            printf("%f ", zs2.at<float>(i, j));
+        }
+        printf("\n\n");
+    }
+
+    std::vector<long> hs(images.size(), 0);
+    for(int i = 0; i < images.size(); i++){
+        //for(int j = 0; j < pca.eigenvectors.rows; j++){
+        for(int j = 0; j < 5; j++){
+            hs[i] += (zs2.at<float>(i, j) < 0) * pow(2, j - 1);
+        }
+        printf("%d\n", hs[i]);
+    }
+    
     //for(auto &i : indxs){
     //    printf("%d %d %d\n", i, i / 256, i % 256);
     //} 
