@@ -72,14 +72,64 @@ CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o.provides: CMakeFiles/bi
 
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o.provides.build: CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o
 
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.o: CMakeFiles/bin/discretize_test.dir/flags.make
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.o: discretize.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles $(CMAKE_PROGRESS_2)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/bin/discretize_test.dir/discretize.cpp.o"
+	/usr/bin/clang++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/bin/discretize_test.dir/discretize.cpp.o -c /home/daiver/coding/edges/discretize.cpp
+
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bin/discretize_test.dir/discretize.cpp.i"
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/daiver/coding/edges/discretize.cpp > CMakeFiles/bin/discretize_test.dir/discretize.cpp.i
+
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bin/discretize_test.dir/discretize.cpp.s"
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/daiver/coding/edges/discretize.cpp -o CMakeFiles/bin/discretize_test.dir/discretize.cpp.s
+
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.requires:
+.PHONY : CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.requires
+
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.provides: CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.requires
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.provides.build
+.PHONY : CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.provides
+
+CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.provides.build: CMakeFiles/bin/discretize_test.dir/discretize.cpp.o
+
+CMakeFiles/bin/discretize_test.dir/common.cpp.o: CMakeFiles/bin/discretize_test.dir/flags.make
+CMakeFiles/bin/discretize_test.dir/common.cpp.o: common.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles $(CMAKE_PROGRESS_3)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/bin/discretize_test.dir/common.cpp.o"
+	/usr/bin/clang++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/bin/discretize_test.dir/common.cpp.o -c /home/daiver/coding/edges/common.cpp
+
+CMakeFiles/bin/discretize_test.dir/common.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bin/discretize_test.dir/common.cpp.i"
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/daiver/coding/edges/common.cpp > CMakeFiles/bin/discretize_test.dir/common.cpp.i
+
+CMakeFiles/bin/discretize_test.dir/common.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bin/discretize_test.dir/common.cpp.s"
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/daiver/coding/edges/common.cpp -o CMakeFiles/bin/discretize_test.dir/common.cpp.s
+
+CMakeFiles/bin/discretize_test.dir/common.cpp.o.requires:
+.PHONY : CMakeFiles/bin/discretize_test.dir/common.cpp.o.requires
+
+CMakeFiles/bin/discretize_test.dir/common.cpp.o.provides: CMakeFiles/bin/discretize_test.dir/common.cpp.o.requires
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.o.provides.build
+.PHONY : CMakeFiles/bin/discretize_test.dir/common.cpp.o.provides
+
+CMakeFiles/bin/discretize_test.dir/common.cpp.o.provides.build: CMakeFiles/bin/discretize_test.dir/common.cpp.o
+
 # Object files for target bin/discretize_test
 bin/discretize_test_OBJECTS = \
-"CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o"
+"CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o" \
+"CMakeFiles/bin/discretize_test.dir/discretize.cpp.o" \
+"CMakeFiles/bin/discretize_test.dir/common.cpp.o"
 
 # External object files for target bin/discretize_test
 bin/discretize_test_EXTERNAL_OBJECTS =
 
 bin/discretize_test: CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o
+bin/discretize_test: CMakeFiles/bin/discretize_test.dir/discretize.cpp.o
+bin/discretize_test: CMakeFiles/bin/discretize_test.dir/common.cpp.o
 bin/discretize_test: CMakeFiles/bin/discretize_test.dir/build.make
 bin/discretize_test: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.2.4.8
 bin/discretize_test: /usr/lib/x86_64-linux-gnu/libopencv_video.so.2.4.8
@@ -119,6 +169,8 @@ CMakeFiles/bin/discretize_test.dir/build: bin/discretize_test
 .PHONY : CMakeFiles/bin/discretize_test.dir/build
 
 CMakeFiles/bin/discretize_test.dir/requires: CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o.requires
+CMakeFiles/bin/discretize_test.dir/requires: CMakeFiles/bin/discretize_test.dir/discretize.cpp.o.requires
+CMakeFiles/bin/discretize_test.dir/requires: CMakeFiles/bin/discretize_test.dir/common.cpp.o.requires
 .PHONY : CMakeFiles/bin/discretize_test.dir/requires
 
 CMakeFiles/bin/discretize_test.dir/clean:

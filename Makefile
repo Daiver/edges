@@ -111,6 +111,54 @@ bin/discretize_test/fast:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/build
 .PHONY : bin/discretize_test/fast
 
+common.o: common.cpp.o
+.PHONY : common.o
+
+# target to build an object file
+common.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.o
+.PHONY : common.cpp.o
+
+common.i: common.cpp.i
+.PHONY : common.i
+
+# target to preprocess a source file
+common.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.i
+.PHONY : common.cpp.i
+
+common.s: common.cpp.s
+.PHONY : common.s
+
+# target to generate assembly for a file
+common.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.s
+.PHONY : common.cpp.s
+
+discretize.o: discretize.cpp.o
+.PHONY : discretize.o
+
+# target to build an object file
+discretize.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.o
+.PHONY : discretize.cpp.o
+
+discretize.i: discretize.cpp.i
+.PHONY : discretize.i
+
+# target to preprocess a source file
+discretize.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.i
+.PHONY : discretize.cpp.i
+
+discretize.s: discretize.cpp.s
+.PHONY : discretize.s
+
+# target to generate assembly for a file
+discretize.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.s
+.PHONY : discretize.cpp.s
+
 discretize_test.o: discretize_test.cpp.o
 .PHONY : discretize_test.o
 
@@ -144,6 +192,12 @@ help:
 	@echo "... bin/discretize_test"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... common.o"
+	@echo "... common.i"
+	@echo "... common.s"
+	@echo "... discretize.o"
+	@echo "... discretize.i"
+	@echo "... discretize.s"
 	@echo "... discretize_test.o"
 	@echo "... discretize_test.i"
 	@echo "... discretize_test.s"

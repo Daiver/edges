@@ -6,6 +6,46 @@
 
 #IncludeRegexTransform: 
 
+/home/daiver/coding/edges/common.cpp
+common.h
+/home/daiver/coding/edges/common.h
+
+/home/daiver/coding/edges/common.h
+stdio.h
+-
+string.h
+-
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+iostream
+-
+fstream
+-
+sstream
+-
+vector
+-
+string
+-
+
+/home/daiver/coding/edges/discretize.h
+stdio.h
+-
+string.h
+-
+vector
+-
+opencv2/core/core.hpp
+-
+opencv2/highgui/highgui.hpp
+-
+opencv2/imgproc/imgproc.hpp
+-
+
 /home/daiver/coding/edges/discretize_test.cpp
 stdio.h
 -
@@ -27,4 +67,8 @@ vector
 -
 string
 -
+discretize.h
+/home/daiver/coding/edges/discretize.h
+common.h
+/home/daiver/coding/edges/common.h
 
