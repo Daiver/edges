@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -34,7 +36,7 @@ void cutPatchesFromImage(cv::Mat img, std::vector<cv::Mat>* patches){
     return indxs;
 }*/
 
-void selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs){
+int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs){
     std::vector<int> indxs;
     for(int i = 0; i < 256; i++){
         indxs.push_back((int)(rand() % (256*256)));
@@ -66,7 +68,7 @@ void selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *h
         }
         //printf("\n");
     }
-    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.81);
+    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.85);
     printf("PCA # %d\n", pca.eigenvectors.rows);
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
     for(int i = 0; i < images.size(); i++){
@@ -78,15 +80,30 @@ void selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *h
     }
 
     //std::vector<long> hs(images.size(), 0);
-    int boundary = std::min(pca.eigenvectors.rows, 8);
+    int boundary = std::min(pca.eigenvectors.rows, 10);
+    std::vector<int> hs2(images.size(), 0);
     for(int i = 0; i < images.size(); i++){
         //for(int j = 0; j < pca.eigenvectors.rows; j++){
         for(int j = 0; j < boundary; j++){
-            hs->at(i) += (zs2.at<float>(i, j) < 0) * pow(2, j);
+            hs2.at(i) += (zs2.at<float>(i, j) < 0) * pow(2, j);
         }
-        printf("%d\n", hs->at(i));
     }
-    
+    int hash_table_size = pow(2, boundary);
+    int *hash_table = new int[hash_table_size];
+    memset(hash_table, -1, sizeof(int) * hash_table_size);
+    int counter = 0;
+    for(auto x : hs2){
+        if (hash_table[x] == -1){
+            hash_table[x] = counter;
+            counter++;
+        }
+    }
+    for(int i = 0 ; i < hs2.size(); i++){
+        hs->at(i) = hash_table[hs2[i]];
+    }
+    printf("counter %d\n", counter);
+    delete [] hash_table;
+    return counter;
     //for(auto &i : indxs){
     //    printf("%d %d %d\n", i, i / 256, i % 256);
     //} 
@@ -104,20 +121,31 @@ int main(){
             //cv::waitKey();
         //}
     }
-    printf("%d \n", patches.size());
+    printf("%zu \n", patches.size());
     std::vector<int> hs(patches.size(), 0);
-    selectFeaturesFromPatches(patches, &hs);
-    for(int i = 0; i < hs.size(); i++){
+    int num_of_classes = selectFeaturesFromPatches(patches, &hs);
+    for(int i = 0; i < num_of_classes; i++){
+        //if(hs[i] == 0) continue;
+        //cv::Mat tmp1;
+        //cv::pyrUp(patches[i]*5, tmp1);
+        //cv::pyrUp(tmp1, tmp1);
+        //cv::pyrUp(tmp1, tmp1);
+        //cv::imshow("o", tmp1);
         for(int j = 0; j < hs.size(); j++){
-            if (i == j || hs[i] != hs[j]) continue;
-            cv::imshow("o", patches[i]*10);
+            if (i != hs[j]) continue;
             char name[100];
-            sprintf(name, "a %d", j % 30);
-            cv::imshow(name, patches[j]*10);
-            printf(">%d\n", hs[i]);
+            sprintf(name, "a %d", j);
+            cv::Mat tmp2;
+            cv::normalize(patches[j], tmp2, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+            cv::pyrUp(tmp2, tmp2);
+            cv::pyrUp(tmp2, tmp2);
+            cv::normalize(tmp2, tmp2, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+            cv::imshow(name, tmp2);
+            printf(">%d\n", i);
         }
         printf("\n");
         cv::waitKey();
+
         cv::destroyAllWindows();
     }
     return 0;
