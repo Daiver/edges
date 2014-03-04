@@ -34,7 +34,7 @@ void cutPatchesFromImage(cv::Mat img, std::vector<cv::Mat>* patches){
     return indxs;
 }*/
 
-void selectFeaturesFromPatches(std::vector<cv::Mat>& images){
+void selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs){
     std::vector<int> indxs;
     for(int i = 0; i < 256; i++){
         indxs.push_back((int)(rand() % (256*256)));
@@ -71,19 +71,20 @@ void selectFeaturesFromPatches(std::vector<cv::Mat>& images){
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
     for(int i = 0; i < images.size(); i++){
         zs2.row(i) = pca.project(zs.row(i));
-        for(int j = 0; j < pca.eigenvectors.rows; j++){
-            printf("%f ", zs2.at<float>(i, j));
-        }
-        printf("\n\n");
+        //for(int j = 0; j < pca.eigenvectors.rows; j++){
+        //    //printf("%f ", zs2.at<float>(i, j));
+        //}
+        //printf("\n\n");
     }
 
-    std::vector<long> hs(images.size(), 0);
+    //std::vector<long> hs(images.size(), 0);
+    int boundary = std::min(pca.eigenvectors.rows, 8);
     for(int i = 0; i < images.size(); i++){
         //for(int j = 0; j < pca.eigenvectors.rows; j++){
-        for(int j = 0; j < 5; j++){
-            hs[i] += (zs2.at<float>(i, j) < 0) * pow(2, j - 1);
+        for(int j = 0; j < boundary; j++){
+            hs->at(i) += (zs2.at<float>(i, j) < 0) * pow(2, j);
         }
-        printf("%d\n", hs[i]);
+        printf("%d\n", hs->at(i));
     }
     
     //for(auto &i : indxs){
@@ -104,7 +105,21 @@ int main(){
         //}
     }
     printf("%d \n", patches.size());
-    selectFeaturesFromPatches(patches);
+    std::vector<int> hs(patches.size(), 0);
+    selectFeaturesFromPatches(patches, &hs);
+    for(int i = 0; i < hs.size(); i++){
+        for(int j = 0; j < hs.size(); j++){
+            if (i == j || hs[i] != hs[j]) continue;
+            cv::imshow("o", patches[i]*10);
+            char name[100];
+            sprintf(name, "a %d", j % 30);
+            cv::imshow(name, patches[j]*10);
+            printf(">%d\n", hs[i]);
+        }
+        printf("\n");
+        cv::waitKey();
+        cv::destroyAllWindows();
+    }
     return 0;
 }
         /*for(int i = 0 ; i < img.rows; i++){
