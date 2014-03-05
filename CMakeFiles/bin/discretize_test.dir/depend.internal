@@ -7,6 +7,7 @@ CMakeFiles/bin/discretize_test.dir/common.cpp.o
 CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o
  /home/daiver/coding/edges/decisiontree.cpp
  /home/daiver/coding/edges/decisiontree.h
+ /home/daiver/coding/edges/discretize.h
  /home/daiver/coding/edges/dtreetypedefs.h
  /home/daiver/coding/edges/treenode.h
 CMakeFiles/bin/discretize_test.dir/discretize.cpp.o

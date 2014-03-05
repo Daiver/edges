@@ -1,6 +1,6 @@
 #include "discretize.h"
 
-void selectFeaturesFromPatches(std::vector<cv::Mat>& images, 
+void selectFeaturesFromPatches(std::vector<cv::Mat> images, 
         std::vector<int> *hs, int *num_of_classes, int *seg_idx){
     std::vector<int> indxs;
     for(int i = 0; i < 256; i++){

@@ -1,25 +1,25 @@
 #include "decisiontree.h"
 
-#include<stdio.h>
+#include <stdio.h>
 
 #include <string.h>
 #include <vector>
 #include <unordered_set>
 
-void DecisionTree::train(std::vector<InputData> data, std::vector<OutputData> labels){
-    this->num_of_classes = getNumOfClasses(labels);
-    this->calcUniqValues(data);
-    this->head = buildnode(data, labels);
+void DecisionTree::train(std::vector<InputData> data, std::vector<cv::Mat> segments){
+    //this->num_of_classes = getNumOfClasses(labels);
+    //this->calcUniqValues(data);
+    //this->head = buildnode(data, labels);
 }
 
 int *DecisionTree::predict(InputData data){
     TreeNode *node = this->head;
     while(node->type != 2){
         TreeBranch *b = static_cast<TreeBranch*>(node);
-        if(data[b->col] >= b->value)
-            node = b->right;
-        else
-            node = b->left;
+        //if(data[b->col] >= b->value)
+        //    node = b->right;
+        //else
+        //    node = b->left;
     }
     return static_cast<TreeLeaf*>(node)->freqs;
 }
@@ -40,44 +40,58 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> &data){
 }
 
 void DecisionTree::divideSet(const std::vector<InputData> &data, const std::vector<OutputData> &labels,
+        std::vector<cv::Mat> &seg,
         int col, InputValue value, 
         std::vector<InputData> *s1, std::vector<InputData> *s2,
-        std::vector<OutputData> *l1, std::vector<OutputData> *l2){
+        std::vector<OutputData> *l1, std::vector<OutputData> *l2,
+        std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2){
     for(int i = 0; i < data.size(); i++){
         if (data[i][col] >= value){
             s1->push_back(data[i]);
             l1->push_back(labels[i]);
+            g1->push_back(seg[i]);
         }
         else{
             s2->push_back(data[i]);
             l2->push_back(labels[i]);
+            g2->push_back(seg[i]);
         }
     }
 }
 
-TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data, const  std::vector<OutputData> &labels){
-    double current_score = this->ginii(labels);
+TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data, 
+        std::vector<cv::Mat> segments){
+    int num_of_classes, seg_idx;
+    std::vector<int> labels(segments.size(), 0);
+    selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);
+
+    double current_score = this->ginii(labels, num_of_classes);
     printf("score %f %d\n", current_score, labels.size());
     double best_gain = 0.0;
     std::vector<InputData>  ms1, ms2;
-    std::vector<OutputData> ml1, ml2;
+    std::vector<cv::Mat> ml1, ml2;
     InputValue best_value;
     int best_col = -1;
 
     for(int col = 0; col < data[0].size(); col++){
         for(auto &val : this->uvalues[col]){
-            std::vector<InputData> s1, s2;
+            std::vector<InputData>  s1, s2;
             std::vector<OutputData> l1, l2;
-            this->divideSet(data, labels, col, val, &s1, &s2, &l1, &l2);
+            std::vector<cv::Mat>    g1, g2;
+            this->divideSet(data, labels, segments, col, val, 
+                    &s1, &s2, &l1, &l2, &g1, &g2);
             double p = (double(s1.size()))/data.size();
-            double gain = current_score - p*this->ginii(l1) - (1 - p) * this->ginii(l2);
+            double gain = current_score - 
+                p*this->ginii(l1, num_of_classes) - 
+                (1 - p) * this->ginii(l2, num_of_classes);
             //printf("gain %f %d %d %d %d\n", gain, s1.size(), s2.size(), col, val);
             if (gain > best_gain &&
                     l1.size() > 0 && l2.size() > 0){
                 best_value = val;
                 best_gain = gain;
                 best_col = col;
-                ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
+                ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
+                //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
             }
         }
     }
@@ -90,17 +104,17 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data, const  std
         return res;
     }
     TreeLeaf *res = new TreeLeaf();
-    res->freqs = this->getFreq(labels);
-    res->len = this->num_of_classes;
+    res->freqs = this->getFreq(labels, num_of_classes);
+    res->len = num_of_classes;
     return res;
 }
 
-double DecisionTree::ginii(const std::vector<OutputData> &labels){
-    int* freqs = this->getFreq(labels);
+double DecisionTree::ginii(const std::vector<OutputData> &labels, int num_of_classes){
+    int* freqs = this->getFreq(labels, num_of_classes);
     double imp = 0;
-    for(int i = 0; i < this->num_of_classes; i++){
+    for(int i = 0; i < num_of_classes; i++){
         double p1 = freqs[i]/(double)labels.size();
-        for(int j = 0; j < this->num_of_classes; j++){
+        for(int j = 0; j < num_of_classes; j++){
             if (i == j) continue;
             double p2 = freqs[j]/(double)labels.size();
             imp += p1*p2;
@@ -118,7 +132,7 @@ int DecisionTree::getNumOfClasses(std::vector<OutputData> labels){
     return max + 1;
 }
 
-int * DecisionTree::getFreq(std::vector<OutputData> labels){
+int * DecisionTree::getFreq(std::vector<OutputData> labels, int num_of_classes){
     int *res = new int[num_of_classes];
     memset(res, 0, sizeof(OutputData) * num_of_classes);
     for(int i = 0; i < labels.size(); i++){
