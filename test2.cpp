@@ -56,5 +56,28 @@ int main(){
     }
     DecisionTree tree;
     tree.train(data, gt_patches);
+    for(int i = 0; i < data.size(); i++){
+        cv::Mat tmp;
+        cv::pyrUp(img_patches[i], tmp);
+        cv::pyrUp(tmp, tmp);
+        cv::cvtColor(tmp, tmp, CV_Lab2BGR);
+        cv::imshow("1", tmp);
+        cv::Mat tmp2;
+        cv::normalize(gt_patches[i], tmp2, 0, 255, cv::NORM_MINMAX);
+        //cv::pyrUp(gt_patches[i], tmp);
+        cv::pyrUp(tmp2, tmp2);
+        cv::pyrUp(tmp2, tmp2);
+        cv::pyrUp(tmp2, tmp2);
+        cv::imshow("o2", tmp2);
+        std::vector<int> desc;
+        patchesToVec(gt_patches[i], &desc);
+        cv::Mat res = tree.predict(desc);
+        cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
+        cv::pyrUp(tmp2, tmp2);
+        cv::pyrUp(tmp2, tmp2);
+        cv::imshow("res", tmp2);
+        cv::waitKey();
+    }
+
     return 0;
 }

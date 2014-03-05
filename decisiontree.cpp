@@ -41,19 +41,24 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> &data){
     //std::vector<InputValue>* res = new std::vector[this->input_length];
 }
 
-void DecisionTree::divideSet(const std::vector<InputData> &data, const std::vector<OutputData> &labels,
+void DecisionTree::divideSet(
+        const std::vector<InputData> &data, 
+        const std::vector<OutputData> &labels,
         std::vector<cv::Mat> &seg,
         int col, InputValue value, 
         std::vector<InputData> *s1, std::vector<InputData> *s2,
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
-        std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2){
+        std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
+        std::vector<int> *i1, std::vector<int> *i2){
     for(int i = 0; i < data.size(); i++){
         if (data[i][col] >= value){
+            i1->push_back(i);
             s1->push_back(data[i]);
             l1->push_back(labels[i]);
             g1->push_back(seg[i]);
         }
         else{
+            i2->push_back(i);
             s2->push_back(data[i]);
             l2->push_back(labels[i]);
             g2->push_back(seg[i]);
@@ -82,8 +87,9 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
             std::vector<InputData>  s1, s2;
             std::vector<OutputData> l1, l2;
             std::vector<cv::Mat>    g1, g2;
+            std::vector<int>    i1, i2;
             this->divideSet(data, labels, segments, col, val, 
-                    &s1, &s2, &l1, &l2, &g1, &g2);
+                    &s1, &s2, &l1, &l2, &g1, &g2, &i1, &i2);
             double p = (double(s1.size()))/data.size();
             double gain = current_score - 
                 p*this->ginii(l1, num_of_classes) - 
@@ -110,7 +116,7 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
     TreeLeaf *res = new TreeLeaf();
     res->freqs = this->getFreq(labels, num_of_classes);
     res->len = num_of_classes;
-    res->patch = segments[seg_idx];
+    res->patch = segments[seg_idx].clone();
     return res;
 }
 
