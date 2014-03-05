@@ -135,6 +135,30 @@ common.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.s
 .PHONY : common.cpp.s
 
+decisiontree.o: decisiontree.cpp.o
+.PHONY : decisiontree.o
+
+# target to build an object file
+decisiontree.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o
+.PHONY : decisiontree.cpp.o
+
+decisiontree.i: decisiontree.cpp.i
+.PHONY : decisiontree.i
+
+# target to preprocess a source file
+decisiontree.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.i
+.PHONY : decisiontree.cpp.i
+
+decisiontree.s: decisiontree.cpp.s
+.PHONY : decisiontree.s
+
+# target to generate assembly for a file
+decisiontree.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.s
+.PHONY : decisiontree.cpp.s
+
 discretize.o: discretize.cpp.o
 .PHONY : discretize.o
 
@@ -183,6 +207,30 @@ discretize_test.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s
 .PHONY : discretize_test.cpp.s
 
+treenode.o: treenode.cpp.o
+.PHONY : treenode.o
+
+# target to build an object file
+treenode.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.o
+.PHONY : treenode.cpp.o
+
+treenode.i: treenode.cpp.i
+.PHONY : treenode.i
+
+# target to preprocess a source file
+treenode.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.i
+.PHONY : treenode.cpp.i
+
+treenode.s: treenode.cpp.s
+.PHONY : treenode.s
+
+# target to generate assembly for a file
+treenode.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.s
+.PHONY : treenode.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -195,12 +243,18 @@ help:
 	@echo "... common.o"
 	@echo "... common.i"
 	@echo "... common.s"
+	@echo "... decisiontree.o"
+	@echo "... decisiontree.i"
+	@echo "... decisiontree.s"
 	@echo "... discretize.o"
 	@echo "... discretize.i"
 	@echo "... discretize.s"
 	@echo "... discretize_test.o"
 	@echo "... discretize_test.i"
 	@echo "... discretize_test.s"
+	@echo "... treenode.o"
+	@echo "... treenode.i"
+	@echo "... treenode.s"
 .PHONY : help
 
 

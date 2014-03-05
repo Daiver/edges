@@ -4,10 +4,22 @@
 CMakeFiles/bin/discretize_test.dir/common.cpp.o
  /home/daiver/coding/edges/common.cpp
  /home/daiver/coding/edges/common.h
+CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o
+ /home/daiver/coding/edges/decisiontree.cpp
+ /home/daiver/coding/edges/decisiontree.h
+ /home/daiver/coding/edges/dtreetypedefs.h
+ /home/daiver/coding/edges/treenode.h
 CMakeFiles/bin/discretize_test.dir/discretize.cpp.o
  /home/daiver/coding/edges/discretize.cpp
  /home/daiver/coding/edges/discretize.h
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o
  /home/daiver/coding/edges/common.h
+ /home/daiver/coding/edges/decisiontree.h
  /home/daiver/coding/edges/discretize.h
  /home/daiver/coding/edges/discretize_test.cpp
+ /home/daiver/coding/edges/dtreetypedefs.h
+ /home/daiver/coding/edges/treenode.h
+CMakeFiles/bin/discretize_test.dir/treenode.cpp.o
+ /home/daiver/coding/edges/dtreetypedefs.h
+ /home/daiver/coding/edges/treenode.cpp
+ /home/daiver/coding/edges/treenode.h

@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/daiver/coding/edges
 CMakeFiles/bin/discretize_test.dir/all:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/depend
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  1 2 3
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  1 2 3 4 5
 	@echo "Built target bin/discretize_test"
 .PHONY : CMakeFiles/bin/discretize_test.dir/all
 
@@ -69,7 +69,7 @@ all: CMakeFiles/bin/discretize_test.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/bin/discretize_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 5
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/bin/discretize_test.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 0
 .PHONY : CMakeFiles/bin/discretize_test.dir/rule

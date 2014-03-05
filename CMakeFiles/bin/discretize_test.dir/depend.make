@@ -4,10 +4,22 @@
 CMakeFiles/bin/discretize_test.dir/common.cpp.o: common.cpp
 CMakeFiles/bin/discretize_test.dir/common.cpp.o: common.h
 
+CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o: decisiontree.cpp
+CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o: decisiontree.h
+CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o: dtreetypedefs.h
+CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o: treenode.h
+
 CMakeFiles/bin/discretize_test.dir/discretize.cpp.o: discretize.cpp
 CMakeFiles/bin/discretize_test.dir/discretize.cpp.o: discretize.h
 
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: common.h
+CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: decisiontree.h
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: discretize.h
 CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: discretize_test.cpp
+CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: dtreetypedefs.h
+CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o: treenode.h
+
+CMakeFiles/bin/discretize_test.dir/treenode.cpp.o: dtreetypedefs.h
+CMakeFiles/bin/discretize_test.dir/treenode.cpp.o: treenode.cpp
+CMakeFiles/bin/discretize_test.dir/treenode.cpp.o: treenode.h
 
