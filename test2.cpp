@@ -16,6 +16,26 @@ void patchesToVec(cv::Mat img, std::vector<int> *res){
             res->push_back(p[2]);
         }
     }
+    cv::Mat gray;
+    cv::cvtColor(img, gray, CV_Lab2BGR);
+    cv::cvtColor(gray, gray, CV_BGR2GRAY);
+    cv::Mat tmp;
+    cv::Sobel(gray, tmp, CV_8U, 0, 1);
+    for(int i = 0; i < img.rows; i++){
+        for(int j = 0; j < img.cols; j++){
+            uchar p = tmp.at<uchar>(i, j);
+            res->push_back(p);
+        }
+    }
+    cv::Sobel(gray, tmp, CV_8U, 1, 0);
+    for(int i = 0; i < img.rows; i++){
+        for(int j = 0; j < img.cols; j++){
+            uchar p = tmp.at<uchar>(i, j);
+            res->push_back(p);
+        }
+    }
+
+
 }
 
 int main(){
@@ -70,7 +90,7 @@ int main(){
         cv::pyrUp(tmp2, tmp2);
         cv::imshow("o2", tmp2);
         std::vector<int> desc;
-        patchesToVec(gt_patches[i], &desc);
+        patchesToVec(img_patches[i], &desc);
         cv::Mat res = tree.predict(desc);
         cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
         cv::pyrUp(tmp2, tmp2);

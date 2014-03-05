@@ -53,15 +53,15 @@ void DecisionTree::divideSet(
     for(int i = 0; i < data.size(); i++){
         if (data[i][col] >= value){
             i1->push_back(i);
-            s1->push_back(data[i]);
+            //s1->push_back(data[i]);
             l1->push_back(labels[i]);
-            g1->push_back(seg[i]);
+            //g1->push_back(seg[i]);
         }
         else{
             i2->push_back(i);
-            s2->push_back(data[i]);
+            //s2->push_back(data[i]);
             l2->push_back(labels[i]);
-            g2->push_back(seg[i]);
+            //g2->push_back(seg[i]);
         }
     }
 }
@@ -76,7 +76,8 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
     printf("score %f %d\n", current_score, labels.size());
     double best_gain = 0.0;
     std::vector<InputData>  ms1, ms2;
-    std::vector<cv::Mat> ml1, ml2;
+    std::vector<int> ml1, ml2;
+    //std::vector<cv::Mat> ml1, ml2;
     InputValue best_value;
     int best_col = -1;
 
@@ -100,15 +101,29 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
                 best_value = val;
                 best_gain = gain;
                 best_col = col;
-                ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
+                ml1 = i1; ml2 = i2;// ms1 = s1; ms2 = s2;
+                //ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
                 //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
             }
         }
     }
     if (best_gain > 0){
         TreeBranch *res = new TreeBranch();
-        res->left  = buildnode(ms2, ml2);
-        res->right = buildnode(ms1, ml1);
+        std::vector<cv::Mat> g1, g2;
+        std::vector<InputData> s1, s2;
+        for(int i = 0; i < ml1.size(); i++){
+            g1.push_back(segments[ml1[i]]);
+            s1.push_back(data[ml1[i]]);
+        }
+        for(int i = 0; i < ml2.size(); i++){
+            g2.push_back(segments[ml2[i]]);
+            s2.push_back(data[ml2[i]]);
+        }
+
+        res->left  = buildnode(s2, g2);
+        //res->left  = buildnode(ms2, ml2);
+        res->right = buildnode(s1, g1);
+        //res->right = buildnode(ms1, ml1);
         res->col = best_col;
         res->value = best_value;
         return res;
