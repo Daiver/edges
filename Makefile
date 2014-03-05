@@ -111,12 +111,26 @@ bin/discretize_test/fast:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/build
 .PHONY : bin/discretize_test/fast
 
+#=============================================================================
+# Target rules for targets named bin/test2
+
+# Build rule for target.
+bin/test2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 bin/test2
+.PHONY : bin/test2
+
+# fast build rule for target.
+bin/test2/fast:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/build
+.PHONY : bin/test2/fast
+
 common.o: common.cpp.o
 .PHONY : common.o
 
 # target to build an object file
 common.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/common.cpp.o
 .PHONY : common.cpp.o
 
 common.i: common.cpp.i
@@ -125,6 +139,7 @@ common.i: common.cpp.i
 # target to preprocess a source file
 common.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/common.cpp.i
 .PHONY : common.cpp.i
 
 common.s: common.cpp.s
@@ -133,6 +148,7 @@ common.s: common.cpp.s
 # target to generate assembly for a file
 common.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/common.cpp.s
 .PHONY : common.cpp.s
 
 decisiontree.o: decisiontree.cpp.o
@@ -141,6 +157,7 @@ decisiontree.o: decisiontree.cpp.o
 # target to build an object file
 decisiontree.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/decisiontree.cpp.o
 .PHONY : decisiontree.cpp.o
 
 decisiontree.i: decisiontree.cpp.i
@@ -149,6 +166,7 @@ decisiontree.i: decisiontree.cpp.i
 # target to preprocess a source file
 decisiontree.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/decisiontree.cpp.i
 .PHONY : decisiontree.cpp.i
 
 decisiontree.s: decisiontree.cpp.s
@@ -157,6 +175,7 @@ decisiontree.s: decisiontree.cpp.s
 # target to generate assembly for a file
 decisiontree.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/decisiontree.cpp.s
 .PHONY : decisiontree.cpp.s
 
 discretize.o: discretize.cpp.o
@@ -165,6 +184,7 @@ discretize.o: discretize.cpp.o
 # target to build an object file
 discretize.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/discretize.cpp.o
 .PHONY : discretize.cpp.o
 
 discretize.i: discretize.cpp.i
@@ -173,6 +193,7 @@ discretize.i: discretize.cpp.i
 # target to preprocess a source file
 discretize.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/discretize.cpp.i
 .PHONY : discretize.cpp.i
 
 discretize.s: discretize.cpp.s
@@ -181,6 +202,7 @@ discretize.s: discretize.cpp.s
 # target to generate assembly for a file
 discretize.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/discretize.cpp.s
 .PHONY : discretize.cpp.s
 
 discretize_test.o: discretize_test.cpp.o
@@ -207,12 +229,37 @@ discretize_test.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s
 .PHONY : discretize_test.cpp.s
 
+test2.o: test2.cpp.o
+.PHONY : test2.o
+
+# target to build an object file
+test2.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/test2.cpp.o
+.PHONY : test2.cpp.o
+
+test2.i: test2.cpp.i
+.PHONY : test2.i
+
+# target to preprocess a source file
+test2.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/test2.cpp.i
+.PHONY : test2.cpp.i
+
+test2.s: test2.cpp.s
+.PHONY : test2.s
+
+# target to generate assembly for a file
+test2.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/test2.cpp.s
+.PHONY : test2.cpp.s
+
 treenode.o: treenode.cpp.o
 .PHONY : treenode.o
 
 # target to build an object file
 treenode.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/treenode.cpp.o
 .PHONY : treenode.cpp.o
 
 treenode.i: treenode.cpp.i
@@ -221,6 +268,7 @@ treenode.i: treenode.cpp.i
 # target to preprocess a source file
 treenode.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/treenode.cpp.i
 .PHONY : treenode.cpp.i
 
 treenode.s: treenode.cpp.s
@@ -229,6 +277,7 @@ treenode.s: treenode.cpp.s
 # target to generate assembly for a file
 treenode.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/treenode.cpp.s
 .PHONY : treenode.cpp.s
 
 # Help Target
@@ -238,6 +287,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... bin/discretize_test"
+	@echo "... bin/test2"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... common.o"
@@ -252,6 +302,9 @@ help:
 	@echo "... discretize_test.o"
 	@echo "... discretize_test.i"
 	@echo "... discretize_test.s"
+	@echo "... test2.o"
+	@echo "... test2.i"
+	@echo "... test2.s"
 	@echo "... treenode.o"
 	@echo "... treenode.i"
 	@echo "... treenode.s"

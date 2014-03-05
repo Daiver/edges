@@ -1,1 +1,2 @@
 /home/daiver/coding/edges/CMakeFiles/bin/discretize_test.dir
+/home/daiver/coding/edges/CMakeFiles/bin/test2.dir

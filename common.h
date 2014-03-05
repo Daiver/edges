@@ -14,6 +14,8 @@
 
 
 void read_imgList(const std::string& filename, std::vector<cv::Mat>* images) ;
+void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images, 
+        std::vector<cv::Mat>* groundTruth) ;
 
 void cutPatchesFromImage(cv::Mat img, std::vector<cv::Mat>* patches);
 
