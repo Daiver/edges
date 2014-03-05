@@ -16,7 +16,11 @@ int main(){
     }
     printf("%zu \n", patches.size());
     std::vector<int> hs(patches.size(), 0);
-    int num_of_classes = selectFeaturesFromPatches(patches, &hs);
+    int num_of_classes, seg_idx;
+    selectFeaturesFromPatches(patches, &hs, &num_of_classes, &seg_idx);
+    printf("seg index %d\n", seg_idx);
+    cv::imshow("seg", patches[seg_idx]);
+    cv::waitKey();
     for(int i = 0; i < num_of_classes; i++){
         int counter = 0;
         for(int j = 0; j < hs.size(); j++){

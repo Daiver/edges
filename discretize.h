@@ -8,6 +8,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs);
+void selectFeaturesFromPatches(std::vector<cv::Mat>& images, 
+                std::vector<int> *hs, int *num_of_classes, int *seg_idx);
 
 #endif

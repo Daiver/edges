@@ -1,6 +1,7 @@
 #include "discretize.h"
 
-int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs){
+void selectFeaturesFromPatches(std::vector<cv::Mat>& images, 
+        std::vector<int> *hs, int *num_of_classes, int *seg_idx){
     std::vector<int> indxs;
     for(int i = 0; i < 256; i++){
         int x = (int)rand() % (256*256);
@@ -67,6 +68,19 @@ int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs
         }
     }
 
+    int min_idx = -1;
+    float min_value = 10000;
+    for(int i = 0; i < images.size(); i++){
+        float sum = 0;
+        for(int j = 0; j < zs.cols; j++){
+            sum += pow(zs.at<float>(i, j), 2);
+        }
+        if (sum < min_value){
+            min_idx = i;
+            min_value = sum;
+        }
+    }
+
     cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.72);
     printf("PCA # %d\n", pca.eigenvectors.rows);
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
@@ -112,7 +126,9 @@ int selectFeaturesFromPatches(std::vector<cv::Mat>& images, std::vector<int> *hs
     }
     printf("counter %d\n", counter);
     delete [] hash_table;
-    return counter;
+    *num_of_classes = counter;
+    *seg_idx = min_idx;
+    //return counter;
 }
 
 
