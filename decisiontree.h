@@ -22,7 +22,7 @@ class DecisionTree{
 
         TreeNode* head;
 
-        int *predict(InputData data);
+        cv::Mat predict(InputData data);
         double ginii(const std::vector<OutputData> &labels, int num_of_classes);
         int getNumOfClasses(std::vector<OutputData> labels);
         int *getFreq(std::vector<OutputData> labels, int num_of_classes);

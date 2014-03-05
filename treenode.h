@@ -3,6 +3,7 @@
 
 #include "dtreetypedefs.h"
 #include <stdio.h>
+#include <opencv2/core/core.hpp>
 
 class TreeNode{
     public:
@@ -13,6 +14,7 @@ class TreeNode{
 class TreeLeaf : public TreeNode{
     public:
         int* freqs;
+        cv::Mat patch;
         int len;
         TreeLeaf(){
             this->type = 2;

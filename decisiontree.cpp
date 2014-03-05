@@ -5,23 +5,25 @@
 #include <string.h>
 #include <vector>
 #include <unordered_set>
+#include <opencv2/core/core.hpp>
 
 void DecisionTree::train(std::vector<InputData> data, std::vector<cv::Mat> segments){
     //this->num_of_classes = getNumOfClasses(labels);
-    //this->calcUniqValues(data);
-    //this->head = buildnode(data, labels);
+    this->calcUniqValues(data);
+    this->head = buildnode(data, segments);
 }
 
-int *DecisionTree::predict(InputData data){
+cv::Mat DecisionTree::predict(InputData data){
     TreeNode *node = this->head;
     while(node->type != 2){
         TreeBranch *b = static_cast<TreeBranch*>(node);
-        //if(data[b->col] >= b->value)
-        //    node = b->right;
-        //else
-        //    node = b->left;
+        if(data[b->col] >= b->value)
+            node = b->right;
+        else
+            node = b->left;
     }
-    return static_cast<TreeLeaf*>(node)->freqs;
+    return static_cast<TreeLeaf*>(node)->patch;
+    //return static_cast<TreeLeaf*>(node)->freqs;
 }
 
 void DecisionTree::calcUniqValues(const std::vector<InputData> &data){
@@ -74,6 +76,8 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
     int best_col = -1;
 
     for(int col = 0; col < data[0].size(); col++){
+        if(col % 500 == 0)
+            printf("col %d %d\n", col, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
             std::vector<InputData>  s1, s2;
             std::vector<OutputData> l1, l2;
@@ -106,6 +110,7 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
     TreeLeaf *res = new TreeLeaf();
     res->freqs = this->getFreq(labels, num_of_classes);
     res->len = num_of_classes;
+    res->patch = segments[seg_idx];
     return res;
 }
 

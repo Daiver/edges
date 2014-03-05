@@ -2,6 +2,13 @@
 
 void selectFeaturesFromPatches(std::vector<cv::Mat> images, 
         std::vector<int> *hs, int *num_of_classes, int *seg_idx){
+    if(images.size() == 1) {
+        hs->at(0) = 0;
+        *num_of_classes = 1;
+        *seg_idx = 0;
+        return;
+    }
+    printf("start disr %d\n", images.size());
     std::vector<int> indxs;
     for(int i = 0; i < 256; i++){
         int x = (int)rand() % (256*256);
@@ -10,6 +17,7 @@ void selectFeaturesFromPatches(std::vector<cv::Mat> images,
         indxs.push_back(x);
     }
     //std::vector<std::vector<double>> zs(images.size());
+    printf("ZS compute\n");
     cv::Mat zs(images.size(), 256, CV_32F);
     for(int i = 0; i < images.size(); i++){
         for(int j = 0; j < 256; j++){
@@ -18,6 +26,7 @@ void selectFeaturesFromPatches(std::vector<cv::Mat> images,
         }
     }
 
+    printf("deleting indexs\n");
     std::vector<int> indx_to_delete;
     for(int j = 0; j < 256; j++){
         float sum = 0;
@@ -68,6 +77,7 @@ void selectFeaturesFromPatches(std::vector<cv::Mat> images,
         }
     }
 
+    printf("search min\n");
     int min_idx = -1;
     float min_value = 10000;
     for(int i = 0; i < images.size(); i++){
@@ -81,6 +91,13 @@ void selectFeaturesFromPatches(std::vector<cv::Mat> images,
         }
     }
 
+    if(zs.cols == 0){
+        hs->at(0) = 0;
+        *num_of_classes = 1;
+        *seg_idx = 0;
+        return;
+    }
+    printf("pca... %d %d\n", zs.rows, zs.cols);
     cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.72);
     printf("PCA # %d\n", pca.eigenvectors.rows);
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
