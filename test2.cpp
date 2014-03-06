@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "decisiontree.h"
+#include "randomforest.h"
 #include <stdio.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -16,7 +17,7 @@ void patchesToVec(cv::Mat img, std::vector<int> *res){
             res->push_back(p[2]);
         }
     }
-    cv::Mat gray;
+    /*cv::Mat gray;
     cv::cvtColor(img, gray, CV_Lab2BGR);
     cv::cvtColor(gray, gray, CV_BGR2GRAY);
     cv::Mat tmp;
@@ -33,7 +34,7 @@ void patchesToVec(cv::Mat img, std::vector<int> *res){
             uchar p = tmp.at<uchar>(i, j);
             res->push_back(p);
         }
-    }
+    }*/
 
 
 }
@@ -74,7 +75,7 @@ int main(){
     for(int i = 0; i < data.size(); i++){
         patchesToVec(img_patches[i], &data[i]);
     }
-    DecisionTree tree;
+    RandomForest tree(1);
     tree.train(data, gt_patches);
     for(int i = 0; i < data.size(); i++){
         cv::Mat tmp;
@@ -91,11 +92,17 @@ int main(){
         cv::imshow("o2", tmp2);
         std::vector<int> desc;
         patchesToVec(img_patches[i], &desc);
-        cv::Mat res = tree.predict(desc);
-        cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
-        cv::pyrUp(tmp2, tmp2);
-        cv::pyrUp(tmp2, tmp2);
-        cv::imshow("res", tmp2);
+        std::vector<cv::Mat> ress = tree.predict(desc);
+        int j = 0;
+        for(auto res : ress){
+            j++;
+            cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
+            cv::pyrUp(tmp2, tmp2);
+            cv::pyrUp(tmp2, tmp2);
+            char nm[100];
+            sprintf(nm, "res %d", j);
+            cv::imshow(nm, tmp2);
+        }
         cv::waitKey();
     }
 

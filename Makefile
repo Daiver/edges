@@ -229,6 +229,30 @@ discretize_test.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.s
 .PHONY : discretize_test.cpp.s
 
+randomforest.o: randomforest.cpp.o
+.PHONY : randomforest.o
+
+# target to build an object file
+randomforest.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/randomforest.cpp.o
+.PHONY : randomforest.cpp.o
+
+randomforest.i: randomforest.cpp.i
+.PHONY : randomforest.i
+
+# target to preprocess a source file
+randomforest.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/randomforest.cpp.i
+.PHONY : randomforest.cpp.i
+
+randomforest.s: randomforest.cpp.s
+.PHONY : randomforest.s
+
+# target to generate assembly for a file
+randomforest.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/randomforest.cpp.s
+.PHONY : randomforest.cpp.s
+
 test2.o: test2.cpp.o
 .PHONY : test2.o
 
@@ -302,6 +326,9 @@ help:
 	@echo "... discretize_test.o"
 	@echo "... discretize_test.i"
 	@echo "... discretize_test.s"
+	@echo "... randomforest.o"
+	@echo "... randomforest.i"
+	@echo "... randomforest.s"
 	@echo "... test2.o"
 	@echo "... test2.i"
 	@echo "... test2.s"

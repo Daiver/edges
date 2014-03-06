@@ -11,7 +11,8 @@ find_package( OpenCV REQUIRED )
     discretize.cpp )
     add_executable(bin/test2 test2.cpp 
     common.cpp decisiontree.cpp treenode.cpp
-    discretize.cpp )
+    discretize.cpp 
+    randomforest.cpp)
 target_link_libraries(bin/discretize_test ${OpenCV_LIBS})
 target_link_libraries(bin/test2 ${OpenCV_LIBS})
 

@@ -98,7 +98,7 @@ void selectFeaturesFromPatches(std::vector<cv::Mat> images,
         return;
     }
     printf("pca... %d %d\n", zs.rows, zs.cols);
-    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.72);
+    cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.82);
     printf("PCA # %d\n", pca.eigenvectors.rows);
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
     for(int i = 0; i < images.size(); i++){
@@ -120,7 +120,7 @@ void selectFeaturesFromPatches(std::vector<cv::Mat> images,
         //}
         //printf("\n");
     }
-    int boundary = std::min(pca.eigenvectors.rows, 8);
+    int boundary = std::min(pca.eigenvectors.rows, 10);
     std::vector<int> hs2(images.size(), 0);
     for(int i = 0; i < images.size(); i++){
         //for(int j = 0; j < pca.eigenvectors.rows; j++){
