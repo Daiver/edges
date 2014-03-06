@@ -29,8 +29,8 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
 void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img_patches, std::vector<cv::Mat> *gt_patches){
     int gt_w = 16;
     int img_w = 32;
-    for (int i = 0; i < img.rows; i+=50){
-        for (int j = 0; j < img.cols; j+=20){
+    for (int i = 0; i < img.rows; i+=5){
+        for (int j = 0; j < img.cols; j+=5){
             cv::Mat tileCopy = img(
                     cv::Range(i, std::min(i + img_w, img.rows)),
                     cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
@@ -53,8 +53,8 @@ void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img
 
 void cutPatchesFromImage(cv::Mat img, std::vector<cv::Mat>* patches){
     int w = 16;
-    for (int i = 0; i < img.rows; i+=20){
-        for (int j = 0; j < img.cols; j+=20){
+    for (int i = 0; i < img.rows; i+=5){
+        for (int j = 0; j < img.cols; j+=5){
             cv::Mat tileCopy = img(cv::Range(i, std::min(i + w, img.rows)),
                  cv::Range(j, std::min(j + w, img.cols))).clone();
             if (tileCopy.rows != w || tileCopy.cols != w) continue;
