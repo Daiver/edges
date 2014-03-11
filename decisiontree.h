@@ -27,10 +27,10 @@ class DecisionTree{
         int getNumOfClasses(std::vector<OutputData> labels);
         int *getFreq(std::vector<OutputData> labels, int num_of_classes);
         TreeNode *buildnode(const std::vector<InputData> &data, 
-                std::vector<cv::Mat> labels);
+                const std::vector<cv::Mat>& labels);
         void calcUniqValues(const std::vector<InputData> &data);
         void divideSet(const std::vector<InputData> &data, const std::vector<OutputData> &labels,
-            std::vector<cv::Mat> &seg,
+            const std::vector<cv::Mat> &seg,
             int col, InputValue value, 
             std::vector<InputData> *s1, std::vector<InputData> *s2,
             std::vector<OutputData> *l1, std::vector<OutputData> *l2,

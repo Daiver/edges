@@ -44,7 +44,7 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> &data){
 void DecisionTree::divideSet(
         const std::vector<InputData> &data, 
         const std::vector<OutputData> &labels,
-        std::vector<cv::Mat> &seg,
+        const std::vector<cv::Mat> &seg,
         int col, InputValue value, 
         std::vector<InputData> *s1, std::vector<InputData> *s2,
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
@@ -67,7 +67,7 @@ void DecisionTree::divideSet(
 }
 
 TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data, 
-        std::vector<cv::Mat> segments){
+        const std::vector<cv::Mat> &segments){
     int num_of_classes, seg_idx;
     std::vector<int> labels(segments.size(), 0);
     selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);

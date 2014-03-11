@@ -1,6 +1,6 @@
 #include "discretize.h"
 
-void selectFeaturesFromPatches(std::vector<cv::Mat> images, 
+void selectFeaturesFromPatches(const std::vector<cv::Mat> &images, 
         std::vector<int> *hs, int *num_of_classes, int *seg_idx){
     if(images.size() == 1) {
         hs->at(0) = 0;
