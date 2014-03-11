@@ -10,7 +10,11 @@
 void DecisionTree::train(std::vector<InputData> data, std::vector<cv::Mat> segments){
     //this->num_of_classes = getNumOfClasses(labels);
     this->calcUniqValues(data);
-    this->head = buildnode(data, segments);
+    this->train_data = data;
+    std::vector<int> data_idx;
+    for(int i = 0; i < data.size(); i++)
+        data_idx.push_back(i);
+    this->head = buildnode(data_idx, segments);
 }
 
 cv::Mat DecisionTree::predict(InputData data){
@@ -42,7 +46,8 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> &data){
 }
 
 void DecisionTree::divideSet(
-        const std::vector<InputData> &data, 
+        //const std::vector<InputData> &data, 
+        const std::vector<int> &data_idx, 
         const std::vector<OutputData> &labels,
         const std::vector<cv::Mat> &seg,
         int col, InputValue value, 
@@ -50,8 +55,8 @@ void DecisionTree::divideSet(
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
         std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
         std::vector<int> *i1, std::vector<int> *i2){
-    for(int i = 0; i < data.size(); i++){
-        if (data[i][col] >= value){
+    for(int i = 0; i < data_idx.size(); i++){
+        if (this->train_data[data_idx[i]][col] >= value){
             i1->push_back(i);
             //s1->push_back(data[i]);
             l1->push_back(labels[i]);
@@ -66,7 +71,9 @@ void DecisionTree::divideSet(
     }
 }
 
-TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data, 
+TreeNode *DecisionTree::buildnode(
+        //const std::vector<InputData> &data, 
+        const std::vector<int> &data_idx, 
         const std::vector<cv::Mat> &segments){
     int num_of_classes, seg_idx;
     std::vector<int> labels(segments.size(), 0);
@@ -75,23 +82,23 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
     double current_score = this->ginii(labels, num_of_classes);
     printf("score %f %d\n", current_score, labels.size());
     double best_gain = 0.0;
-    std::vector<InputData>  ms1, ms2;
+    //std::vector<InputData>  ms1, ms2;
     std::vector<int> ml1, ml2;
     //std::vector<cv::Mat> ml1, ml2;
     InputValue best_value;
     int best_col = -1;
 
-    for(int col = 0; col < data[0].size(); col++){
+    std::vector<int> i1, i2;
+    for(int col = 0; col < this->train_data[0].size(); col++){
         if(col % 500 == 0)
             printf("col %d %d\n", col, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
             std::vector<InputData>  s1, s2;
             std::vector<OutputData> l1, l2;
             std::vector<cv::Mat>    g1, g2;
-            std::vector<int>    i1, i2;
-            this->divideSet(data, labels, segments, col, val, 
+            this->divideSet(data_idx, labels, segments, col, val, 
                     &s1, &s2, &l1, &l2, &g1, &g2, &i1, &i2);
-            double p = (double(s1.size()))/data.size();
+            double p = (double(s1.size()))/data_idx.size();
             double gain = current_score - 
                 p*this->ginii(l1, num_of_classes) - 
                 (1 - p) * this->ginii(l2, num_of_classes);
@@ -105,24 +112,25 @@ TreeNode *DecisionTree::buildnode(const std::vector<InputData> &data,
                 //ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
                 //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
             }
+            i1.clear(); i2.clear();
         }
     }
     if (best_gain > 0){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
-        std::vector<InputData> s1, s2;
+        //std::vector<InputData> s1, s2;
         for(int i = 0; i < ml1.size(); i++){
             g1.push_back(segments[ml1[i]]);
-            s1.push_back(data[ml1[i]]);
+            //s1.push_back(data[ml1[i]]);
         }
         for(int i = 0; i < ml2.size(); i++){
             g2.push_back(segments[ml2[i]]);
-            s2.push_back(data[ml2[i]]);
+            //s2.push_back(data[ml2[i]]);
         }
 
-        res->left  = buildnode(s2, g2);
+        res->left  = buildnode(ml2, g2);
         //res->left  = buildnode(ms2, ml2);
-        res->right = buildnode(s1, g1);
+        res->right = buildnode(ml1, g1);
         //res->right = buildnode(ms1, ml1);
         res->col = best_col;
         res->value = best_value;

@@ -20,16 +20,27 @@ class DecisionTree{
         //long num_of_classes;
         std::unordered_set<InputValue>* uvalues;
 
+        std::vector<InputData> train_data;
+
         TreeNode* head;
 
         cv::Mat predict(InputData data);
         double ginii(const std::vector<OutputData> &labels, int num_of_classes);
+
         int getNumOfClasses(std::vector<OutputData> labels);
+
         int *getFreq(std::vector<OutputData> labels, int num_of_classes);
-        TreeNode *buildnode(const std::vector<InputData> &data, 
+
+        TreeNode *buildnode(
+                //const std::vector<InputData> &data, 
+                const std::vector<int> &data_idx, 
                 const std::vector<cv::Mat>& labels);
+
         void calcUniqValues(const std::vector<InputData> &data);
-        void divideSet(const std::vector<InputData> &data, const std::vector<OutputData> &labels,
+        void divideSet(
+            //const std::vector<InputData> &data, 
+            const std::vector<int> &data_idx,
+            const std::vector<OutputData> &labels,
             const std::vector<cv::Mat> &seg,
             int col, InputValue value, 
             std::vector<InputData> *s1, std::vector<InputData> *s2,
