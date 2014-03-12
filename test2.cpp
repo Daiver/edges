@@ -8,7 +8,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 
-void patchesToVec(cv::Mat img, std::vector<int> *res){
+void patchesToVec(cv::Mat img, std::vector<float> *res){
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             cv::Vec3b p = img.at<cv::Vec3b>(i, j);
@@ -71,10 +71,27 @@ int main(){
         printf("%d %d %f\n", i, img_patches.size(), cv::sum(gt_patches[i])[0]);
         cv::waitKey();
     }*/
-    std::vector<std::vector<int>> data(img_patches.size());
-    for(int i = 0; i < data.size(); i++){
-        patchesToVec(img_patches[i], &data[i]);
+    std::vector<std::vector<float>> tmp_data(img_patches.size());
+    for(int i = 0; i < tmp_data.size(); i++){
+        patchesToVec(img_patches[i], &tmp_data[i]);
     }
+    cv::Mat to_pca(tmp_data.size(), tmp_data[0].size(), CV_32F);
+    for(int i = 0; i < tmp_data.size(); i++){
+        for(int j = 0; j < tmp_data[0].size(); j++){
+            to_pca.at<float>(i, j) = tmp_data[i][j];
+        }
+    }
+    printf("Start pca\n");
+    cv::PCA pca(to_pca, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.82);
+    printf("End pca # %d\n", pca.eigenvectors.rows);
+    std::vector<std::vector<float>> data(img_patches.size());
+    for(int i = 0; i < tmp_data.size(); i++){
+        cv::Mat tmp_mat = pca.project(to_pca.row(i));
+        for(int j = 0; j < tmp_data[0].size(); j++){
+            data[i].push_back(tmp_mat.at<float>(0, j));
+        }
+    }
+
     RandomForest tree(10);
     tree.train(data, gt_patches);
     for(int i = 0; i < data.size(); i++){
@@ -90,7 +107,7 @@ int main(){
         cv::pyrUp(tmp2, tmp2);
         cv::pyrUp(tmp2, tmp2);
         cv::imshow("o2", tmp2);
-        std::vector<int> desc;
+        std::vector<float> desc;
         patchesToVec(img_patches[i], &desc);
         std::vector<cv::Mat> ress = tree.predict(desc);
         int j = 0;

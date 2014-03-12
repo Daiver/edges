@@ -6,21 +6,31 @@
 
 #IncludeRegexTransform: 
 
-/home/daiver/coding/edges/discretize.cpp
-discretize.h
-/home/daiver/coding/edges/discretize.h
+/home/daiver/coding/edges/common.cpp
+common.h
+/home/daiver/coding/edges/common.h
+iostream
+-
 
-/home/daiver/coding/edges/discretize.h
+/home/daiver/coding/edges/common.h
 stdio.h
 -
 string.h
--
-vector
 -
 opencv2/core/core.hpp
 -
 opencv2/highgui/highgui.hpp
 -
 opencv2/imgproc/imgproc.hpp
+-
+iostream
+-
+fstream
+-
+sstream
+-
+vector
+-
+string
 -
 

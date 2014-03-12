@@ -2,7 +2,7 @@
 #define __DTREE_TYPEDEFS__
 #include <vector>
 //typedef int InputValue;
-typedef int InputValue;
+typedef float InputValue;
 typedef std::vector<InputValue> InputData;
 typedef int OutputData ;
 
