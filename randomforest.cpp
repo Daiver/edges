@@ -42,7 +42,15 @@ void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label
         //auto indxs = getRandIndxs(data[0].size());
         //auto ndata = this->getRandSamples(data, indxs);
         //indxss[i] = indxs;
-        this->ansamble[i].train(data, label);
+        std::vector<InputData> n_data; //(data.size()/this->ansamble_length);
+        std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
+        for(int j = (data.size()/this->ansamble_length) * (i); 
+                j < (data.size()/this->ansamble_length)*(i + 1); j++){
+            if (j >= data.size()) continue;
+            n_data.push_back(data[j]);
+            n_labels.push_back(label[j]);
+        }
+        this->ansamble[i].train(n_data, n_labels);
     }
     //this->num_of_classes = this->ansamble[0].num_of_classes;
 }

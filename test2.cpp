@@ -17,7 +17,7 @@ void patchesToVec(cv::Mat img, std::vector<int> *res){
             res->push_back(p[2]);
         }
     }
-    /*cv::Mat gray;
+    cv::Mat gray;
     cv::cvtColor(img, gray, CV_Lab2BGR);
     cv::cvtColor(gray, gray, CV_BGR2GRAY);
     cv::Mat tmp;
@@ -34,7 +34,7 @@ void patchesToVec(cv::Mat img, std::vector<int> *res){
             uchar p = tmp.at<uchar>(i, j);
             res->push_back(p);
         }
-    }*/
+    }
 
 
 }
@@ -75,7 +75,7 @@ int main(){
     for(int i = 0; i < data.size(); i++){
         patchesToVec(img_patches[i], &data[i]);
     }
-    RandomForest tree(1);
+    RandomForest tree(10);
     tree.train(data, gt_patches);
     for(int i = 0; i < data.size(); i++){
         cv::Mat tmp;
