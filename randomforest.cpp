@@ -38,16 +38,17 @@ std::vector<InputData> RandomForest::getRandSamples(std::vector<InputData> data,
 }
 
 void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label){
-    int frame_size = (data.size()/this->ansamble_length) * 2;
+    int frame_size = data.size() * 0.7;
     for(int i = 0; i < this->ansamble_length; i++){
+        printf("Tree num %d\n", i);
         //auto indxs = getRandIndxs(data[0].size());
         //auto ndata = this->getRandSamples(data, indxs);
         //indxss[i] = indxs;
-        /*std::vector<InputData> n_data; //(data.size()/this->ansamble_length);
+        std::vector<InputData> n_data; //(data.size()/this->ansamble_length);
         std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
         for(int j = 0; j < frame_size; j++){
             int indx = rand() % data.size();
-            printf("indx %d\n", indx);
+            //printf("indx %d\n", indx);
             n_data.push_back(data[indx]);
             n_labels.push_back(label[indx]);
         }
@@ -57,9 +58,9 @@ void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label
             n_data.push_back(data[j]);
             n_labels.push_back(label[j]);
         }
-        printf("%d: tree dt size %d\n", i, n_data.size());
-        this->ansamble[i].train(n_data, n_labels);*/
-        this->ansamble[i].train(data, label);
+        printf("%d: tree dt size %d\n", i, n_data.size());*/
+        this->ansamble[i].train(n_data, n_labels);
+        //this->ansamble[i].train(data, label);
     }
     //this->num_of_classes = this->ansamble[0].num_of_classes;
 }

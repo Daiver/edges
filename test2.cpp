@@ -81,16 +81,17 @@ int main(){
             to_pca.at<float>(i, j) = tmp_data[i][j];
         }
     }
-    printf("Start pca\n");
+    std::vector<std::vector<float>> data(img_patches.size());
+    /*printf("Start pca\n");
     cv::PCA pca(to_pca, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.82);
     printf("End pca # %d\n", pca.eigenvectors.rows);
-    std::vector<std::vector<float>> data(img_patches.size());
     for(int i = 0; i < tmp_data.size(); i++){
         cv::Mat tmp_mat = pca.project(to_pca.row(i));
         for(int j = 0; j < tmp_data[0].size(); j++){
             data[i].push_back(tmp_mat.at<float>(0, j));
         }
-    }
+    }*/
+    data = tmp_data;
 
     RandomForest tree(10);
     tree.train(data, gt_patches);

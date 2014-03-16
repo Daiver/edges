@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <vector>
+#include <math.h>
 #include <unordered_set>
 #include <opencv2/core/core.hpp>
 
@@ -89,9 +90,12 @@ TreeNode *DecisionTree::buildnode(
     int best_col = -1;
 
     std::vector<int> i1, i2;
-    for(int col = 0; col < this->train_data[0].size(); col++){
-        if(col % 500 == 0)
-            printf("col %d %d\n", col, this->uvalues[col].size());
+    //for(int col = 0; col < this->train_data[0].size(); col++){
+    int m_small = sqrt(this->train_data[0].size());
+    for(int col_idx = 0; col_idx < m_small; col_idx++){
+        int col = (int)rand() % this->train_data[0].size();
+        if(col_idx % 500 == 0)
+            printf("col %d %d\n", col_idx, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
             std::vector<InputData>  s1, s2;
             std::vector<OutputData> l1, l2;
