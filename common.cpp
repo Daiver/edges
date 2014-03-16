@@ -31,8 +31,8 @@ void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img
     int img_w = 32;
     /*for (int i = 0; i < img.rows; i+=5){
         for (int j = 0; j < img.cols; j+=5){*/
-    for (int i = 100; i < 200; i+=2){
-        for (int j = 100; j < 200; j+=2){
+    for (int i = 0; i < 200; i+=5){
+        for (int j = 0; j < 200; j+=5){
             cv::Mat tileCopy = img(
                     cv::Range(i, std::min(i + img_w, img.rows)),
                     cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
@@ -46,8 +46,10 @@ void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img
                 cv::Mat gt_tile = gtruth(
                         cv::Range(cI - gt_w/2, cI + gt_w/2),
                         cv::Range(cJ - gt_w/2, cJ + gt_w/2));//.clone();
-                img_patches->push_back(tileCopy);
-                gt_patches->push_back(gt_tile);
+                if(gt_tile.rows == gt_w && gt_tile.cols == gt_w){
+                    img_patches->push_back(tileCopy);
+                    gt_patches->push_back(gt_tile);
+                }
             }
         }
     }

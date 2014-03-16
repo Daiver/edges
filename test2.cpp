@@ -121,6 +121,12 @@ int main(){
             sprintf(nm, "res %d", j);
             cv::imshow(nm, tmp2);
         }
+        auto res = ress[ress.size() - 1];
+        cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
+        cv::pyrUp(tmp2, tmp2);
+        cv::pyrUp(tmp2, tmp2);
+        cv::pyrUp(tmp2, tmp2);
+        cv::imshow("F", tmp2);
         cv::waitKey();
     }
 

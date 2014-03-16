@@ -91,7 +91,7 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         }
     }
 
-    if(zs.cols == 0){
+    if(zs.cols < 2){
         hs->at(0) = 0;
         *num_of_classes = 1;
         *seg_idx = 0;

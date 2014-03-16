@@ -193,6 +193,39 @@ Project_BINARY_DIR:STATIC=/home/daiver/coding/edges
 //Value Computed by CMake
 Project_SOURCE_DIR:STATIC=/home/daiver/coding/edges
 
+//TBB debug library directory
+TBB_DEBUG_LIBRARY_DIRS:PATH=
+
+//The directory containing a CMake configuration file for TBB.
+TBB_DIR:PATH=TBB_DIR-NOTFOUND
+
+//Path to a file.
+TBB_INCLUDE_DIR:PATH=/usr/include
+
+//TBB include directory
+TBB_INCLUDE_DIRS:PATH=/usr/include
+
+//Intel TBB install directory
+TBB_INSTALL_DIR:PATH=/opt/intel/tbb;/usr/local/include;/usr/include
+
+//Path to a library.
+TBB_LIBRARY:FILEPATH=/usr/lib/libtbb.so
+
+//Path to a library.
+TBB_LIBRARY_DEBUG:FILEPATH=TBB_LIBRARY_DEBUG-NOTFOUND
+
+//TBB library directory
+TBB_LIBRARY_DIRS:PATH=/usr/lib
+
+//Path to a library.
+TBB_MALLOC_LIBRARY:FILEPATH=/usr/lib/libtbbmalloc.so
+
+//Path to a library.
+TBB_MALLOC_LIBRARY_DEBUG:FILEPATH=TBB_MALLOC_LIBRARY_DEBUG-NOTFOUND
+
+//The directory containing a CMake configuration file for tbb.
+tbb_DIR:PATH=tbb_DIR-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries
@@ -335,4 +368,22 @@ OpenCV_CONFIG_PATH-ADVANCED:INTERNAL=1
 OpenCV_LIB_DIR_DBG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OpenCV_LIB_DIR_OPT
 OpenCV_LIB_DIR_OPT-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_DEBUG_LIBRARY_DIRS
+TBB_DEBUG_LIBRARY_DIRS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_INCLUDE_DIR
+TBB_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_INCLUDE_DIRS
+TBB_INCLUDE_DIRS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_INSTALL_DIR
+TBB_INSTALL_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_LIBRARY
+TBB_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_LIBRARY_DEBUG
+TBB_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_LIBRARY_DIRS
+TBB_LIBRARY_DIRS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_MALLOC_LIBRARY
+TBB_MALLOC_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: TBB_MALLOC_LIBRARY_DEBUG
+TBB_MALLOC_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 

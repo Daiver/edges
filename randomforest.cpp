@@ -1,4 +1,5 @@
 #include "randomforest.h"
+#include "discretize.h"
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -38,7 +39,7 @@ std::vector<InputData> RandomForest::getRandSamples(std::vector<InputData> data,
 }
 
 void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label){
-    int frame_size = data.size() * 0.7;
+    int frame_size = data.size() ;
     for(int i = 0; i < this->ansamble_length; i++){
         printf("Tree num %d\n", i);
         //auto indxs = getRandIndxs(data[0].size());
@@ -78,5 +79,9 @@ std::vector<cv::Mat> RandomForest::predict(InputData sample){
     //float sum = 0;
     //for(int j = 0; j < this->num_of_classes; j++) sum += res[j];
     //for(int j = 0; j < this->num_of_classes; j++) res[j] /= sum;
+    int num_of_classes, seg_idx;
+    std::vector<int> labels(res.size(), 0);
+    selectFeaturesFromPatches(res, &labels, &num_of_classes, &seg_idx);
+    res.push_back(res[seg_idx]);
     return res;
 }
