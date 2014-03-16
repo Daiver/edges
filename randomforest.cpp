@@ -3,6 +3,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include "tbb/task_scheduler_init.h"
+#include "tbb/parallel_for.h"
+#include "tbb/blocked_range.h"
+
 
 RandomForest::RandomForest(int ansamble_length){
     this->ansamble_length = ansamble_length;
@@ -38,31 +42,45 @@ std::vector<InputData> RandomForest::getRandSamples(std::vector<InputData> data,
     return res;
 }
 
-void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label){
+void RandomForest::train_one_tree(const std::vector<InputData>& data, const std::vector<cv::Mat>& label, int tree_num){
     int frame_size = data.size() ;
-    for(int i = 0; i < this->ansamble_length; i++){
-        printf("Tree num %d\n", i);
-        //auto indxs = getRandIndxs(data[0].size());
-        //auto ndata = this->getRandSamples(data, indxs);
-        //indxss[i] = indxs;
-        std::vector<InputData> n_data; //(data.size()/this->ansamble_length);
-        std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
-        for(int j = 0; j < frame_size; j++){
-            int indx = rand() % data.size();
-            //printf("indx %d\n", indx);
-            n_data.push_back(data[indx]);
-            n_labels.push_back(label[indx]);
-        }
-        /*for(int j = (frame_size/2) * (i); 
-                j < (frame_size/2)*(i + 1); j++){
-            if (j >= data.size()) continue;
-            n_data.push_back(data[j]);
-            n_labels.push_back(label[j]);
-        }
-        printf("%d: tree dt size %d\n", i, n_data.size());*/
-        this->ansamble[i].train(n_data, n_labels);
-        //this->ansamble[i].train(data, label);
+    int i = tree_num;
+    printf("Tree num %d\n", i);
+    //auto indxs = getRandIndxs(data[0].size());
+    //auto ndata = this->getRandSamples(data, indxs);
+    //indxss[i] = indxs;
+    std::vector<InputData> n_data; //(data.size()/this->ansamble_length);
+    std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
+    for(int j = 0; j < frame_size; j++){
+        int indx = rand() % data.size();
+        //printf("indx %d\n", indx);
+        n_data.push_back(data[indx]);
+        n_labels.push_back(label[indx]);
     }
+    /*for(int j = (frame_size/2) * (i); 
+            j < (frame_size/2)*(i + 1); j++){
+        if (j >= data.size()) continue;
+        n_data.push_back(data[j]);
+        n_labels.push_back(label[j]);
+    }
+    printf("%d: tree dt size %d\n", i, n_data.size());*/
+    this->ansamble[i].train(n_data, n_labels);
+    //this->ansamble[i].train(data, label);
+
+}
+
+void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label){
+    tbb::task_scheduler_init init_object(2);
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, this->ansamble_length) , 
+            [=](const tbb::blocked_range<size_t>& r) {
+            for(size_t i=r.begin(); i!=r.end(); ++i){
+                this->train_one_tree(data, label, i);
+            }
+    });
+
+    /*for(int i = 0; i < this->ansamble_length; i++){
+        this->train_one_tree(data, label, i);
+    }*/
     //this->num_of_classes = this->ansamble[0].num_of_classes;
 }
 

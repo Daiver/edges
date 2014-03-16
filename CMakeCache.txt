@@ -88,6 +88,9 @@ CMAKE_INSTALL_PREFIX:PATH=/usr/local
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/usr/bin/ld
 
+//No help, variable specified on the command line.
+CMAKE_LINK_FLAGS:UNINITIALIZED=-ltbb
+
 //Path to a program.
 CMAKE_MAKE_PROGRAM:FILEPATH=/usr/bin/make
 
@@ -196,9 +199,6 @@ Project_SOURCE_DIR:STATIC=/home/daiver/coding/edges
 //TBB debug library directory
 TBB_DEBUG_LIBRARY_DIRS:PATH=
 
-//The directory containing a CMake configuration file for TBB.
-TBB_DIR:PATH=TBB_DIR-NOTFOUND
-
 //Path to a file.
 TBB_INCLUDE_DIR:PATH=/usr/include
 
@@ -222,9 +222,6 @@ TBB_MALLOC_LIBRARY:FILEPATH=/usr/lib/libtbbmalloc.so
 
 //Path to a library.
 TBB_MALLOC_LIBRARY_DEBUG:FILEPATH=TBB_MALLOC_LIBRARY_DEBUG-NOTFOUND
-
-//The directory containing a CMake configuration file for tbb.
-tbb_DIR:PATH=tbb_DIR-NOTFOUND
 
 
 ########################
