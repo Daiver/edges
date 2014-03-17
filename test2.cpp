@@ -22,6 +22,7 @@ void patchesToVec(cv::Mat img, std::vector<float> *res){
     cv::cvtColor(gray, gray, CV_BGR2GRAY);
     cv::Mat tmp;
     cv::Sobel(gray, tmp, CV_8U, 0, 1);
+    cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             uchar p = tmp.at<uchar>(i, j);
@@ -29,6 +30,7 @@ void patchesToVec(cv::Mat img, std::vector<float> *res){
         }
     }
     cv::Sobel(gray, tmp, CV_8U, 1, 0);
+    cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             uchar p = tmp.at<uchar>(i, j);
