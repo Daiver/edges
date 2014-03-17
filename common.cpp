@@ -31,8 +31,8 @@ void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img
     int img_w = 32;
     /*for (int i = 0; i < img.rows; i+=5){
         for (int j = 0; j < img.cols; j+=5){*/
-    for (int i = 0; i < 200; i+=5){
-        for (int j = 0; j < 200; j+=5){
+    for (int i = 50; i < 150; i+=5){
+        for (int j = 50; j < 150; j+=5){
             cv::Mat tileCopy = img(
                     cv::Range(i, std::min(i + img_w, img.rows)),
                     cv::Range(j, std::min(j + img_w, img.cols)));//.clone();

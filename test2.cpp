@@ -93,7 +93,7 @@ int main(){
     }*/
     data = tmp_data;
 
-    RandomForest tree(10);
+    RandomForest tree(20);
     tree.train(data, gt_patches);
     for(int i = 0; i < data.size(); i++){
         cv::Mat tmp;

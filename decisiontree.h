@@ -15,12 +15,14 @@
 class DecisionTree{
     public:
         DecisionTree();
-        void train(std::vector<InputData> data, std::vector<cv::Mat> labels);
+        void train(const std::vector<InputData> *data, 
+                std::vector<int> &data_idx, 
+                std::vector<cv::Mat> labels);
         //long input_length, samples_length;
         //long num_of_classes;
         std::unordered_set<InputValue>* uvalues;
 
-        std::vector<InputData> train_data;
+        const std::vector<InputData>* train_data;
 
         TreeNode* head;
 
@@ -36,7 +38,7 @@ class DecisionTree{
                 const std::vector<int> &data_idx, 
                 const std::vector<cv::Mat>& labels);
 
-        void calcUniqValues(const std::vector<InputData> &data);
+        void calcUniqValues(const std::vector<InputData> *data);
         void divideSet(
             //const std::vector<InputData> &data, 
             const std::vector<int> &data_idx,

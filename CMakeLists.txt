@@ -3,7 +3,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/FindTBB/
 
 
 SET (CMAKE_CXX_COMPILER  "/usr/bin/clang++")
-SET (CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Wno-sign-compare -O3 --std=c++11 -ltbb -export-dynamic")
+SET (CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Wno-sign-compare -O3 --std=c++11 ")
 
 find_package( OpenCV REQUIRED )
 

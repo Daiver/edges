@@ -8,13 +8,16 @@
 #include <unordered_set>
 #include <opencv2/core/core.hpp>
 
-void DecisionTree::train(std::vector<InputData> data, std::vector<cv::Mat> segments){
+void DecisionTree::train(
+        const std::vector<InputData> *data, 
+        std::vector<int> &data_idx,
+        std::vector<cv::Mat> segments){
     //this->num_of_classes = getNumOfClasses(labels);
     this->calcUniqValues(data);
     this->train_data = data;
-    std::vector<int> data_idx;
-    for(int i = 0; i < data.size(); i++)
-        data_idx.push_back(i);
+    //std::vector<int> data_idx;
+    /*for(int i = 0; i < data->size(); i++)
+        data_idx.push_back(i);*/
     this->head = buildnode(data_idx, segments);
 }
 
@@ -31,11 +34,11 @@ cv::Mat DecisionTree::predict(InputData data){
     //return static_cast<TreeLeaf*>(node)->freqs;
 }
 
-void DecisionTree::calcUniqValues(const std::vector<InputData> &data){
-    this->uvalues = new std::unordered_set<InputValue>[data[0].size()];
-    for(int i = 0; i < data[0].size(); i++){
-        for(int j = 0; j < data.size(); j++){
-            uvalues[i].insert(data[j][i]);
+void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
+    this->uvalues = new std::unordered_set<InputValue>[data->at(0).size()];
+    for(int i = 0; i < data->at(0).size(); i++){
+        for(int j = 0; j < data->size(); j++){
+            uvalues[i].insert(data->at(j)[i]);
         }
     }
     /*for(int i = 0; i < data[0].size(); i++){
@@ -57,7 +60,7 @@ void DecisionTree::divideSet(
         std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
         std::vector<int> *i1, std::vector<int> *i2){
     for(int i = 0; i < data_idx.size(); i++){
-        if (this->train_data[data_idx[i]][col] >= value){
+        if (this->train_data->at(data_idx[i])[col] >= value){
             i1->push_back(i);
             //s1->push_back(data[i]);
             l1->push_back(labels[i]);
