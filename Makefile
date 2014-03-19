@@ -178,6 +178,30 @@ decisiontree.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/decisiontree.cpp.s
 .PHONY : decisiontree.cpp.s
 
+desc.o: desc.cpp.o
+.PHONY : desc.o
+
+# target to build an object file
+desc.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/desc.cpp.o
+.PHONY : desc.cpp.o
+
+desc.i: desc.cpp.i
+.PHONY : desc.i
+
+# target to preprocess a source file
+desc.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/desc.cpp.i
+.PHONY : desc.cpp.i
+
+desc.s: desc.cpp.s
+.PHONY : desc.s
+
+# target to generate assembly for a file
+desc.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/desc.cpp.s
+.PHONY : desc.cpp.s
+
 discretize.o: discretize.cpp.o
 .PHONY : discretize.o
 
@@ -320,6 +344,9 @@ help:
 	@echo "... decisiontree.o"
 	@echo "... decisiontree.i"
 	@echo "... decisiontree.s"
+	@echo "... desc.o"
+	@echo "... desc.i"
+	@echo "... desc.s"
 	@echo "... discretize.o"
 	@echo "... discretize.i"
 	@echo "... discretize.s"

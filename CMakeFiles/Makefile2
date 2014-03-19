@@ -94,7 +94,7 @@ clean: CMakeFiles/bin/discretize_test.dir/clean
 CMakeFiles/bin/test2.dir/all:
 	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/depend
 	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  6 7 8 9 10 11
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  6 7 8 9 10 11 12
 	@echo "Built target bin/test2"
 .PHONY : CMakeFiles/bin/test2.dir/all
 
@@ -104,7 +104,7 @@ all: CMakeFiles/bin/test2.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/bin/test2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 7
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/bin/test2.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 0
 .PHONY : CMakeFiles/bin/test2.dir/rule

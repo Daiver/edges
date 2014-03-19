@@ -2,44 +2,13 @@
 
 #include "decisiontree.h"
 #include "randomforest.h"
+#include "desc.h"
+
 #include <stdio.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
-
-void patchesToVec(cv::Mat img, std::vector<float> *res){
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            cv::Vec3b p = img.at<cv::Vec3b>(i, j);
-            res->push_back(p[0]);
-            res->push_back(p[1]);
-            res->push_back(p[2]);
-        }
-    }
-    cv::Mat gray;
-    cv::cvtColor(img, gray, CV_Lab2BGR);
-    cv::cvtColor(gray, gray, CV_BGR2GRAY);
-    cv::Mat tmp;
-    cv::Sobel(gray, tmp, CV_8U, 0, 1);
-    cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            uchar p = tmp.at<uchar>(i, j);
-            res->push_back(p);
-        }
-    }
-    cv::Sobel(gray, tmp, CV_8U, 1, 0);
-    cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            uchar p = tmp.at<uchar>(i, j);
-            res->push_back(p);
-        }
-    }
-
-
-}
 
 int main(){
     std::vector<cv::Mat> images, gtruth;
@@ -95,7 +64,7 @@ int main(){
     }*/
     data = tmp_data;
 
-    RandomForest tree(20);
+    RandomForest tree(8);
     tree.train(data, gt_patches);
     for(int i = 0; i < data.size(); i++){
         cv::Mat tmp;
