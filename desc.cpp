@@ -33,16 +33,38 @@ void patchesToVec(cv::Mat img, std::vector<float> *res){
 
     cv::Mat mag, ori;
     cv::magnitude(Sx, Sy, mag);
-    cv::normalize(magnitude, magnitude, 0, 255, cv::NORM_MINMAX);
+    cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
     cv::phase(Sx, Sy, ori, true);
+    cv::Mat f1 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    cv::Mat f2 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    cv::Mat f3 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    cv::Mat f4 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             float p = mag.at<float>(i, j);
             float f = ori.at<float>(i, j);
             //float f = cv::fastAtan2(gradY.at<short>(i, j), gradX.at<short>(i, j));
             //printf("%d %d %f\n", i, j, f);
-            res->push_back(p);
-            res->push_back(f);
+            if(p > 1.0){
+                if(f < 90.0)
+                    f1.at<float>(i, j) = p;
+                else if(f >= 90.0 && f < 180.0)
+                    f2.at<float>(i, j) = p;
+                else if(f >= 180.0 && f < 270.0)
+                    f3.at<float>(i, j) = p;
+                else if(f >= 270.0 && f < 360.0)
+                    f4.at<float>(i, j) = p;
+            }
+            //res->push_back(f);
+        }
+    }
+    cv::Mat F[] = {f1,f2,f3,f4};
+    for(int k = 0; k < 4;  k++){
+        for(int i = 0; i < img.rows; i++){
+            for(int j = 0; j < img.cols; j++){
+                float p = F[k].at<float>(i, j);
+                res->push_back(p);
+            }
         }
     }
 }
