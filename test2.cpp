@@ -64,6 +64,8 @@ int main(){
     }*/
     data = tmp_data;
 
+    printf("dataset size: %d\n", data.size());
+    printf("features len: %d\n", data[0].size());
     RandomForest tree(8);
     tree.train(data, gt_patches);
     for(int i = 0; i < data.size(); i++){

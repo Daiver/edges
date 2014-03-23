@@ -6,7 +6,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 
-void patchesToVec(cv::Mat img, std::vector<float> *res){
+void patchesToVec(cv::Mat img_o, std::vector<float> *res){
+    cv::Mat img;
+    cv::pyrDown(img_o, img);
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             cv::Vec3b p = img.at<cv::Vec3b>(i, j);
@@ -60,6 +62,7 @@ void patchesToVec(cv::Mat img, std::vector<float> *res){
     }
     cv::Mat F[] = {f1,f2,f3,f4};
     for(int k = 0; k < 4;  k++){
+        cv::normalize(F[k], F[k], 0, 255, cv::NORM_MINMAX);
         for(int i = 0; i < img.rows; i++){
             for(int j = 0; j < img.cols; j++){
                 float p = F[k].at<float>(i, j);

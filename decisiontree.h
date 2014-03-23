@@ -4,7 +4,7 @@
 #include "dtreetypedefs.h"
 
 #include <vector>
-#include <unordered_set>
+#include <set>
 #include "discretize.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -20,7 +20,7 @@ class DecisionTree{
                 std::vector<cv::Mat> labels);
         //long input_length, samples_length;
         //long num_of_classes;
-        std::unordered_set<InputValue>* uvalues;
+        std::set<InputValue>* uvalues;
 
         const std::vector<InputData>* train_data;
 

@@ -5,7 +5,8 @@
 #include <string.h>
 #include <vector>
 #include <math.h>
-#include <unordered_set>
+//#include <unordered_set>
+#include <set>
 #include <opencv2/core/core.hpp>
 
 void DecisionTree::train(
@@ -35,11 +36,15 @@ cv::Mat DecisionTree::predict(InputData data){
 }
 
 void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
-    this->uvalues = new std::unordered_set<InputValue>[data->at(0).size()];
+    this->uvalues = new std::set<InputValue>[data->at(0).size()];
     for(int i = 0; i < data->at(0).size(); i++){
         for(int j = 0; j < data->size(); j++){
             uvalues[i].insert(data->at(j)[i]);
         }
+    }
+    for(int i = 0; i < data->at(0).size(); i++){
+        if(uvalues[i].size() > 5000)
+            printf("USIZE %d\n", uvalues[i].size());
     }
     /*for(int i = 0; i < data[0].size(); i++){
         for(auto val : uvalues[i]){
@@ -96,7 +101,7 @@ TreeNode *DecisionTree::buildnode(
     //for(int col = 0; col < this->train_data[0].size(); col++){
     int m_small = sqrt(this->train_data[0].size());
     for(int col_idx = 0; col_idx < m_small; col_idx++){
-        int col = (int)rand() % this->train_data[0].size();
+        int col = (int)rand() % this->train_data->at(0).size();
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
