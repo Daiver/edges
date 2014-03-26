@@ -61,7 +61,7 @@ void DecisionTree::divideSet(
         const std::vector<cv::Mat> &seg,
         int col, InputValue value, 
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
-        std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
+        //std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
         std::vector<int> *i1, std::vector<int> *i2){
     for(int i = 0; i < data_idx.size(); i++){
         if (this->train_data->at(data_idx[i])[col] >= value){
@@ -105,9 +105,10 @@ TreeNode *DecisionTree::buildnode(
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
             std::vector<OutputData> l1, l2;
-            std::vector<cv::Mat>    g1, g2;
+            //std::vector<cv::Mat>    g1, g2;
             this->divideSet(data_idx, labels, segments, col, val, 
-                    &l1, &l2, &g1, &g2, &i1, &i2);
+                    &l1, &l2, //&g1, &g2, 
+                    &i1, &i2);
             double p = (double(i1.size()))/data_idx.size();
             double gain = current_score - 
                 p*this->ginii(l1, num_of_classes) - 
@@ -133,14 +134,15 @@ TreeNode *DecisionTree::buildnode(
         std::vector<OutputData> l1, l2; 
         ml1.clear(); ml2.clear();
         this->divideSet(data_idx, labels, segments, best_col, best_value, 
-                &l1, &l2, &g1, &g2, &ml1, &ml2);
+                &l1, &l2, //&g1, &g2, 
+                &ml1, &ml2);
         //std::vector<InputData> s1, s2;
         char name[100];
         cv::destroyAllWindows();
         printf("best_value is %f\n", best_value);
         for(int i = 0; i < ml1.size(); i++){
             g1.push_back(segments[ml1[i]]);
-            /*if(i < 12){
+            if(i < 12){
                 sprintf(name, "g1 %i", i);
                 cv::Mat tmp;
                 cv::pyrUp(g1[i], tmp);
@@ -152,12 +154,12 @@ TreeNode *DecisionTree::buildnode(
                         this->train_data->at(ml1[i])[best_col], 
                         this->train_data->at(ml1[i])[best_col] >= best_value);
                 cv::imshow(name, tmp);
-            }*/
+            }
             //s1.push_back(data[ml1[i]]);
         }
         for(int i = 0; i < ml2.size(); i++){
             g2.push_back(segments[ml2[i]]);
-            /*if(i < 12){
+            if(i < 12){
                 sprintf(name, "g2 %i", i);
                 cv::Mat tmp;
                 cv::pyrUp(g2[i], tmp);
@@ -169,10 +171,10 @@ TreeNode *DecisionTree::buildnode(
                         this->train_data->at(ml2[i])[best_col], 
                         this->train_data->at(ml2[i])[best_col] < best_value);
                 cv::imshow(name, tmp);
-            }*/
+            }
             //s2.push_back(data[ml2[i]]);
         }
-        //cv::waitKey();
+        cv::waitKey();
 
         res->left  = buildnode(ml2, g2, depth + 1);
         //res->left  = buildnode(ms2, ml2);
