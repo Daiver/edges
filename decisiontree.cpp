@@ -109,7 +109,7 @@ TreeNode *DecisionTree::buildnode(
             this->divideSet(data_idx, labels, segments, col, val, 
                     &l1, &l2, //&g1, &g2, 
                     &i1, &i2);
-            double p = (double(i1.size()))/data_idx.size();
+            double p = ((double)(i1.size()))/data_idx.size();
             double gain = current_score - 
                 p*this->ginii(l1, num_of_classes) - 
                 (1 - p) * this->ginii(l2, num_of_classes);

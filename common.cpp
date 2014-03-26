@@ -29,8 +29,8 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
 void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img_patches, std::vector<cv::Mat> *gt_patches){
     int gt_w = 16;
     int img_w = 32;
-    for (int i = 0; i < img.rows; i+=18){
-        for (int j = 0; j < img.cols; j+=18){
+    for (int i = 0; i < img.rows; i+=8){
+        for (int j = 0; j < img.cols; j+=8){
     /*for (int i = 50; i < 200; i+=4){
         for (int j = 50; j < 200; j+=4){*/
             cv::Mat tileCopy = img(
