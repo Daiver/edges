@@ -64,7 +64,7 @@ void DecisionTree::divideSet(
         //std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
         std::vector<int> *i1, std::vector<int> *i2){
     for(int i = 0; i < data_idx.size(); i++){
-        if (this->train_data->at(data_idx[i])[col] >= value){
+        if ((this->train_data->at(data_idx[i])[col]) >= value){
             i1->push_back(i);
             //s1->push_back(data[i]);
             l1->push_back(labels[i]);
