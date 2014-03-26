@@ -60,7 +60,6 @@ void DecisionTree::divideSet(
         const std::vector<OutputData> &labels,
         const std::vector<cv::Mat> &seg,
         int col, InputValue value, 
-        std::vector<InputData> *s1, std::vector<InputData> *s2,
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
         std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
         std::vector<int> *i1, std::vector<int> *i2){
@@ -105,12 +104,11 @@ TreeNode *DecisionTree::buildnode(
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
-            std::vector<InputData>  s1, s2;
             std::vector<OutputData> l1, l2;
             std::vector<cv::Mat>    g1, g2;
             this->divideSet(data_idx, labels, segments, col, val, 
-                    &s1, &s2, &l1, &l2, &g1, &g2, &i1, &i2);
-            double p = (double(s1.size()))/data_idx.size();
+                    &l1, &l2, &g1, &g2, &i1, &i2);
+            double p = (double(i1.size()))/data_idx.size();
             double gain = current_score - 
                 p*this->ginii(l1, num_of_classes) - 
                 (1 - p) * this->ginii(l2, num_of_classes);
@@ -120,6 +118,8 @@ TreeNode *DecisionTree::buildnode(
                 best_value = val;
                 best_gain = gain;
                 best_col = col;
+                ml1.clear();
+                ml2.clear();
                 ml1 = i1; ml2 = i2;// ms1 = s1; ms2 = s2;
                 //ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
                 //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
@@ -130,15 +130,49 @@ TreeNode *DecisionTree::buildnode(
     if (best_gain > 0 && depth < 84){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
+        std::vector<OutputData> l1, l2; 
+        ml1.clear(); ml2.clear();
+        this->divideSet(data_idx, labels, segments, best_col, best_value, 
+                &l1, &l2, &g1, &g2, &ml1, &ml2);
         //std::vector<InputData> s1, s2;
+        char name[100];
+        cv::destroyAllWindows();
+        printf("best_value is %f\n", best_value);
         for(int i = 0; i < ml1.size(); i++){
             g1.push_back(segments[ml1[i]]);
+            /*if(i < 12){
+                sprintf(name, "g1 %i", i);
+                cv::Mat tmp;
+                cv::pyrUp(g1[i], tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
+                printf("g1 %d %d %d %f %f %d\n", i, ml1[i], 
+                        best_col, best_value, 
+                        this->train_data->at(ml1[i])[best_col], 
+                        this->train_data->at(ml1[i])[best_col] >= best_value);
+                cv::imshow(name, tmp);
+            }*/
             //s1.push_back(data[ml1[i]]);
         }
         for(int i = 0; i < ml2.size(); i++){
             g2.push_back(segments[ml2[i]]);
+            /*if(i < 12){
+                sprintf(name, "g2 %i", i);
+                cv::Mat tmp;
+                cv::pyrUp(g2[i], tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
+                printf("g2 %d %d %d %f %f %d\n", i, ml2[i], 
+                        best_col, best_value, 
+                        this->train_data->at(ml2[i])[best_col], 
+                        this->train_data->at(ml2[i])[best_col] < best_value);
+                cv::imshow(name, tmp);
+            }*/
             //s2.push_back(data[ml2[i]]);
         }
+        //cv::waitKey();
 
         res->left  = buildnode(ml2, g2, depth + 1);
         //res->left  = buildnode(ms2, ml2);

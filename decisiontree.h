@@ -46,7 +46,6 @@ class DecisionTree{
             const std::vector<OutputData> &labels,
             const std::vector<cv::Mat> &seg,
             int col, InputValue value, 
-            std::vector<InputData> *s1, std::vector<InputData> *s2,
             std::vector<OutputData> *l1, std::vector<OutputData> *l2,
             std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
             std::vector<int> *i1, std::vector<int> *i2);

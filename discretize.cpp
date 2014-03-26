@@ -120,7 +120,7 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         //}
         //printf("\n");
     }
-    int boundary = std::min(pca.eigenvectors.rows, 8);
+    int boundary = std::min(pca.eigenvectors.rows, 1);
     std::vector<int> hs2(images.size(), 0);
     for(int i = 0; i < images.size(); i++){
         //for(int j = 0; j < pca.eigenvectors.rows; j++){
