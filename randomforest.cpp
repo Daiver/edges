@@ -52,9 +52,17 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
     //std::vector<InputData> n_data_idx; //(data.size()/this->ansamble_length);
     std::vector<int> n_data_idx; //(data.size()/this->ansamble_length);
     std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
+    int neg_size = 0;
     for(int j = 0; j < frame_size; j++){
         int indx = rand() % data.size();
         //printf("indx %d\n", indx);
+        cv::Scalar mean, std;
+        cv::meanStdDev(label[indx], mean, std);
+        //printf("%f\n", std[0]);
+        if(std[0] == 0.0) {
+            neg_size++;
+            if (neg_size > (data.size()/2)) {j--; continue;}
+        }
         n_data_idx.push_back(indx);
         n_labels.push_back(label[indx]);
     }
@@ -72,17 +80,17 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
 }
 
 void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label){
-    tbb::task_scheduler_init init_object(1);
-    /*tbb::parallel_for(tbb::blocked_range<size_t>(0, this->ansamble_length) , 
+    tbb::task_scheduler_init init_object(4);
+    tbb::parallel_for(tbb::blocked_range<size_t>(0, this->ansamble_length) , 
             [=](const tbb::blocked_range<size_t>& r) {
             for(size_t i=r.begin(); i!=r.end(); ++i){
                 this->train_one_tree(data, label, i);
             }
-    });*/
+    });
 
-    for(int i = 0; i < this->ansamble_length; i++){
+    /*for(int i = 0; i < this->ansamble_length; i++){
         this->train_one_tree(data, label, i);
-    }
+    }*/
     //this->num_of_classes = this->ansamble[0].num_of_classes;
 }
 

@@ -36,7 +36,8 @@ class DecisionTree{
         TreeNode *buildnode(
                 //const std::vector<InputData> &data, 
                 const std::vector<int> &data_idx, 
-                const std::vector<cv::Mat>& labels);
+                const std::vector<cv::Mat>& labels,
+                int depth);
 
         void calcUniqValues(const std::vector<InputData> *data);
         void divideSet(

@@ -66,7 +66,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
         for(int i = 0; i < img.rows; i++){
             for(int j = 0; j < img.cols; j++){
                 float p = F[k].at<float>(i, j);
-                res->push_back(p);
+                res->push_back(round(p));
             }
         }
     }

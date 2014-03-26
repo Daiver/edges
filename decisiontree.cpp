@@ -19,7 +19,7 @@ void DecisionTree::train(
     //std::vector<int> data_idx;
     /*for(int i = 0; i < data->size(); i++)
         data_idx.push_back(i);*/
-    this->head = buildnode(data_idx, segments);
+    this->head = buildnode(data_idx, segments, 0);
 }
 
 cv::Mat DecisionTree::predict(InputData data){
@@ -83,13 +83,13 @@ void DecisionTree::divideSet(
 TreeNode *DecisionTree::buildnode(
         //const std::vector<InputData> &data, 
         const std::vector<int> &data_idx, 
-        const std::vector<cv::Mat> &segments){
+        const std::vector<cv::Mat> &segments, int depth){
     int num_of_classes, seg_idx;
     std::vector<int> labels(segments.size(), 0);
     selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);
 
     double current_score = this->ginii(labels, num_of_classes);
-    printf("score %f %d\n", current_score, labels.size());
+    printf("score %f %d depth %d\n", current_score, labels.size(), depth);
     double best_gain = 0.0;
     //std::vector<InputData>  ms1, ms2;
     std::vector<int> ml1, ml2;
@@ -127,7 +127,7 @@ TreeNode *DecisionTree::buildnode(
             i1.clear(); i2.clear();
         }
     }
-    if (best_gain > 0){
+    if (best_gain > 0 && depth < 84){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
         //std::vector<InputData> s1, s2;
@@ -140,9 +140,9 @@ TreeNode *DecisionTree::buildnode(
             //s2.push_back(data[ml2[i]]);
         }
 
-        res->left  = buildnode(ml2, g2);
+        res->left  = buildnode(ml2, g2, depth + 1);
         //res->left  = buildnode(ms2, ml2);
-        res->right = buildnode(ml1, g1);
+        res->right = buildnode(ml1, g1, depth + 1);
         //res->right = buildnode(ms1, ml1);
         res->col = best_col;
         res->value = best_value;
