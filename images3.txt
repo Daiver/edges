@@ -1,0 +1,15 @@
+/home/daiver/BSR/BSDS500/data/images/train/
+/home/daiver/BSR/BSDS500/data/groundImages/train/
+100075
+376020
+97017
+106020
+268002
+159045
+286092
+176039
+231015
+187071
+113044
+26031
+183087

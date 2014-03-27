@@ -96,7 +96,6 @@ TreeNode *DecisionTree::buildnode(
     InputValue best_value;
     int best_col = -1;
 
-    std::vector<int> i1, i2;
     //for(int col = 0; col < this->train_data[0].size(); col++){
     int m_small = sqrt(this->train_data[0].size());
     for(int col_idx = 0; col_idx < m_small; col_idx++){
@@ -104,12 +103,13 @@ TreeNode *DecisionTree::buildnode(
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
         for(auto &val : this->uvalues[col]){
+            std::vector<int> i1, i2;
             std::vector<OutputData> l1, l2;
             //std::vector<cv::Mat>    g1, g2;
             this->divideSet(data_idx, labels, segments, col, val, 
                     &l1, &l2, //&g1, &g2, 
                     &i1, &i2);
-            double p = ((double)(i1.size()))/data_idx.size();
+            double p = ((double)(l1.size()))/data_idx.size();
             double gain = current_score - 
                 p*this->ginii(l1, num_of_classes) - 
                 (1 - p) * this->ginii(l2, num_of_classes);
