@@ -10,7 +10,7 @@ class RandomForest {
         int ansamble_length;
         DecisionTree *ansamble;
         std::vector<int> *indxss;
-        int num_of_classes;
+        //int num_of_classes;
         RandomForest(int ansamble_length);
         void train(std::vector<InputData> data, std::vector<cv::Mat> label);
         void train_one_tree(const std::vector<InputData>& data, const std::vector<cv::Mat>& label, int);
