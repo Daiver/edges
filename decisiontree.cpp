@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "decisiontree.h"
 
 #include <stdio.h>
@@ -79,10 +80,47 @@ void DecisionTree::divideSet(
     }
 }
 
+void DecisionTree::finalDivide(
+        const std::vector<int> &data_idx, 
+        const std::vector<OutputData> &labels,
+        //const std::vector<cv::Mat> &seg,
+        int col, InputValue value, 
+        std::vector<OutputData> *l1, std::vector<OutputData> *l2,
+        //std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
+        std::vector<int> *i1, std::vector<int> *i2){
+    for(int i = 0; i < data_idx.size(); i++){
+        if ((this->train_data->at(data_idx[i]))[col] >= value){
+            i1->push_back(data_idx[i]);
+            //s1->push_back(data[i]);
+            l1->push_back(i);
+            //g1->push_back(seg[i]);
+        }
+        else{
+            i2->push_back(data_idx[i]);
+            //s2->push_back(data[i]);
+            l2->push_back(i);
+            //g2->push_back(seg[i]);
+        }
+    }
+}
+
+
 TreeNode *DecisionTree::buildnode(
         //const std::vector<InputData> &data, 
         const std::vector<int> &data_idx, 
         const std::vector<cv::Mat> &segments, int depth){
+    /*for(int i = 0; i < segments.size(); i++){
+        char name[100];
+        sprintf(name, "seg %d", i % 10);
+        printf("%d\n", i);
+        cv::Mat tmp;
+        cv::normalize(segments[i], tmp, 0, 255, cv::NORM_MINMAX);
+        cv::pyrUp(tmp, tmp);
+        cv::pyrUp(tmp, tmp);
+        cv::imshow(name, tmp);
+        if(i%10 == 0) cv::waitKey();
+    }*/
+
     int num_of_classes, seg_idx;
     std::vector<int> labels(segments.size(), 0);
     selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);
@@ -135,7 +173,8 @@ TreeNode *DecisionTree::buildnode(
         std::vector<cv::Mat> g1, g2;
         std::vector<OutputData> l1, l2; 
         ml1.clear(); ml2.clear();
-        this->divideSet(data_idx, labels, 
+        //this->divideSet(data_idx, labels, 
+        finalDivide(data_idx, labels, 
                 //segments, 
                 best_col, best_value, 
                 &l1, &l2, //&g1, &g2, 
@@ -146,39 +185,45 @@ TreeNode *DecisionTree::buildnode(
         printf("best_value is %f\n", best_value);
         for(int i = 0; i < l1.size(); i++){
             g1.push_back(segments[l1[i]]);
-            /*if(i < 12){
+#ifdef NODE_SHOW_DEBUG
+            if(i < 12){
                 sprintf(name, "g1 %i", i);
                 cv::Mat tmp;
                 cv::pyrUp(g1[i], tmp);
                 cv::pyrUp(tmp, tmp);
                 cv::pyrUp(tmp, tmp);
                 cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
-                printf("g1 %d %d %d %f %f %d\n", i, ml1[i], 
-                        best_col, best_value, 
+                printf("g1 %d %d %d l(%d) %f %f %d\n", i, ml1[i], 
+                        best_col, best_value, l1[i],
                         this->train_data->at(ml1[i])[best_col], 
                         this->train_data->at(ml1[i])[best_col] >= best_value);
                 cv::imshow(name, tmp);
-            }*/
+            }
+#endif                
             //s1.push_back(data[ml1[i]]);
         }
         for(int i = 0; i < l2.size(); i++){
             g2.push_back(segments[l2[i]]);
-            /*if(i < 12){
+#ifdef NODE_SHOW_DEBUG
+            if(i < 12){
                 sprintf(name, "g2 %i", i);
                 cv::Mat tmp;
                 cv::pyrUp(g2[i], tmp);
                 cv::pyrUp(tmp, tmp);
                 cv::pyrUp(tmp, tmp);
                 cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
-                printf("g2 %d %d %d %f %f %d\n", i, ml2[i], 
-                        best_col, best_value, 
+                printf("g2 %d %d %d l(%d) %f %f %d\n", i, ml2[i], 
+                        best_col, best_value, labels[l2[i]],
                         this->train_data->at(ml2[i])[best_col], 
                         this->train_data->at(ml2[i])[best_col] < best_value);
                 cv::imshow(name, tmp);
-            }*/
+            }
+#endif
             //s2.push_back(data[ml2[i]]);
         }
-        //cv::waitKey();
+#ifdef NODE_SHOW_DEBUG
+        cv::waitKey();
+#endif
 
         res->left  = buildnode(ml2, g2, depth + 1);
         //res->left  = buildnode(ms2, ml2);

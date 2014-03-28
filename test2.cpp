@@ -1,3 +1,4 @@
+
 #include "common.h"
 
 #include "decisiontree.h"
@@ -9,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
+
 
 cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
     int img_w = 32;
@@ -115,6 +117,8 @@ int main(){
 
     gt_patches2 = gt_patches;
     data = tmp_data;
+
+    srand(NULL);
 
     printf("dataset size: %d\n", data.size());
     printf("features len: %d\n", data[0].size());
