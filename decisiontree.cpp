@@ -58,7 +58,7 @@ void DecisionTree::divideSet(
         //const std::vector<InputData> &data, 
         const std::vector<int> &data_idx, 
         const std::vector<OutputData> &labels,
-        const std::vector<cv::Mat> &seg,
+        //const std::vector<cv::Mat> &seg,
         int col, InputValue value, 
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
         //std::vector<cv::Mat> *g1, std::vector<cv::Mat> *g2,
@@ -97,7 +97,7 @@ TreeNode *DecisionTree::buildnode(
     int best_col = -1;
 
     //for(int col = 0; col < this->train_data[0].size(); col++){
-    int m_small = sqrt(this->train_data[0].size());
+    int m_small = (int)sqrt(this->train_data[0].size());
     for(int col_idx = 0; col_idx < m_small; col_idx++){
         int col = (int)rand() % this->train_data->at(0).size();
         if(col_idx % 500 == 0)
@@ -106,7 +106,9 @@ TreeNode *DecisionTree::buildnode(
             std::vector<int> i1, i2;
             std::vector<OutputData> l1, l2;
             //std::vector<cv::Mat>    g1, g2;
-            this->divideSet(data_idx, labels, segments, col, val, 
+            this->divideSet(data_idx, labels, 
+                    //segments, 
+                    col, val, 
                     &l1, &l2, //&g1, &g2, 
                     &i1, &i2);
             double p = ((double)(l1.size()))/data_idx.size();
@@ -133,7 +135,9 @@ TreeNode *DecisionTree::buildnode(
         std::vector<cv::Mat> g1, g2;
         std::vector<OutputData> l1, l2; 
         ml1.clear(); ml2.clear();
-        this->divideSet(data_idx, labels, segments, best_col, best_value, 
+        this->divideSet(data_idx, labels, 
+                //segments, 
+                best_col, best_value, 
                 &l1, &l2, //&g1, &g2, 
                 &ml1, &ml2);
         //std::vector<InputData> s1, s2;
