@@ -16,6 +16,23 @@ RandomForest::RandomForest(int ansamble_length){
     this->indxss = new std::vector<int>[this->ansamble_length];
 }
 
+void RandomForest::save(const char *fname){
+    for(int i = 0; i < this->ansamble_length; i++){
+        char name[128];
+        sprintf(name, "%s_%d.tree", fname, i);
+        this->ansamble[i].save(name);
+    }
+}
+
+void RandomForest::load(const char *fname){
+    for(int i = 0; i < this->ansamble_length; i++){
+        char name[128];
+        sprintf(name, "%s_%d.tree", fname, i);
+        this->ansamble[i].load(name);
+    }
+}
+
+
 void swap(int *a, int *b){
     int c = *a;
     *a = *b;

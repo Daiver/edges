@@ -53,13 +53,48 @@ CMAKE_SOURCE_DIR = /home/daiver/coding/edges
 CMAKE_BINARY_DIR = /home/daiver/coding/edges
 
 #=============================================================================
+# Target rules for target CMakeFiles/bin/activate.dir
+
+# All Build rule for target.
+CMakeFiles/bin/activate.dir/all:
+	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/depend
+	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  1 2 3 4 5 6 7
+	@echo "Built target bin/activate"
+.PHONY : CMakeFiles/bin/activate.dir/all
+
+# Include target in all.
+all: CMakeFiles/bin/activate.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/bin/activate.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 7
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/bin/activate.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 0
+.PHONY : CMakeFiles/bin/activate.dir/rule
+
+# Convenience name for target.
+bin/activate: CMakeFiles/bin/activate.dir/rule
+.PHONY : bin/activate
+
+# clean rule for target.
+CMakeFiles/bin/activate.dir/clean:
+	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/clean
+.PHONY : CMakeFiles/bin/activate.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/bin/activate.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/bin/discretize_test.dir
 
 # All Build rule for target.
 CMakeFiles/bin/discretize_test.dir/all:
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/depend
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  1 2 3 4 5
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  8 9 10 11 12
 	@echo "Built target bin/discretize_test"
 .PHONY : CMakeFiles/bin/discretize_test.dir/all
 
@@ -94,7 +129,7 @@ clean: CMakeFiles/bin/discretize_test.dir/clean
 CMakeFiles/bin/test2.dir/all:
 	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/depend
 	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  6 7 8 9 10 11 12
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  13 14 15 16 17 18 19
 	@echo "Built target bin/test2"
 .PHONY : CMakeFiles/bin/test2.dir/all
 

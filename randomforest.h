@@ -12,6 +12,10 @@ class RandomForest {
         std::vector<int> *indxss;
         //int num_of_classes;
         RandomForest(int ansamble_length);
+
+        void save(const char *fname);
+        void load(const char *fname);
+
         void train(std::vector<InputData> data, std::vector<cv::Mat> label);
         void train_one_tree(const std::vector<InputData>& data, const std::vector<cv::Mat>& label, int);
         std::vector<cv::Mat> predict(InputData sample);

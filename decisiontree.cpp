@@ -2,7 +2,7 @@
 #include "decisiontree.h"
 
 #include <stdio.h>
-
+#include <fstream>
 #include <string.h>
 #include <vector>
 #include <math.h>
@@ -275,3 +275,80 @@ int * DecisionTree::getFreq(std::vector<OutputData> labels, int num_of_classes){
 
 DecisionTree::DecisionTree(){
 }
+
+TreeNode* readNodeFromFile(std::ifstream &in){
+    int type;
+    in >> type;
+    if(type == 1){
+        std::string s;
+        in >> s;
+        int col ; float value;
+        in >> col >> value;
+        TreeBranch *b = new TreeBranch();
+        b->col = col;
+        b->value = value;
+        b->left = readNodeFromFile(in);
+        b->right = readNodeFromFile(in);
+        return b;
+    }
+    else{
+        std::string s;
+        in >> s;
+        int rows, cols;
+        in >> rows >> cols;
+        cv::Mat p(rows, cols, CV_8U);
+        for(int i = 0; i < p.rows; i++){
+            for(int j = 0; j < p.rows; j++){
+                in >> p.at<uchar>(i, j);
+            }
+        }
+        TreeLeaf *res = new TreeLeaf();
+        res->patch = p;
+        return res;
+    }
+
+}
+
+void DecisionTree::load(const char *fname){
+    std::ifstream in(fname);
+    this->head = readNodeFromFile(in);
+    in.close();
+}
+
+void writeNodeToFile(std::ofstream &out, TreeNode* node){
+    if(node->type == 1){
+        TreeBranch *b = static_cast<TreeBranch*>(node);
+        out << "1\n" << "TreeBranch\n" << b->col << " " << b->value << "\n";
+        writeNodeToFile(out, b->left);
+        writeNodeToFile(out, b->right);
+    }
+    else{
+        auto p = static_cast<TreeLeaf*>(node)->patch;
+        out << "2\n" << "TreeLeaf\n";
+        out << p.rows << " " << p.cols << "\n";
+        for(int i = 0; i < p.rows; i++){
+            for(int j = 0; j < p.rows; j++){
+                out << p.at<uchar>(i, j) << " ";
+            }
+            out << "\n";
+        }
+    }
+}
+
+void DecisionTree::save(const char *fname){
+    std::ofstream out(fname);
+    writeNodeToFile(out, this->head);
+    out.close();
+}
+
+
+/*
+    while(node->type != 2){
+        TreeBranch *b = static_cast<TreeBranch*>(node);
+        if(data[b->col] >= b->value)
+            node = b->right;
+        else
+            node = b->left;
+    }
+    return static_cast<TreeLeaf*>(node)->patch;
+*/

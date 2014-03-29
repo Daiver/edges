@@ -15,6 +15,10 @@
 class DecisionTree{
     public:
         DecisionTree();
+
+        void save(const char *fname);
+        void load(const char *fname);
+
         void train(const std::vector<InputData> *data, 
                 std::vector<int> &data_idx, 
                 std::vector<cv::Mat> labels);
@@ -25,7 +29,7 @@ class DecisionTree{
         const std::vector<InputData>* train_data;
 
         TreeNode* head;
-
+        
         cv::Mat predict(InputData data);
         double ginii(const std::vector<OutputData> &labels, int num_of_classes);
 
