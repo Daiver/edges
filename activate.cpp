@@ -25,13 +25,26 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
                 cv::Range(i, std::min(i + img_w, img.rows)),
                 cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
             if (tileCopy.rows == img_w && tileCopy.cols == img_w){
+                cv::Mat tmp;
+                cv::pyrUp(tileCopy, tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::imshow("", tmp);
                 patchesToVec(tileCopy, &desc);
                 std::vector<cv::Mat> ress = forest.predict(desc);
                 cv::Mat edges;
                 cv::Canny(ress[ress.size() - 1], edges, 0, 1);
-                cv::imshow("1", ress[ress.size() - 1]);
-                cv::imshow("2", edges);
-                //cv::waitKey();
+                cv::normalize(ress[ress.size() - 1], tmp, 0, 255, cv::NORM_MINMAX);
+                cv::pyrUp(tmp, tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::pyrUp(tmp, tmp);
+                cv::imshow("1", tmp);
+
+                cv::Mat tmp2;
+                cv::pyrUp(edges, tmp2);
+                cv::pyrUp(tmp2, tmp2);
+                cv::pyrUp(tmp2, tmp2);
+                cv::imshow("2", tmp2);
+                cv::waitKey();
                 for(int ii = 0; ii < gt_w; ii++){
                     for(int jj = 0; jj < gt_w; jj++){
                         res.at<uchar>(i + ii, j + jj) = 
@@ -81,8 +94,8 @@ int main(){
         tree.ansamble[i].head->show();
     }
 
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_res = reproduce(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);

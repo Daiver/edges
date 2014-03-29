@@ -1,5 +1,5 @@
 /home/daiver/BSR/BSDS500/data/images/train/
 /home/daiver/BSR/BSDS500/data/groundImages/train/
 100075
-376020
-97017
+26031
+183087

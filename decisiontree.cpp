@@ -299,10 +299,13 @@ TreeNode* readNodeFromFile(std::ifstream &in){
         cv::Mat p(rows, cols, CV_8U);
         for(int i = 0; i < p.rows; i++){
             for(int j = 0; j < p.rows; j++){
-                in >> p.at<uchar>(i, j);
+                int t;
+                in >> t;
+                p.at<uchar>(i, j) = t;
             }
         }
         TreeLeaf *res = new TreeLeaf();
+        res->len = 0;
         res->patch = p;
         return res;
     }
@@ -328,7 +331,7 @@ void writeNodeToFile(std::ofstream &out, TreeNode* node){
         out << p.rows << " " << p.cols << "\n";
         for(int i = 0; i < p.rows; i++){
             for(int j = 0; j < p.rows; j++){
-                out << p.at<uchar>(i, j) << " ";
+                out << (int)p.at<uchar>(i, j) << " ";
             }
             out << "\n";
         }

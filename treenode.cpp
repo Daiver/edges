@@ -4,7 +4,7 @@
 void TreeBranch::show(int n){
     for(int i = 0; i < n; i++)
         printf("  ");
-    printf("br %d %d\n", this->col, this->value);
+    printf("br %d %f\n", this->col, this->value);
     this->left->show(n+1);
     this->right->show(n+1);
 }
