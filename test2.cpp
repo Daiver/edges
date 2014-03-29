@@ -19,8 +19,8 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
     cv::cvtColor(img_o, img, CV_BGR2Luv);
     cv::Mat res = cv::Mat::zeros(img.rows, img.cols, CV_8U);
     std::vector<float> desc;
-    for (int i = 0; i < img.rows; i+=8){
-        for (int j = 0; j < img.cols; j+=8){
+    for (int i = 0; i < img.rows; i+=16){
+        for (int j = 0; j < img.cols; j+=16){
             cv::Mat tileCopy = img(
                 cv::Range(i, std::min(i + img_w, img.rows)),
                 cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
@@ -49,12 +49,12 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
 
 int main(){
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images2.txt", &images, &gtruth);
+    read_imgList2("images3.txt", &images, &gtruth);
     for(int i = 0; i < images.size(); i++){
-        cv::imshow("image", images[i]);
+        //cv::imshow("image", images[i]);
         cv::Mat tmp;
         cv::normalize(gtruth[i], tmp, 0, 255, cv::NORM_MINMAX);
-        cv::imshow("edges", tmp);
+        //cv::imshow("edges", tmp);
         //cv::waitKey();
     }
     std::vector<cv::Mat> img_patches, gt_patches;
@@ -124,7 +124,8 @@ int main(){
     printf("features len: %d\n", data[0].size());
     RandomForest tree(8);
     tree.train(data, gt_patches2);
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_res = reproduce(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
