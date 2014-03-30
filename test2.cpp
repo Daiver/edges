@@ -49,7 +49,7 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
 
 int main(){
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images2.txt", &images, &gtruth);
+    read_imgList2("images3.txt", &images, &gtruth);
     for(int i = 0; i < images.size(); i++){
         //cv::imshow("image", images[i]);
         cv::Mat tmp;
@@ -128,6 +128,7 @@ int main(){
     for(int i = 0; i < 8;i++){
         tree.ansamble[i].head->show();
     }
+    return 0;
 
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");

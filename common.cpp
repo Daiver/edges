@@ -26,6 +26,7 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
 
 }
 
+
 void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img_patches, std::vector<cv::Mat> *gt_patches){
     int gt_w = 16;
     int img_w = 32;
