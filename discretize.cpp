@@ -1,5 +1,7 @@
 #include "discretize.h"
 
+#include "defines.h"
+
 void selectFeaturesFromPatches(const std::vector<cv::Mat> &images, 
         std::vector<int> *hs, int *num_of_classes, int *seg_idx){
     if(images.size() == 1) {
@@ -8,7 +10,9 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         *seg_idx = 0;
         return;
     }
+#ifdef DISCRETIZE_DEBUG
     printf("start disr %d\n", images.size());
+#endif
     std::vector<int> indxs;
     for(int i = 0; i < 256; i++){
         int x = (int)rand() % (256*256);
@@ -17,7 +21,9 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         indxs.push_back(x);
     }
     //std::vector<std::vector<double>> zs(images.size());
+#ifdef DISCRETIZE_DEBUG
     printf("ZS compute\n");
+#endif
     cv::Mat zs(images.size(), 256, CV_32F);
     for(int i = 0; i < images.size(); i++){
         for(int j = 0; j < 256; j++){
@@ -26,7 +32,9 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         }
     }
 
+#ifdef DISCRETIZE_DEBUG
     printf("deleting indexs\n");
+#endif
     std::vector<int> indx_to_delete;
     for(int j = 0; j < 256; j++){
         float sum = 0;
@@ -77,7 +85,9 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         }
     }
 
+#ifdef DISCRETIZE_DEBUG
     printf("search min\n");
+#endif
     int min_idx = -1;
     float min_value = 10000;
     for(int i = 0; i < images.size(); i++){
@@ -97,9 +107,13 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
         *seg_idx = 0;
         return;
     }
+#ifdef DISCRETIZE_DEBUG
     printf("pca... %d %d\n", zs.rows, zs.cols);
+#endif
     cv::PCA pca(zs, cv::Mat(), CV_PCA_DATA_AS_ROW, 0.82);
+#ifdef DISCRETIZE_DEBUG
     printf("PCA # %d\n", pca.eigenvectors.rows);
+#endif
     cv::Mat zs2(images.size(), pca.eigenvectors.rows, CV_32F);
     for(int i = 0; i < images.size(); i++){
         auto res = pca.project(zs.row(i));
@@ -141,7 +155,9 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
     for(int i = 0 ; i < hs2.size(); i++){
         hs->at(i) = hash_table[hs2[i]];
     }
+#ifdef DISCRETIZE_DEBUG
     printf("counter %d\n", counter);
+#endif
     delete [] hash_table;
     *num_of_classes = counter;
     *seg_idx = min_idx;

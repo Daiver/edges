@@ -3,6 +3,6 @@
 
 //#define NODE_SHOW_DEBUG
 
-#define ENABLE_TBB
+//#define ENABLE_TBB
 
 #endif

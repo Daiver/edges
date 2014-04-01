@@ -13,7 +13,7 @@
 RandomForest::RandomForest(int ansamble_length){
     this->ansamble_length = ansamble_length;
     this->ansamble = new DecisionTree[this->ansamble_length];
-    this->indxss = new std::vector<int>[this->ansamble_length];
+    //this->indxss = new std::vector<int>[this->ansamble_length];
 }
 
 void RandomForest::save(const char *fname){
@@ -71,6 +71,9 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
     //std::vector<InputData> n_data_idx; //(data.size()/this->ansamble_length);
     std::vector<int> n_data_idx; //(data.size()/this->ansamble_length);
     std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
+
+    sleep(10000);
+    
     int neg_size = 0;
     for(int j = 0; j < frame_size; j++){
         int indx = rand() % data.size();

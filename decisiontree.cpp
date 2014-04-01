@@ -126,7 +126,9 @@ TreeNode *DecisionTree::buildnode(
     selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);
 
     double current_score = this->ginii(labels, num_of_classes);
+#ifdef DECISION_TREE_DEBUG
     printf("score %f %d depth %d\n", current_score, labels.size(), depth);
+#endif
     double best_gain = 0.0;
     //std::vector<InputData>  ms1, ms2;
     std::vector<int> ml1, ml2;
@@ -138,8 +140,10 @@ TreeNode *DecisionTree::buildnode(
     int m_small = (int)sqrt(this->train_data[0].size());
     for(int col_idx = 0; col_idx < m_small; col_idx++){
         int col = (int)rand() % this->train_data->at(0).size();
+#ifdef DECISION_TREE_DEBUG
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
+#endif
         for(auto &val : this->uvalues[col]){
             std::vector<int> i1, i2;
             std::vector<OutputData> l1, l2;
@@ -182,7 +186,6 @@ TreeNode *DecisionTree::buildnode(
         //std::vector<InputData> s1, s2;
         char name[100];
         cv::destroyAllWindows();
-        printf("best_value is %f\n", best_value);
         for(int i = 0; i < l1.size(); i++){
             g1.push_back(segments[l1[i]]);
 #ifdef NODE_SHOW_DEBUG
