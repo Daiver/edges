@@ -5,3 +5,4 @@
 #include <vector>
 
 void patchesToVec(cv::Mat img, std::vector<float> *res);
+cv::Mat convTri(cv::Mat, float);

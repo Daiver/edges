@@ -117,6 +117,13 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
 }
 
 int main(){
+
+    cv::Mat test_img2 = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg", 0);
+    cv::Mat tmp_img = convTri(test_img2, 4);
+    cv::imshow("1", test_img2);
+    cv::imshow("2", tmp_img);
+    cv::waitKey();
+    return 0;
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
     for(int i = 0; i < images.size(); i++){
