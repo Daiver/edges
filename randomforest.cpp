@@ -72,7 +72,7 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
     std::vector<int> n_data_idx; //(data.size()/this->ansamble_length);
     std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
 
-    sleep(10000);
+    //sleep(10000);
     
     int neg_size = 0;
     for(int j = 0; j < frame_size; j++){

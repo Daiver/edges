@@ -184,7 +184,9 @@ TreeNode *DecisionTree::buildnode(
                 &l1, &l2, //&g1, &g2, 
                 &ml1, &ml2);
         //std::vector<InputData> s1, s2;
+#ifdef NODE_SHOW_DEBUG
         char name[100];
+#endif
         cv::destroyAllWindows();
         for(int i = 0; i < l1.size(); i++){
             g1.push_back(segments[l1[i]]);

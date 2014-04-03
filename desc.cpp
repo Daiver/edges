@@ -50,10 +50,12 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
         cv::Mat::zeros(img.rows, img.cols, img.depth()),
         cv::Mat::zeros(img.rows, img.cols, img.depth()),
     };
+    int chnls_size = sizeof(chnls)/sizeof(cv::Mat);
+
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             cv::Vec3b p = img.at<cv::Vec3b>(i, j);
-            for(int k = 0; k < img.channels(); k++){
+            for(int k = 0; k < chnls_size; k++){
                 chnls[k].at<uchar>(i, j) = p[k];//WARN
             }
         }
@@ -67,9 +69,9 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
 #ifdef GRAD_MAG_DEBUG
     printf("Compute mag\n");
 #endif
-    for(int k = 0; k < img.channels(); k++){
-        cv::Sobel(img, Sx[k], CV_32F, 1, 0, 3);
-        cv::Sobel(img, Sy[k], CV_32F, 0, 1, 3);
+    for(int k = 0; k < chnls_size; k++){
+        cv::Sobel(chnls[k], Sx[k], CV_32F, 1, 0);
+        cv::Sobel(chnls[k], Sy[k], CV_32F, 0, 1);
         cv::magnitude(Sx[k], Sy[k], mag[k]);
     }
 #ifdef GRAD_MAG_DEBUG
@@ -78,8 +80,8 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             float max = 0;
-            int ind = -1;
-            for(int k = 0; k < img.channels(); k++){
+            int ind = 0;
+            for(int k = 0; k < chnls_size; k++){
                 float p = mag[k].at<float>(i,j);
                 if (p > max){
                     max = p;
@@ -97,11 +99,20 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
     cv::Mat M1 = mag[3];
     cv::Mat S = convTri(M1, normRad) + normConst;
     cv::divide(M1, S, M);
+    cv::divide(Sx[3], S, Sx[3]);
+    cv::divide(Sy[3], S, Sy[3]);
 #ifdef GRAD_MAG_DEBUG
     printf("Compute ori\n");
 #endif
     O = cv::Mat::zeros(img.rows, img.cols, CV_32F);
-    cv::phase(Sx[3], Sy[3], O, true);
+    cv::phase(Sx[3], Sy[3], O);
+    /*for(int i = 0; i < img.rows; i++){
+        for(int j = 0; j < img.cols; j++){
+            if (O.at<float>(i, j) < 0) printf("--- %f\n", O.at<float>(i,j));
+            if (O.at<float>(i, j) >3.15) printf("++ %f\n", O.at<float>(i,j));
+        }
+    }*/
+    //O = (3.14 + O)/2.;
 }
 
 void patchesToVec(cv::Mat img_o, std::vector<float> *res){
@@ -126,13 +137,16 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat gradF;
     cv::Sobel(gray, gradF, CV_16S, 1, 1);
     cv::normalize(gradF, gradF, 0, 255, cv::NORM_MINMAX);*/
-    cv::Mat Sx;
+    /*cv::Mat Sx;
     cv::Sobel(img, Sx, CV_32F, 1, 0, 3);
     cv::Mat Sy;
-    cv::Sobel(img, Sy, CV_32F, 0, 1, 3);
+    cv::Sobel(img, Sy, CV_32F, 0, 1, 3);*/
 
     cv::Mat mag, ori;
-    cv::magnitude(Sx, Sy, mag);
+    gradientMag(img, mag, ori, 4, 0.01);
+    //cv::magnitude(Sx, Sy, mag);
+    //cv::phase(Sx, Sy, ori, true);
+    mag = convTri(mag, 2);
     cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
@@ -140,7 +154,6 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
             res->push_back(round(p));
         }
     }
-    cv::phase(Sx, Sy, ori, true);
     cv::Mat f1 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
     cv::Mat f2 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
     cv::Mat f3 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
@@ -166,6 +179,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     }
     cv::Mat F[] = {f1,f2,f3,f4};
     for(int k = 0; k < 4;  k++){
+        F[k] = convTri(F[k], 2);
         cv::normalize(F[k], F[k], 0, 255, cv::NORM_MINMAX);
         for(int i = 0; i < img.rows; i++){
             for(int j = 0; j < img.cols; j++){
@@ -187,7 +201,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat for_pairwise[] = {i1,i2,i3,mag,f1,f2,f3,f4};//8
     for(int k = 0; k < 8;  k++){
         cv::Mat reduced = cv::Mat::zeros(5,5,CV_32F);
-        cv::resize(for_pairwise[k], reduced, reduced.size());
+        cv::resize(convTri(for_pairwise[k], 8), reduced, reduced.size());
         for(int i = 0; i < 25; i++){
             int x1 = i/5;
             int y1 = i%5;

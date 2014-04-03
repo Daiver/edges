@@ -3,8 +3,8 @@
 
 //#define NODE_SHOW_DEBUG
 
-//#define ENABLE_TBB
+#define ENABLE_TBB
 
-#define GRAD_MAG_DEBUG
+//#define GRAD_MAG_DEBUG
 
 #endif
