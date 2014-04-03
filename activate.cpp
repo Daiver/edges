@@ -134,8 +134,21 @@ void convTriTest(){
     return;
 }
 
+void gradMagTest(){
+    cv::Mat test_img2 = cv::imread(
+            "/home/daiver/BSR/BSDS500/data/images/test/100099.jpg", 0);
+    cv::Mat mag, ori;
+    gradientMag(test_img2, mag, ori, 4, 0.1);
+    cv::imshow("1", test_img2);
+    printf("show mag %d %d\n", mag.rows, mag.cols);
+    cv::imshow("2", mag);
+    printf("show ori %d %d\n", ori.rows, ori.cols);
+    cv::imshow("3", ori);
+    cv::waitKey();
+}
 int main(){
     //convTriTest(); return 0;
+    gradMagTest(); return 0;
 
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);

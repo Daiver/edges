@@ -1,4 +1,5 @@
 #include "desc.h"
+#include "defines.h"
 
 #include <stdio.h>
 #include <opencv2/core/core.hpp>
@@ -38,6 +39,69 @@ cv::Mat convTri(cv::Mat img, float r){
     std::cout<<kernel;*/
     cv::filter2D(img, res, -1, kernel);
     return res;
+}
+
+void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normConst){
+#ifdef GRAD_MAG_DEBUG
+    printf("Compute channels\n");
+#endif
+    cv::Mat chnls[] = {
+        cv::Mat::zeros(img.rows, img.cols, img.depth()),
+        cv::Mat::zeros(img.rows, img.cols, img.depth()),
+        cv::Mat::zeros(img.rows, img.cols, img.depth()),
+    };
+    for(int i = 0; i < img.rows; i++){
+        for(int j = 0; j < img.cols; j++){
+            cv::Vec3b p = img.at<cv::Vec3b>(i, j);
+            for(int k = 0; k < img.channels(); k++){
+                chnls[k].at<uchar>(i, j) = p[k];//WARN
+            }
+        }
+    }
+    cv::Mat Sx[4];
+    cv::Mat Sy[4];
+    cv::Mat mag[4];
+    Sx[3] = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    Sy[3] = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    mag[3] = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+#ifdef GRAD_MAG_DEBUG
+    printf("Compute mag\n");
+#endif
+    for(int k = 0; k < img.channels(); k++){
+        cv::Sobel(img, Sx[k], CV_32F, 1, 0, 3);
+        cv::Sobel(img, Sy[k], CV_32F, 0, 1, 3);
+        cv::magnitude(Sx[k], Sy[k], mag[k]);
+    }
+#ifdef GRAD_MAG_DEBUG
+    printf("Compute max mag\n");
+#endif
+    for(int i = 0; i < img.rows; i++){
+        for(int j = 0; j < img.cols; j++){
+            float max = 0;
+            int ind = -1;
+            for(int k = 0; k < img.channels(); k++){
+                float p = mag[k].at<float>(i,j);
+                if (p > max){
+                    max = p;
+                    ind = k;
+                }
+            }
+            mag[3].at<float>(i, j) = max;
+            Sx[3].at<float>(i, j) = Sx[ind].at<float>(i,j);
+            Sy[3].at<float>(i, j) = Sy[ind].at<float>(i,j);
+        }
+    }
+#ifdef GRAD_MAG_DEBUG
+    printf("Compute norm\n");
+#endif
+    cv::Mat M1 = mag[3];
+    cv::Mat S = convTri(M1, normRad) + normConst;
+    cv::divide(M1, S, M);
+#ifdef GRAD_MAG_DEBUG
+    printf("Compute ori\n");
+#endif
+    O = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+    cv::phase(Sx[3], Sy[3], O, true);
 }
 
 void patchesToVec(cv::Mat img_o, std::vector<float> *res){

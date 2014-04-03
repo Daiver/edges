@@ -6,3 +6,4 @@
 
 void patchesToVec(cv::Mat img, std::vector<float> *res);
 cv::Mat convTri(cv::Mat, float);
+void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normConst);

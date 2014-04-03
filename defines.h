@@ -5,4 +5,6 @@
 
 //#define ENABLE_TBB
 
+#define GRAD_MAG_DEBUG
+
 #endif
