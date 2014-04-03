@@ -63,6 +63,7 @@ cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
         }
     }
     cv::imshow("RR", fin_edges);
+    fin_edges = convTri(fin_edges, 1);
     cv::waitKey();
     return fin_edges;
 }
@@ -134,7 +135,7 @@ void convTriTest(){
 }
 
 int main(){
-    convTriTest(); return 0;
+    //convTriTest(); return 0;
 
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
