@@ -118,11 +118,13 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
 
 void convTriTest(){
     cv::Mat test_img2 = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/100099.jpg", 0);
-    cv::Mat tmp_img = convTri(test_img2, 4);
+    cv::Mat tmp_img = convTri(test_img2, 8);
     cv::imshow("1", test_img2);
     cv::imshow("2", tmp_img);
     cv::Mat orig_tmp = cv::imread("/home/daiver/tmp.bmp", 0);
+    cv::imshow("orig", orig_tmp);
     auto diff = abs(orig_tmp - tmp_img);
+    cv::imshow("diff", diff);
     cv::Scalar mean, std;
     cv::meanStdDev(diff, mean, std);
     printf(">>>%f %f\n", std[0], mean[0]);
@@ -132,6 +134,7 @@ void convTriTest(){
 }
 
 int main(){
+    convTriTest(); return 0;
 
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
