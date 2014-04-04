@@ -65,6 +65,8 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
     int frame_size = data.size() ;
     int i = tree_num;
     printf("Tree num %d\n", i);
+    //sleep(10);
+    //printf("after\n");
     //auto indxs = getRandIndxs(data[0].size());
     //auto ndata = this->getRandSamples(data, indxs);
     //indxss[i] = indxs;
@@ -109,7 +111,7 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
 
 }
 
-void RandomForest::train(std::vector<InputData> data, std::vector<cv::Mat> label){
+void RandomForest::train(std::vector<InputData> &data, std::vector<cv::Mat> &label){
 #ifdef ENABLE_TBB
     tbb::task_scheduler_init init_object(4);
     tbb::parallel_for(tbb::blocked_range<size_t>(0, this->ansamble_length) , 

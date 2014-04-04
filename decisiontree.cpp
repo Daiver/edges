@@ -40,7 +40,8 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
     this->uvalues = new std::set<InputValue>[data->at(0).size()];
     for(int i = 0; i < data->at(0).size(); i++){
         for(int j = 0; j < data->size(); j++){
-            uvalues[i].insert(data->at(j)[i]);
+            uvalues[i].insert(round(data->at(j)[i]));
+            //uvalues[i].insert(data->at(j)[i]);
         }
     }
     for(int i = 0; i < data->at(0).size(); i++){

@@ -151,7 +151,8 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             float p = mag.at<float>(i, j);
-            res->push_back(round(p));
+            res->push_back(p);
+            //res->push_back(round(p));
         }
     }
     cv::Mat f1 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
@@ -184,7 +185,8 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
         for(int i = 0; i < img.rows; i++){
             for(int j = 0; j < img.cols; j++){
                 float p = F[k].at<float>(i, j);
-                res->push_back(round(p));
+                res->push_back(p);
+                //res->push_back(round(p));
             }
         }
     }
@@ -211,7 +213,8 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
                 int y2 = j%5;
                 if(x1 == x2 && y1 == y2) continue;
                 float p2 = for_pairwise[k].at<float>(x2, y2);
-                res->push_back(round(p1 - p2));
+                res->push_back(p1 - p2);
+                //res->push_back(round(p1 - p2));
             }
         }
     }

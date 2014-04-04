@@ -6,11 +6,14 @@
 #include "desc.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 #include <iostream>
+#include <unistd.h>
 
 
 cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
@@ -80,9 +83,12 @@ int main(){
         printf("%d %d %f\n", i, img_patches.size(), cv::sum(gt_patches[i])[0]);
         cv::waitKey();
     }*/
-    std::vector<std::vector<float>> tmp_data(img_patches.size());
-    for(int i = 0; i < tmp_data.size(); i++){
-        patchesToVec(img_patches[i], &tmp_data[i]);
+    //std::vector<cv::Mat> gt_patches2;
+    std::vector<std::vector<float>> data(img_patches.size());
+    //std::vector<std::vector<float>> tmp_data(img_patches.size());
+    for(int i = 0; i < data.size(); i++){
+        patchesToVec(img_patches[i], &data[i]);
+        //patchesToVec(img_patches[i], &tmp_data[i]);
     }
     /*cv::Mat to_pca(tmp_data.size(), tmp_data[0].size(), CV_32F);
     for(int i = 0; i < tmp_data.size(); i++){
@@ -100,8 +106,6 @@ int main(){
             data[i].push_back(tmp_mat.at<float>(0, j));
         }
     }*/
-    std::vector<cv::Mat> gt_patches2;
-    std::vector<std::vector<float>> data;
 
     /*int neg_size = 0;
     for(int i = 0; i < tmp_data.size(); i++){
@@ -116,15 +120,18 @@ int main(){
         }
     }*/
 
-    gt_patches2 = gt_patches;
-    data = tmp_data;
+    //gt_patches2 = gt_patches;
+    //data = tmp_data;
+    
+    //printf("After reading desc\n");
+    //sleep(10);
 
     srand(NULL);
 
     printf("dataset size: %d\n", data.size());
     printf("features len: %d\n", data[0].size());
     RandomForest tree(8);
-    tree.train(data, gt_patches2);
+    tree.train(data, gt_patches);
     tree.save("forest");
     for(int i = 0; i < 8;i++){
         tree.ansamble[i].head->show();
@@ -136,7 +143,7 @@ int main(){
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
     cv::waitKey();
-    for(int i = 0; i < tmp_data.size(); i++){
+    for(int i = 0; i < data.size(); i++){
         cv::Mat tmp;
         cv::pyrUp(img_patches[i], tmp);
         cv::pyrUp(tmp, tmp);

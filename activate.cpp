@@ -53,7 +53,7 @@ cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
         cv::pyrUp(tmp2, tmp2);
         cv::pyrUp(tmp2, tmp2);
         cv::imshow("E", tmp2);
-        printf("i %d\n", i);
+        //printf("i %d\n", i);
         int sti = (i /(fin_edges.cols/8))*8;
         int stj = (i %(fin_edges.cols/8))*8;
         for(int ii = 0; ii < 8;ii++){
@@ -183,8 +183,8 @@ int main(){
     RandomForest tree(8);
     tree.load("forest");
 
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_res = reproduce2(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
