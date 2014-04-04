@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "decisiontree.h"
 
+#include <unistd.h>
 #include <stdio.h>
 #include <fstream>
 #include <string.h>
@@ -15,6 +16,8 @@ void DecisionTree::train(
         std::vector<int> &data_idx,
         std::vector<cv::Mat> segments){
     //this->num_of_classes = getNumOfClasses(labels);
+    //printf("HERe\n");
+    //sleep(10);
     this->calcUniqValues(data);
     this->train_data = data;
     //std::vector<int> data_idx;
@@ -40,14 +43,17 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
     this->uvalues = new std::set<InputValue>[data->at(0).size()];
     for(int i = 0; i < data->at(0).size(); i++){
         for(int j = 0; j < data->size(); j++){
-            uvalues[i].insert(round(data->at(j)[i]));
-            //uvalues[i].insert(data->at(j)[i]);
+            //uvalues[i].insert(round(data->at(j)[i]));
+            uvalues[i].insert(data->at(j)[i]);
         }
     }
     for(int i = 0; i < data->at(0).size(); i++){
         if(uvalues[i].size() > 5000)
             printf("USIZE %d\n", uvalues[i].size());
     }
+    /*printf("FIN\n");
+    sleep(10);
+    printf("FIN\n");*/
     /*for(int i = 0; i < data[0].size(); i++){
         for(auto val : uvalues[i]){
             printf("%d\n", val);

@@ -147,7 +147,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     //cv::magnitude(Sx, Sy, mag);
     //cv::phase(Sx, Sy, ori, true);
     mag = convTri(mag, 2);
-    cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
+    //cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             float p = mag.at<float>(i, j);
@@ -181,7 +181,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat F[] = {f1,f2,f3,f4};
     for(int k = 0; k < 4;  k++){
         F[k] = convTri(F[k], 2);
-        cv::normalize(F[k], F[k], 0, 255, cv::NORM_MINMAX);
+        //cv::normalize(F[k], F[k], 0, 255, cv::NORM_MINMAX);
         for(int i = 0; i < img.rows; i++){
             for(int j = 0; j < img.cols; j++){
                 float p = F[k].at<float>(i, j);
