@@ -18,7 +18,7 @@ void DecisionTree::train(
     //this->num_of_classes = getNumOfClasses(labels);
     //printf("HERe\n");
     //sleep(10);
-    this->calcUniqValues(data);
+    //this->calcUniqValues(data);
     this->train_data = data;
     //std::vector<int> data_idx;
     /*for(int i = 0; i < data->size(); i++)
@@ -39,7 +39,7 @@ cv::Mat DecisionTree::predict(InputData data){
     //return static_cast<TreeLeaf*>(node)->freqs;
 }
 
-void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
+/*void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
     this->uvalues = new std::set<InputValue>[data->at(0).size()];
     for(int i = 0; i < data->at(0).size(); i++){
         for(int j = 0; j < data->size(); j++){
@@ -50,7 +50,7 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
     for(int i = 0; i < data->at(0).size(); i++){
         if(uvalues[i].size() > 5000)
             printf("USIZE %d\n", uvalues[i].size());
-    }
+    }*/
     /*printf("FIN\n");
     sleep(10);
     printf("FIN\n");*/
@@ -61,7 +61,7 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
         }
     }*/
     //std::vector<InputValue>* res = new std::vector[this->input_length];
-}
+//}
 
 void DecisionTree::divideSet(
         //const std::vector<InputData> &data, 
@@ -152,7 +152,13 @@ TreeNode *DecisionTree::buildnode(
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
 #endif
-        for(auto &val : this->uvalues[col]){
+
+        std::set<InputValue> val_set;
+        //for(auto &val : this->uvalues[col]){
+        for(int val_idx : data_idx){
+            InputValue val = this->train_data->at(val_idx).at(col);
+            if(val_set.find(val) != val_set.end()) continue;
+            val_set.insert(val);
             std::vector<int> i1, i2;
             std::vector<OutputData> l1, l2;
             //std::vector<cv::Mat>    g1, g2;
