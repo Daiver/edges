@@ -57,6 +57,7 @@ void DecisionTree::calcUniqValues(const std::vector<InputData> *data){
     /*for(int i = 0; i < data[0].size(); i++){
         for(auto val : uvalues[i]){
             printf("%d\n", val);
+    printf("FIN\n");
         }
     }*/
     //std::vector<InputValue>* res = new std::vector[this->input_length];
