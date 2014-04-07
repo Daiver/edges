@@ -105,7 +105,7 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
     printf("Compute ori\n");
 #endif
     O = cv::Mat::zeros(img.rows, img.cols, CV_32F);
-    cv::phase(Sx[3], Sy[3], O);
+    cv::phase(Sx[3], Sy[3], O, true);
     /*for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             if (O.at<float>(i, j) < 0) printf("--- %f\n", O.at<float>(i,j));

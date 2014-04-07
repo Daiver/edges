@@ -132,7 +132,7 @@ int main(){
     printf("features len: %d\n", data[0].size());
     RandomForest tree(8);
     tree.train(data, gt_patches);
-    tree.save("forest");
+    tree.save("../model/forest");
     for(int i = 0; i < 8;i++){
         tree.ansamble[i].head->show();
     }

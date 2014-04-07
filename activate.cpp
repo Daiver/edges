@@ -42,8 +42,12 @@ cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
         patchesToVec(img_patches[i], &desc);
         std::vector<cv::Mat> ress = tree.predict(desc);
         auto res = ress[ress.size() - 1];
-        cv::Mat edges, tmp2;
-        cv::Canny(res, edges, 0, 1);
+        cv::Mat edges, tmp2, tmpO;
+        //gradientMag(res, edges, tmpO, 0, 0.005);
+        cv::Sobel(res, edges, CV_32F, 1, 1);
+        edges = edges > 0.1;
+        
+        //cv::Canny(res, edges, 0, 1);
         cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
         cv::pyrUp(tmp2, tmp2);
         cv::pyrUp(tmp2, tmp2);
@@ -137,7 +141,9 @@ void convTriTest(){
 
 void gradMagTest(){
     cv::Mat test_img2 = cv::imread(
-            "/home/daiver/BSR/BSDS500/data/images/test/100099.jpg");
+            "/home/daiver/u2.png");
+            //"/home/daiver/u.png");
+            //"/home/daiver/BSR/BSDS500/data/images/test/100099.jpg");
     
     cv::Mat mag, ori;
     gradientMag(test_img2, mag, ori, 4, 0.01);
@@ -149,9 +155,61 @@ void gradMagTest(){
     cv::imshow("3", ori);
     cv::waitKey();
 }
+
+void gradMagTest2(){
+    cv::Mat test_img2 = cv::imread(
+            "/home/daiver/u2.png");
+            //"/home/daiver/u.png");
+            //"/home/daiver/BSR/BSDS500/data/images/test/100099.jpg");
+    
+    cv::Mat mag, ori;
+    gradientMag(test_img2, mag, ori, 4, 0.01);
+    cv::imshow("1", test_img2);
+    printf("show mag %d %d\n", mag.rows, mag.cols);
+    cv::imshow("2", mag);
+    printf("show ori %d %d\n", ori.rows, ori.cols);
+    //cv::normalize(ori, ori, 0, 255, cv::NORM_MINMAX);
+    cv::imshow("3", ori);
+
+
+    cv::Mat f1 = cv::Mat::zeros(test_img2.rows, test_img2.cols, CV_32F);
+    cv::Mat f2 = cv::Mat::zeros(test_img2.rows, test_img2.cols, CV_32F);
+    cv::Mat f3 = cv::Mat::zeros(test_img2.rows, test_img2.cols, CV_32F);
+    cv::Mat f4 = cv::Mat::zeros(test_img2.rows, test_img2.cols, CV_32F);
+    for(int i = 0; i < test_img2.rows; i++){
+        for(int j = 0; j < test_img2.cols; j++){
+            float p = mag.at<float>(i, j);
+            float f = ori.at<float>(i, j) ;
+            //float f = cv::fastAtan2(gradY.at<short>(i, j), gradX.at<short>(i, j));
+            //printf("%d %d %f\n", i, j, f);
+            if(p > 1.0){
+                if(f < 90.0)
+                    f1.at<float>(i, j) = p;
+                else if(f >= 90.0 && f < 180.0)
+                    f2.at<float>(i, j) = p;
+                else if(f >= 180.0 && f < 270.0)
+                    f3.at<float>(i, j) = p;
+                else if(f >= 270.0 && f < 360.0){
+                    f4.at<float>(i, j) = p;
+                }
+            }
+            //res->push_back(f);
+        }
+    }
+    cv::imshow("f1", f1);
+    cv::imshow("f2", f2);
+    cv::imshow("f3", f3);
+    cv::imshow("f4", f4);
+    cv::waitKey();
+    //cv::imshow("f5", f1 + f2 + f3 + f4);
+    //cv::imshow("f6", abs(ori - f1 + f2 + f3 + f4));
+    //cv::waitKey();
+}
+
 int main(){
     //convTriTest(); return 0;
     //gradMagTest(); return 0;
+    gradMagTest2(); return 0;
 
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
@@ -181,10 +239,10 @@ int main(){
     printf("dataset size: %d\n", data.size());
     printf("features len: %d\n", data[0].size());
     RandomForest tree(8);
-    tree.load("forest");
+    tree.load("../model/forest");
 
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_res = reproduce2(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
