@@ -11,6 +11,77 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 
+cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
+
+    cv::Mat img;
+    std::vector<cv::Mat> img_patches, gt_patches;
+    cv::cvtColor(img_o, img, CV_BGR2Luv);
+    cv::Mat fin_edges = cv::Mat::zeros(img.rows, img.cols, CV_8U);
+
+    int gt_w = 16;
+    int img_w = 32;
+    for (int i = 0; i < img.rows; i+=16){
+        for (int j = 0; j < img.cols; j+=16){
+            cv::Mat tileCopy = img(
+                    cv::Range(i, std::min(i + img_w, img.rows)),
+                    cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
+            if (tileCopy.rows == img_w && tileCopy.cols == img_w){
+                //continue;
+                int cI = i + img_w/2;
+                int cJ = j + img_w/2;
+                std::vector<float> desc;
+                patchesToVec(tileCopy, &desc);
+                std::vector<cv::Mat> ress = tree.predict(desc);
+                auto res = ress[ress.size() - 1];
+                cv::Mat edges, tmp2, tmpO;
+                cv::Canny(res, edges, 0, 1);
+                cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
+                cv::pyrUp(tmp2, tmp2);
+                cv::pyrUp(tmp2, tmp2);
+                cv::pyrUp(tmp2, tmp2);
+                cv::imshow("F", tmp2);
+                cv::pyrUp(edges, tmp2);
+                cv::pyrUp(tmp2, tmp2);
+                cv::pyrUp(tmp2, tmp2);
+                cv::imshow("E", tmp2);
+                cv::imshow("RR", fin_edges);
+                //fin_edges = convTri(fin_edges, 1);
+                //cv::waitKey();
+                //printf("i %d\n", i);
+                //int sti = (i /(fin_edges.cols/8))*8;
+                //int stj = (i %(fin_edges.cols/8))*8;
+                //for(int ii = cI - gt_w/2 ; ii < cI + gt_w/2; ii++){
+                //    for(int jj = cJ - gt_w/2 ; jj < cJ + gt_w/2; jj++){//.clone();
+                int si = cI - gt_w/2;
+                int sj = cJ - gt_w/2;
+                for(int ii = 0; ii < 16;ii++){
+                    for(int  jj = 0; jj < 16;jj++){
+                        //if (fin_edges.at<uchar>(ii + si, jj + sj) == 0){
+                            fin_edges.at<uchar>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
+                            //printf("is 1\n");
+                        //}
+                        //else {
+                            //printf("is 0\n");
+                        //}
+                    }
+                }
+                //cv::Mat gt_tile = gtruth(
+                //        cv::Range(cI - gt_w/2, cI + gt_w/2),
+                //        cv::Range(cJ - gt_w/2, cJ + gt_w/2));//.clone();
+                //if(gt_tile.rows == gt_w && gt_tile.cols == gt_w){
+                //    img_patches->push_back(tileCopy);
+                //    //cv::Canny(gt_tile, gt_tile, 1, 2);
+                //    gt_patches->push_back(gt_tile);
+                //}
+            }
+        }
+    }
+
+    return  convTri(fin_edges, 1);
+    //return fin_edges;
+}
+
+
 cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
     int img_w = 32;
     int gt_w = 16;
@@ -36,7 +107,7 @@ cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
         tree.ansamble[i].head->show();
     }*/
 
-    cv::Mat fin_edges(img.rows, img.cols, CV_8U);
+    cv::Mat fin_edges = cv::Mat::zeros(img.rows, img.cols, CV_8U);
     for(int i = 0; i < tmp_data.size(); i++){
         std::vector<float> desc;
         patchesToVec(img_patches[i], &desc);
@@ -44,10 +115,10 @@ cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
         auto res = ress[ress.size() - 1];
         cv::Mat edges, tmp2, tmpO;
         //gradientMag(res, edges, tmpO, 0, 0.005);
-        cv::Sobel(res, edges, CV_32F, 1, 1);
-        edges = edges > 0.1;
+        //cv::Sobel(res, edges, CV_32F, 1, 1);
+        //edges = edges > 0.1;
         
-        //cv::Canny(res, edges, 0, 1);
+        cv::Canny(res, edges, 0, 1);
         cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
         cv::pyrUp(tmp2, tmp2);
         cv::pyrUp(tmp2, tmp2);
@@ -57,17 +128,26 @@ cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){
         cv::pyrUp(tmp2, tmp2);
         cv::pyrUp(tmp2, tmp2);
         cv::imshow("E", tmp2);
+        cv::imshow("RR", fin_edges);
+        //fin_edges = convTri(fin_edges, 1);
+        //cv::waitKey();
         //printf("i %d\n", i);
         int sti = (i /(fin_edges.cols/8))*8;
         int stj = (i %(fin_edges.cols/8))*8;
-        for(int ii = 0; ii < 8;ii++){
-            for(int  jj = 0; jj < 8;jj++){
-                fin_edges.at<uchar>(ii + sti, jj + stj) = edges.at<uchar>(ii, jj);
+        for(int ii = 0; ii < 16;ii++){
+            for(int  jj = 0; jj < 16;jj++){
+                if (fin_edges.at<uchar>(ii + sti, jj + stj) == 0){
+                    fin_edges.at<uchar>(ii + sti, jj + stj) = edges.at<uchar>(ii, jj);
+                    //printf("is 1\n");
+                }
+                else {
+                    //printf("is 0\n");
+                }
             }
         }
     }
     cv::imshow("RR", fin_edges);
-    fin_edges = convTri(fin_edges, 1);
+    //fin_edges = convTri(fin_edges, 1);
     cv::waitKey();
     return fin_edges;
 }
@@ -209,10 +289,10 @@ void gradMagTest2(){
 int main(){
     //convTriTest(); return 0;
     //gradMagTest(); return 0;
-    gradMagTest2(); return 0;
+    //gradMagTest2(); return 0;
 
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images2.txt", &images, &gtruth);
+    read_imgList2("images4.txt", &images, &gtruth);
     for(int i = 0; i < images.size(); i++){
         //cv::imshow("image", images[i]);
         cv::Mat tmp;
@@ -241,9 +321,10 @@ int main(){
     RandomForest tree(8);
     tree.load("../model/forest");
 
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
-    cv::Mat test_res = reproduce2(tree, test_img);
+    //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_res = reproduce3(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
     cv::waitKey();

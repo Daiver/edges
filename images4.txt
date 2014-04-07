@@ -1,0 +1,3 @@
+/home/daiver/coding/edges/imgs/img/
+/home/daiver/coding/edges/imgs/gt/
+1
