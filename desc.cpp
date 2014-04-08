@@ -118,12 +118,30 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
 void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat img;
     cv::pyrDown(img_o, img);
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            cv::Vec3b p = img.at<cv::Vec3b>(i, j);
-            res->push_back(p[0]);
-            res->push_back(p[1]);
-            res->push_back(p[2]);
+    cv::Mat II = {cv::Mat(img.rows, img.cols, CV_32F), 
+        cv::Mat(img.rows, img.cols, CV_32F), 
+        cv::Mat(img.rows, img.cols, CV_32F)
+    };
+    for(int k = 0; k < 3; k++){
+        for(int i = 0; i < img.rows; i++){
+            for(int j = 0; j < img.cols; j++){
+                cv::Vec3b p = img.at<cv::Vec3b>(i, j);
+                II[k].at<float>(i, j) = p[k];
+            }
+        }
+    }
+
+    for(int k = 0; k < 3; k++){
+        II[k] = convTri(II[k], 0);
+        cv::pyrDown(II[k], II[k]);
+        for(int i = 0; i < II[k].rows; i++){
+            for(int j = 0; j < II[k].cols; j++){
+                /*cv::Vec3b p = img.at<cv::Vec3b>(i, j);
+                res->push_back(p[0]);
+                res->push_back(p[1]);*/
+                float p = II[k].at<cv::Vec3b>(i, j);
+                res->push_back(p);
+            }
         }
     }
     cv::Mat gray;
@@ -142,79 +160,78 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat Sy;
     cv::Sobel(img, Sy, CV_32F, 0, 1, 3);*/
 
-    cv::Mat mag, ori;
-    gradientMag(img, mag, ori, 4, 0.01);
-    //cv::magnitude(Sx, Sy, mag);
-    //cv::phase(Sx, Sy, ori, true);
-    mag = convTri(mag, 2);
-    //cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            float p = mag.at<float>(i, j);
-            res->push_back(p);
-            //res->push_back(round(p));
+    for (int shrink = 0; shrink < 2; shrink++){
+        if (shrink > 0) cv::pyrDown(img, img);
+        cv::Mat mag, ori;
+        gradientMag(img, mag, ori, 4, 0.01);
+        //cv::magnitude(Sx, Sy, mag);
+        //cv::phase(Sx, Sy, ori, true);
+        mag = convTri(mag, 2);
+        if (shrink > 0) {
+            cv::pyrUp(mag, mag);
+            cv::pyrUp(ori, ori);
+            cv::pyrUp(img, img);
         }
-    }
-    cv::Mat f1 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
-    cv::Mat f2 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
-    cv::Mat f3 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
-    cv::Mat f4 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            float p = mag.at<float>(i, j);
-            float f = ori.at<float>(i, j);
-            //float f = cv::fastAtan2(gradY.at<short>(i, j), gradX.at<short>(i, j));
-            //printf("%d %d %f\n", i, j, f);
-            if(p > 1.0){
-                if(f < 90.0)
-                    f1.at<float>(i, j) = p;
-                else if(f >= 90.0 && f < 180.0)
-                    f2.at<float>(i, j) = p;
-                else if(f >= 180.0 && f < 270.0)
-                    f3.at<float>(i, j) = p;
-                else if(f >= 270.0 && f < 360.0)
-                    f4.at<float>(i, j) = p;
-            }
-            //res->push_back(f);
-        }
-    }
-    cv::Mat F[] = {f1,f2,f3,f4};
-    for(int k = 0; k < 4;  k++){
-        F[k] = convTri(F[k], 2);
-        //cv::normalize(F[k], F[k], 0, 255, cv::NORM_MINMAX);
+        //cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
         for(int i = 0; i < img.rows; i++){
             for(int j = 0; j < img.cols; j++){
-                float p = F[k].at<float>(i, j);
+                float p = mag.at<float>(i, j);
                 res->push_back(p);
                 //res->push_back(round(p));
             }
         }
-    }
-    cv::Mat i1(img.rows, img.cols, CV_32F), i2(img.rows, img.cols, CV_32F), i3(img.rows, img.cols, CV_32F);
-    for(int i = 0; i < img.rows; i++){
-        for(int j = 0; j < img.cols; j++){
-            cv::Vec3b p = img.at<cv::Vec3b>(i, j);
-            i1.at<float>(i, j) = p[0];
-            i2.at<float>(i, j) = p[1];
-            i3.at<float>(i, j) = p[2];
+        cv::Mat f1 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+        cv::Mat f2 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+        cv::Mat f3 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+        cv::Mat f4 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
+        for(int i = 0; i < img.rows; i++){
+            for(int j = 0; j < img.cols; j++){
+                float p = mag.at<float>(i, j);
+                float f = ori.at<float>(i, j);
+                //float f = cv::fastAtan2(gradY.at<short>(i, j), gradX.at<short>(i, j));
+                //printf("%d %d %f\n", i, j, f);
+                if(p > 1.0){
+                    if(f < 90.0)
+                        f1.at<float>(i, j) = p;
+                    else if(f >= 90.0 && f < 180.0)
+                        f2.at<float>(i, j) = p;
+                    else if(f >= 180.0 && f < 270.0)
+                        f3.at<float>(i, j) = p;
+                    else if(f >= 270.0 && f < 360.0)
+                        f4.at<float>(i, j) = p;
+                }
+                //res->push_back(f);
+            }
         }
-    }
+        cv::Mat F[] = {f1,f2,f3,f4};
+        for(int k = 0; k < 4;  k++){
+            F[k] = convTri(F[k], 2);
+            //cv::normalize(F[k], F[k], 0, 255, cv::NORM_MINMAX);
+            for(int i = 0; i < F[k].rows; i++){
+                for(int j = 0; j < F[k].cols; j++){
+                    float p = F[k].at<float>(i, j);
+                    res->push_back(p);
+                    //res->push_back(round(p));
+                }
+            }
+        }
 
-    cv::Mat for_pairwise[] = {i1,i2,i3,mag,f1,f2,f3,f4};//8
-    for(int k = 0; k < 8;  k++){
-        cv::Mat reduced = cv::Mat::zeros(5,5,CV_32F);
-        cv::resize(convTri(for_pairwise[k], 8), reduced, reduced.size());
-        for(int i = 0; i < 25; i++){
-            int x1 = i/5;
-            int y1 = i%5;
-            float p1 = for_pairwise[k].at<float>(x1, y1);
-            for(int j = i; j < 25; j++){
-                int x2 = j/5;
-                int y2 = j%5;
-                if(x1 == x2 && y1 == y2) continue;
-                float p2 = for_pairwise[k].at<float>(x2, y2);
-                res->push_back(p1 - p2);
-                //res->push_back(round(p1 - p2));
+        cv::Mat for_pairwise[] = {i1,i2,i3,mag,f1,f2,f3,f4};//8
+        for(int k = ((shrink > 0) ? 3 : 0); k < 8;  k++){
+            cv::Mat reduced = cv::Mat::zeros(5,5,CV_32F);
+            cv::resize(convTri(for_pairwise[k], 8), reduced, reduced.size());
+            for(int i = 0; i < 25; i++){
+                int x1 = i/5;
+                int y1 = i%5;
+                float p1 = for_pairwise[k].at<float>(x1, y1);
+                for(int j = i; j < 25; j++){
+                    int x2 = j/5;
+                    int y2 = j%5;
+                    if(x1 == x2 && y1 == y2) continue;
+                    float p2 = for_pairwise[k].at<float>(x2, y2);
+                    res->push_back(p1 - p2);
+                    //res->push_back(round(p1 - p2));
+                }
             }
         }
     }

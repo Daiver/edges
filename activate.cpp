@@ -20,8 +20,8 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
 
     int gt_w = 16;
     int img_w = 32;
-    for (int i = 0; i < img.rows; i+=16){
-        for (int j = 0; j < img.cols; j+=16){
+    for (int i = 0; i < img.rows; i+=8){
+        for (int j = 0; j < img.cols; j+=8){
             cv::Mat tileCopy = img(
                     cv::Range(i, std::min(i + img_w, img.rows)),
                     cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
@@ -322,8 +322,8 @@ int main(){
     tree.load("../model/forest");
 
     //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_res = reproduce3(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
