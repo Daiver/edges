@@ -48,6 +48,12 @@ treenode.h
 
 /home/daiver/coding/edges/defines.h
 
+/home/daiver/coding/edges/discretize.cpp
+discretize.h
+/home/daiver/coding/edges/discretize.h
+defines.h
+/home/daiver/coding/edges/defines.h
+
 /home/daiver/coding/edges/discretize.h
 stdio.h
 -

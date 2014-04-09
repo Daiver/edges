@@ -286,10 +286,19 @@ void gradMagTest2(){
     //cv::waitKey();
 }
 
+void testDesc(){
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/u2.png");
+    std::vector <float> tmp;
+    patchesToVec(test_img, &tmp);
+}
+
 int main(){
     //convTriTest(); return 0;
     //gradMagTest(); return 0;
     //gradMagTest2(); return 0;
+    //testDesc(); return 0;
 
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images4.txt", &images, &gtruth);

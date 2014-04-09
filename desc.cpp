@@ -117,8 +117,9 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
 
 void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat img = img_o;
-    //`cv::pyrDown(img_o, img);
-    cv::Mat II[] = {cv::Mat(img.rows, img.cols, CV_32F), 
+    //cv::pyrDown(img_o, img);
+    cv::Mat II[] = {
+        cv::Mat(img.rows, img.cols, CV_32F), 
         cv::Mat(img.rows, img.cols, CV_32F), 
         cv::Mat(img.rows, img.cols, CV_32F)
     };
@@ -127,10 +128,12 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
             for(int j = 0; j < img.cols; j++){
                 cv::Vec3b p = img.at<cv::Vec3b>(i, j);
                 float t = p[k];
+                //if(t != 0) printf("ttt\n");
                 II[k].at<float>(i, j) = t;
             }
         }
     }
+    // img 32 II 32
 
     for(int k = 0; k < 3; k++){
         II[k] = convTri(II[k], 0);
@@ -144,10 +147,24 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
                 res->push_back(p);
             }
         }
+        // II 16
     }
+#ifdef DESC_DEBUG
+    cv::imshow("img", img);
+    cv::Mat tmp;
+    cv::normalize(II[0], tmp, 0, 255, cv::NORM_MINMAX);
+    cv::imshow("i1", tmp);
+    cv::normalize(II[1], tmp, 0, 255, cv::NORM_MINMAX);
+    cv::imshow("i2", tmp);
+    cv::normalize(II[2], tmp, 0, 255, cv::NORM_MINMAX);
+    cv::imshow("i3", tmp);
+    cv::waitKey();
+#endif
+
+    //printf("0 II %d %d\n", II[0].rows, II[0].cols);
     cv::Mat gray;
-    cv::cvtColor(img, gray, CV_Lab2BGR);
-    cv::cvtColor(gray, gray, CV_BGR2GRAY);
+    //cv::cvtColor(img, gray, CV_Lab2BGR);
+    //cv::cvtColor(gray, gray, CV_BGR2GRAY);
     /*cv::Mat gradY;
     cv::Sobel(gray, gradY, CV_16S, 0, 1);
     //cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
@@ -163,8 +180,12 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
 
     for (int shrink = 0; shrink < 2; shrink++){
         if (shrink > 0) cv::pyrDown(img, img);
+        //printf("1 %d img %d %d\n", shrink, img.rows, img.cols);
+        // img 16
         cv::Mat mag, ori;
         gradientMag(img, mag, ori, 4, 0.01);
+        //printf("2 %d mag %d %d\n", shrink, mag.rows, mag.cols);
+        // mag 16 ori 16
         //cv::magnitude(Sx, Sy, mag);
         //cv::phase(Sx, Sy, ori, true);
         mag = convTri(mag, 2);
@@ -173,16 +194,23 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
             cv::pyrUp(ori, ori);
             cv::pyrUp(img, img);
         }
+        //printf("3 %d img %d %d\n", shrink, img.rows, img.cols);
+        //printf("4 %d mag %d %d\n", shrink, mag.rows, mag.cols);
+        // img 32 mag 32 ori 32
         //cv::normalize(mag, mag, 0, 255, cv::NORM_MINMAX);
         cv::pyrDown(mag, mag);
-        for(int i = 0; i < img.rows; i++){
-            for(int j = 0; j < img.cols; j++){
+        //printf("5 %d mag %d %d\n", shrink, mag.rows, mag.cols);
+        // mag 16
+        for(int i = 0; i < mag.rows; i++){
+            for(int j = 0; j < mag.cols; j++){
                 float p = mag.at<float>(i, j);
                 res->push_back(p);
                 //res->push_back(round(p));
             }
         }
         cv::pyrUp(mag, mag);
+        //printf("6 %d mag %d %d\n", shrink, mag.rows, mag.cols);
+        // mag 32
         cv::Mat f1 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
         cv::Mat f2 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
         cv::Mat f3 = cv::Mat::zeros(img.rows, img.cols, CV_32F);
@@ -206,6 +234,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
                 //res->push_back(f);
             }
         }
+        // F 32
         cv::Mat F[] = {f1,f2,f3,f4};
         for(int k = 0; k < 4;  k++){
             F[k] = convTri(F[k], 2);
@@ -219,8 +248,19 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
                 }
             }
         }
+        //printf("7 %d f %d %d\n", shrink, F[0].rows, F[0].cols);
+        //F 16
+#ifdef DESC_DEBUG
+        cv::imshow("mag", mag);
+        cv::imshow("ori", ori);
+        cv::imshow("F[0]", F[0]);
+        cv::imshow("F[1]", F[1]);
+        cv::imshow("F[2]", F[2]);
+        cv::imshow("F[3]", F[3]);
+        cv::waitKey();
+#endif
 
-        /*
+        
         cv::Mat for_pairwise[] = {II[0],II[1], II[2],mag,f1,f2,f3,f4};//8
         for(int k = ((shrink > 0) ? 3 : 0); k < 8;  k++){
             cv::Mat reduced = cv::Mat::zeros(5,5,CV_32F);
@@ -239,7 +279,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
                 }
             }
         }
-        */
+        
     }
 }
 

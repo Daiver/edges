@@ -7,4 +7,6 @@
 
 //#define GRAD_MAG_DEBUG
 
+//#define DESC_DEBUG
+
 #endif
