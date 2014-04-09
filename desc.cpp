@@ -128,15 +128,15 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
             for(int j = 0; j < img.cols; j++){
                 cv::Vec3b p = img.at<cv::Vec3b>(i, j);
                 float t = p[k];
-                //if(t != 0) printf("ttt\n");
                 II[k].at<float>(i, j) = t;
+                //if(II[k].at<float>(i, j) != 0) printf("ttt\n");
             }
         }
     }
     // img 32 II 32
 
     for(int k = 0; k < 3; k++){
-        II[k] = convTri(II[k], 0);
+        //II[k] = convTri(II[k], 0);
         cv::pyrDown(II[k], II[k]);
         for(int i = 0; i < II[k].rows; i++){
             for(int j = 0; j < II[k].cols; j++){

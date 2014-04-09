@@ -288,8 +288,8 @@ void gradMagTest2(){
 
 void testDesc(){
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/u2.png");
+    cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/u2.png");
     std::vector <float> tmp;
     patchesToVec(test_img, &tmp);
 }
