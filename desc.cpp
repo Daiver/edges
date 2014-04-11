@@ -97,6 +97,9 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
     printf("Compute norm\n");
 #endif
     cv::Mat M1 = mag[3];
+    if (normRad == 0) {
+        M = M1; return;
+    }
     cv::Mat S = convTri(M1, normRad) + normConst;
     cv::divide(M1, S, M);
     cv::divide(Sx[3], S, Sx[3]);
@@ -264,7 +267,15 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
         cv::Mat for_pairwise[] = {II[0],II[1], II[2],mag,f1,f2,f3,f4};//8
         for(int k = ((shrink > 0) ? 3 : 0); k < 8;  k++){
             cv::Mat reduced = cv::Mat::zeros(5,5,CV_32F);
-            cv::resize(convTri(for_pairwise[k], 8), reduced, reduced.size());
+#ifdef DESC_DEBUG
+            cv::imshow("",convTri(for_pairwise[k], 8));
+            printf("%d\n", k);
+            cv::waitKey();
+#endif
+            cv::resize(convTri(for_pairwise[k], 8), reduced, reduced.size(), 0, 0, cv::INTER_NEAREST);
+#ifdef DESC_DEBUG_SIM
+            std::cout << reduced << std::endl;
+#endif
             for(int i = 0; i < 25; i++){
                 int x1 = i/5;
                 int y1 = i%5;
@@ -279,7 +290,6 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
                 }
             }
         }
-        
     }
 }
 

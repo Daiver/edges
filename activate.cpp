@@ -1,4 +1,5 @@
 
+#include "defines.h"
 #include "common.h"
 
 #include "decisiontree.h"
@@ -20,8 +21,9 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
 
     int gt_w = 16;
     int img_w = 32;
-    for (int i = 0; i < img.rows; i+=8){
-        for (int j = 0; j < img.cols; j+=8){
+    int stride = 4;
+    for (int i = 0; i < img.rows; i+=stride){
+        for (int j = 0; j < img.cols; j+=stride){
             cv::Mat tileCopy = img(
                     cv::Range(i, std::min(i + img_w, img.rows)),
                     cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
@@ -34,7 +36,11 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
                 std::vector<cv::Mat> ress = tree.predict(desc);
                 auto res = ress[ress.size() - 1];
                 cv::Mat edges, tmp2, tmpO;
-                cv::Canny(res, edges, 0, 1);
+                //cv::Canny(res, edges, 0, 1);
+                cv::Mat tmp;
+                gradientMag(res, edges, tmp, 0, 0.005);
+                edges = edges > 0.01;
+                //edges = res;
                 cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
                 cv::pyrUp(tmp2, tmp2);
                 cv::pyrUp(tmp2, tmp2);
@@ -46,6 +52,7 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
                 cv::imshow("E", tmp2);
                 cv::imshow("RR", fin_edges);
                 //fin_edges = convTri(fin_edges, 1);
+                //std::cout<<edges << std::endl;
                 //cv::waitKey();
                 //printf("i %d\n", i);
                 //int sti = (i /(fin_edges.cols/8))*8;
@@ -287,9 +294,10 @@ void gradMagTest2(){
 }
 
 void testDesc(){
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/u2.png");
+    cv::cvtColor(test_img, test_img, CV_BGR2Luv);
     std::vector <float> tmp;
     patchesToVec(test_img, &tmp);
 }
@@ -298,10 +306,11 @@ int main(){
     //convTriTest(); return 0;
     //gradMagTest(); return 0;
     //gradMagTest2(); return 0;
-    //testDesc(); return 0;
-
+#ifdef DESC_DEBUG_ACT
+    testDesc(); return 0;
+#endif
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images4.txt", &images, &gtruth);
+    read_imgList2("images2.txt", &images, &gtruth);
     for(int i = 0; i < images.size(); i++){
         //cv::imshow("image", images[i]);
         cv::Mat tmp;

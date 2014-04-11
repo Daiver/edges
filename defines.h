@@ -3,10 +3,14 @@
 
 //#define NODE_SHOW_DEBUG
 
-//#define ENABLE_TBB
+#define ENABLE_TBB
 
 //#define GRAD_MAG_DEBUG
 
-//#define DESC_DEBUG
-
+//#define DEBUG
+#ifdef DEBUG
+    //#define DESC_DEBUG
+    //#define DESC_DEBUG_ACT
+    //#define DESC_DEBUG_SIM
+#endif
 #endif

@@ -49,7 +49,7 @@ void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img
                         cv::Range(cJ - gt_w/2, cJ + gt_w/2));//.clone();
                 if(gt_tile.rows == gt_w && gt_tile.cols == gt_w){
                     img_patches->push_back(tileCopy);
-                    //cv::Canny(gt_tile, gt_tile, 1, 2);
+                    //cv::Canny(gt_tile, gt_tile, 0, 1);
                     gt_patches->push_back(gt_tile);
                 }
             }
