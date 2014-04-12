@@ -11,6 +11,22 @@
 #include <set>
 #include <opencv2/core/core.hpp>
 
+double ginii2(int *freqs, int num_of_classes, int num_of_samples){
+    //int* freqs = this->getFreq(labels, num_of_classes);
+    double imp = 0;
+    //printf("ns %d\n", num_of_samples);
+    for(int i = 0; i < num_of_classes; i++){
+        double p1 = freqs[i]/(double)num_of_samples;
+        for(int j = 0; j < num_of_classes; j++){
+            if (i == j) continue;
+            double p2 = freqs[j]/(double)num_of_samples;
+            imp += p1*p2;
+        }
+    }
+    return imp;
+}
+
+
 void DecisionTree::train(
         const std::vector<InputData> *data, 
         std::vector<int> &data_idx,
@@ -146,6 +162,11 @@ TreeNode *DecisionTree::buildnode(
 
     //for(int col = 0; col < this->train_data[0].size(); col++){
     int m_small = (int)sqrt(this->train_data[0].size());
+
+    int *class_freqsL = new int[num_of_classes];
+    int *class_freqsR = new int[num_of_classes];
+    int num_of_samplesL = 0, num_of_samplesR = 0;
+
     for(int col_idx = 0; col_idx < m_small; col_idx++){
         int col = (int)rand() % this->train_data->at(0).size();
 #ifdef DECISION_TREE_DEBUG
@@ -159,34 +180,58 @@ TreeNode *DecisionTree::buildnode(
             InputValue val = this->train_data->at(val_idx).at(col);
             if(val_set.find(val) != val_set.end()) continue;
             val_set.insert(val);
-            std::vector<int> i1, i2;
-            std::vector<OutputData> l1, l2;
+            //std::vector<int> i1, i2;
+            //std::vector<OutputData> l1, l2;
             //std::vector<cv::Mat>    g1, g2;
-            this->divideSet(data_idx, labels, 
+            /*this->divideSet(data_idx, labels, 
                     //segments, 
                     col, val, 
                     &l1, &l2, //&g1, &g2, 
-                    &i1, &i2);
-            double p = ((double)(l1.size()))/data_idx.size();
+                    &i1, &i2);*/
+            /*for(int ii = 0; ii < num_of_classes; ii++){
+                class_freqsL[ii] = 0;
+                class_freqsR[ii] = 0;
+            }*/
+            memset(class_freqsR, 0, sizeof(int) * num_of_classes);
+            memset(class_freqsL, 0, sizeof(int) * num_of_classes);
+            num_of_samplesR = 0; num_of_samplesL = 0;
+            for(int ii = 0; ii < data_idx.size(); ii++){
+                if((this->train_data->at(data_idx[ii]))[col] >= val){
+                    class_freqsR[labels[ii]]++;
+                    num_of_samplesR++;
+                }
+                else{
+                    class_freqsL[labels[ii]]++;
+                    num_of_samplesL++;
+                }
+            }
+            if(num_of_samplesL == 0 || num_of_samplesR == 0) continue;
+            //double p = ((double)(l1.size()))/data_idx.size();
+            double p = ((double)(num_of_samplesR))/data_idx.size();
             double gain = current_score - 
-                p*this->ginii(l1, num_of_classes) - 
-                (1 - p) * this->ginii(l2, num_of_classes);
+                p*ginii2(class_freqsR, num_of_classes, num_of_samplesR) - 
+                (1 - p) * ginii2(class_freqsL, num_of_classes, num_of_samplesL);
+                //p*this->ginii(l1, num_of_classes) - 
+                //(1 - p) * this->ginii(l2, num_of_classes);
             //printf("gain %f %d %d %d %d\n", gain, s1.size(), s2.size(), col, val);
             if (gain > best_gain &&
-                    l1.size() > 0 && l2.size() > 0){
+                    num_of_samplesR > 0 && num_of_samplesL > 0){
+                    //l1.size() > 0 && l2.size() > 0){
                 best_value = val;
                 best_gain = gain;
                 best_col = col;
-                ml1.clear();
-                ml2.clear();
-                ml1 = i1; ml2 = i2;// ms1 = s1; ms2 = s2;
+                //ml1.clear();
+                //ml2.clear();
+                //ml1 = i1; ml2 = i2;// ms1 = s1; ms2 = s2;
                 //ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
                 //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
             }
-            i1.clear(); i2.clear();
+            //i1.clear(); i2.clear();
         }
     }
-    if (best_gain > 0 && depth < 84){
+    delete [] class_freqsR;
+    delete [] class_freqsL;
+    if (best_gain > 0 && depth < 64){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
         std::vector<OutputData> l1, l2; 

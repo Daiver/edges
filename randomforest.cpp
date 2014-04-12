@@ -105,6 +105,8 @@ void RandomForest::train_one_tree(const std::vector<InputData>& data, const std:
         n_labels.push_back(label[j]);
     }
     printf("%d: tree dt size %d\n", i, n_data.size());*/
+    //sleep(10);
+    //printf("after\n");
     this->ansamble[i].train(&data, n_data_idx, n_labels);
     printf("=======FINISH Tree num %d========\n", i);
     //this->ansamble[i].train(data, label);
@@ -115,7 +117,7 @@ void RandomForest::train(std::vector<InputData> &data, std::vector<cv::Mat> &lab
 #ifdef ENABLE_TBB
     tbb::task_scheduler_init init_object(4);
     tbb::parallel_for(tbb::blocked_range<size_t>(0, this->ansamble_length) , 
-            [=](const tbb::blocked_range<size_t>& r) {
+            [&](const tbb::blocked_range<size_t>& r) {
             for(size_t i=r.begin(); i!=r.end(); ++i){
                 this->train_one_tree(data, label, i);
             }

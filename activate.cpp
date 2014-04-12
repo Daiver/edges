@@ -21,7 +21,7 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
 
     int gt_w = 16;
     int img_w = 32;
-    int stride = 2;
+    int stride = 8;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
             cv::Mat tileCopy = img(
@@ -36,10 +36,10 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
                 std::vector<cv::Mat> ress = tree.predict(desc);
                 auto res = ress[ress.size() - 1];
                 cv::Mat edges, tmp2, tmpO;
-                //cv::Canny(res, edges, 0, 1);
-                cv::Mat tmp;
-                gradientMag(res, edges, tmp, 0, 0.005);
-                edges = edges > 0.01;
+                cv::Canny(res, edges, 0, 1);
+                //cv::Mat tmp;
+                //gradientMag(res, edges, tmp, 0, 0.005);
+                //edges = edges > 0.01;
                 //edges = res;
                 cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
                 cv::pyrUp(tmp2, tmp2);
