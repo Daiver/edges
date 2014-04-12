@@ -21,7 +21,7 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
 
     int gt_w = 16;
     int img_w = 32;
-    int stride = 4;
+    int stride = 2;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
             cv::Mat tileCopy = img(
@@ -309,6 +309,16 @@ int main(){
 #ifdef DESC_DEBUG_ACT
     testDesc(); return 0;
 #endif
+    RandomForest tree(8);
+    tree.load("../model/forest");
+
+    //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_res = reproduce3(tree, test_img);
+    cv::imshow("ORIG", test_img);
+    cv::imshow("rep", test_res);
+    cv::waitKey();
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
     for(int i = 0; i < images.size(); i++){
@@ -336,16 +346,6 @@ int main(){
 
     printf("dataset size: %d\n", data.size());
     printf("features len: %d\n", data[0].size());
-    RandomForest tree(8);
-    tree.load("../model/forest");
-
-    //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
-    cv::Mat test_res = reproduce3(tree, test_img);
-    cv::imshow("ORIG", test_img);
-    cv::imshow("rep", test_res);
-    cv::waitKey();
     cv::Mat fin_edges(test_img.rows, test_img.cols, CV_8U);
     printf("r %d c %d\n", test_img.rows, test_img.cols);
     for(int i = 0; i < tmp_data.size(); i++){
