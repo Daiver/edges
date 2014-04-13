@@ -139,11 +139,12 @@ void forestFindThr( int H, int N, int F,
   const std::vector<int>&data_idx,
   //const uint32 *hs, 
   std::vector<int> &hs, 
+  std::vector<int> &f_idxs,
 //const float *ws, 
   //const uint32 *order, 
   int **order,
   //const int split,
-  int ws_const,
+  double ws_const,
   int &fid, float &thr, double &gain )
 {
   double *Wl, *Wr, *W; //float *data1; 
@@ -159,7 +160,9 @@ void forestFindThr( int H, int N, int F,
   }
   //for( j=0; j<N; j++ ) { w+=ws[j]; W[hs[j]-1]+=ws[j]; }
 
-  for( i=0; i<H; i++ ) g+=gini3(W[i]); vBst=vInit=(1-g/w/w);
+  for( i=0; i<H; i++ ) g+=gini3(W[i]); 
+  vBst=vInit=(1-g/w/w);
+  printf("-%f %f ini %f bst %f\n", w, g, vInit, vBst);
     //printf("main loop\n");
   // loop over features, then thresholds (data is sorted by feature value)
   for( i=0; i<F; i++ ) {
@@ -198,14 +201,16 @@ void forestFindThr( int H, int N, int F,
         v = - wl/w*wr/w*g*g;
       }*/
       //printf("data %d %d %d %d %d\n", j1, j1, data_idx.size(), i, F);
-      float d1 = data->at(data_idx[j1])[i];
-      float d2 = data->at(data_idx[j2])[i];
+      float d1 = data->at(data_idx[j1])[f_idxs[i]];
+      float d2 = data->at(data_idx[j2])[f_idxs[i]];
+      //printf("d1 %f\n", d1);
       if( v<vBst && d2 - d1>=1e-6f ) {
       //if( v<vBst && data->at(i)[j2]-data->at(i)[j1]>=1e-6f ) {
         vBst=v; fid=i; thr=0.5f*(d1 + d2); }
         //vBst=v; fid=i+1; thr=0.5f*(data->at(i)[j1]+data->at(i)[j2]); }
         //vBst=v; fid=i+1; thr=0.5f*(data1[j1]+data1[j2]); }
     }
+    //printf("n\n");
   }
 
     //printf("main loop End\n");
@@ -216,6 +221,7 @@ void forestFindThr( int H, int N, int F,
   //printf("freee3\n");
   delete [] W; 
   gain = vInit-vBst;
+  printf("ini %f bst %f\n", vInit, vBst);
   //printf("freee end\n");
 }
 
@@ -274,13 +280,31 @@ TreeNode *DecisionTree::buildnode(
     std::vector<int> idxs_old(data_idx.size());
     for(int i = 0; i < idxs_old.size(); i++) {idxs_old[i] = i;}
     int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
+    for(int f = 0; f < f_idxs.size(); f++){
+        int val0 = this->train_data->at(data_idx[idxs[f][0]])[f_idxs[f]];
+        for(int i = 1; i < data_idx.size(); i++){
+            int id = data_idx[idxs[f][i]];
+            int val = this->train_data->at(id)[f_idxs[f]];
+            if (val0 > val) printf("ERRRRR\n");
+            val0 = val;
+        }
+    }
 #ifdef DECISION_TREE_DEBUG
     printf("end sort\n");
 #endif
 
     int fid = -1;
     printf("Start FFT\n");
-    forestFindThr(num_of_classes, data_idx.size(), m_small, this->train_data, data_idx, labels, idxs, 1.0,  fid, best_value, best_gain);
+    forestFindThr(num_of_classes, 
+            data_idx.size(), 
+            m_small, 
+            this->train_data, 
+            data_idx, 
+            labels, 
+            f_idxs,
+            idxs, 
+            1.0/2109,  
+            fid, best_value, best_gain);
     best_col = f_idxs[fid];
     printf("ENd FFT\n");
 
@@ -363,6 +387,8 @@ TreeNode *DecisionTree::buildnode(
     }
     delete[] idxs;
     //printf("END OF div\n");
+    //if(best_gain <= 0)
+    {printf("bad gain %f\n", best_gain);}
     if (best_gain > 0 && depth < 64){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
@@ -422,7 +448,6 @@ TreeNode *DecisionTree::buildnode(
 #ifdef NODE_SHOW_DEBUG
             cv::waitKey();
 #endif
-
             //printf("END OF branch\n");
             res->left  = buildnode(ml2, g2, depth + 1);
             //res->left  = buildnode(ms2, ml2);
@@ -432,6 +457,7 @@ TreeNode *DecisionTree::buildnode(
             res->value = best_value;
             return res;
         }
+        printf("bad thr\n");
     }
     TreeLeaf *res = new TreeLeaf();
     res->freqs = this->getFreq(labels, num_of_classes);
