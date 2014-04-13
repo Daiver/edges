@@ -162,7 +162,7 @@ void forestFindThr( int H, int N, int F,
 
   for( i=0; i<H; i++ ) g+=gini3(W[i]); 
   vBst=vInit=(1-g/w/w);
-  printf("-%f %f ini %f bst %f\n", w, g, vInit, vBst);
+  //printf("-%f %f ini %f bst %f\n", w, g, vInit, vBst);
     //printf("main loop\n");
   // loop over features, then thresholds (data is sorted by feature value)
   for( i=0; i<F; i++ ) {
@@ -221,7 +221,7 @@ void forestFindThr( int H, int N, int F,
   //printf("freee3\n");
   delete [] W; 
   gain = vInit-vBst;
-  printf("ini %f bst %f\n", vInit, vBst);
+  //printf("ini %f bst %f\n", vInit, vBst);
   //printf("freee end\n");
 }
 
@@ -280,7 +280,7 @@ TreeNode *DecisionTree::buildnode(
     std::vector<int> idxs_old(data_idx.size());
     for(int i = 0; i < idxs_old.size(); i++) {idxs_old[i] = i;}
     int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
-    for(int f = 0; f < f_idxs.size(); f++){
+    /*for(int f = 0; f < f_idxs.size(); f++){
         int val0 = this->train_data->at(data_idx[idxs[f][0]])[f_idxs[f]];
         for(int i = 1; i < data_idx.size(); i++){
             int id = data_idx[idxs[f][i]];
@@ -288,13 +288,13 @@ TreeNode *DecisionTree::buildnode(
             if (val0 > val) printf("ERRRRR\n");
             val0 = val;
         }
-    }
+    }*/
 #ifdef DECISION_TREE_DEBUG
     printf("end sort\n");
 #endif
 
     int fid = -1;
-    printf("Start FFT\n");
+    //printf("Start FFT\n");
     forestFindThr(num_of_classes, 
             data_idx.size(), 
             m_small, 
@@ -306,7 +306,7 @@ TreeNode *DecisionTree::buildnode(
             1.0/2109,  
             fid, best_value, best_gain);
     best_col = f_idxs[fid];
-    printf("ENd FFT\n");
+    //printf("ENd FFT\n");
 
     /*for(int col_idx = 0; col_idx < m_small; col_idx++){
         int col = f_idxs.at(col_idx);//(int)rand() % this->train_data->at(0).size();
@@ -388,7 +388,7 @@ TreeNode *DecisionTree::buildnode(
     delete[] idxs;
     //printf("END OF div\n");
     //if(best_gain <= 0)
-    {printf("bad gain %f\n", best_gain);}
+    //{printf("bad gain %f\n", best_gain);}
     if (best_gain > 0 && depth < 64){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;

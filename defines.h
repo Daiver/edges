@@ -1,7 +1,7 @@
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
-//#define ENABLE_TBB
+#define ENABLE_TBB
 
 #define DEBUG
 #ifdef DEBUG
