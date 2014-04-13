@@ -169,7 +169,7 @@ TreeNode *DecisionTree::buildnode(
 
     for(int col_idx = 0; col_idx < m_small; col_idx++){
         int col = (int)rand() % this->train_data->at(0).size();
-#ifdef DECISION_TREE_DEBUG
+#ifdef DECISION_TREE_DEBUG2
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
 #endif

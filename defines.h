@@ -7,10 +7,11 @@
 
 //#define GRAD_MAG_DEBUG
 
-//#define DEBUG
+#define DEBUG
 #ifdef DEBUG
     //#define DESC_DEBUG
     //#define DESC_DEBUG_ACT
     //#define DESC_DEBUG_SIM
+    #define DECISION_TREE_DEBUG
 #endif
 #endif
