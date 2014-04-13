@@ -100,7 +100,9 @@ void selectFeaturesFromPatches(const std::vector<cv::Mat> &images,
             min_value = sum;
         }
     }
-
+#ifdef DISCRETIZE_DEBUG
+    printf("hs len %d \n", hs->size());
+#endif
     if(zs.cols < 2){
         hs->at(0) = 0;
         *num_of_classes = 1;

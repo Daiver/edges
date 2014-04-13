@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "decisiontree.h"
+#include "dimSort.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -129,6 +130,97 @@ void DecisionTree::finalDivide(
 }
 
 
+#define gini3(p) p*p
+typedef unsigned int uint32;
+// perform actual computation
+void forestFindThr( int H, int N, int F, 
+  //const float *data,
+  const std::vector<std::vector<float>> *data,
+  const std::vector<int>&data_idx,
+  //const uint32 *hs, 
+  std::vector<int> &hs, 
+//const float *ws, 
+  //const uint32 *order, 
+  int **order,
+  //const int split,
+  int ws_const,
+  int &fid, float &thr, double &gain )
+{
+  double *Wl, *Wr, *W; //float *data1; 
+  int *order1;
+  int i, j, j1, j2, h; double vBst, vInit, v, w, wl, wr, g, gl, gr;
+  Wl=new double[H]; Wr=new double[H]; W=new double[H];
+  // perform initialization
+  vBst = vInit = 0; g = 0; w = 0; fid = 1; thr = 0;
+  for( i=0; i<H; i++ ) W[i] = 0;
+
+  for( j=0; j<N; j++ ) { 
+      w+=ws_const; W[hs[j]]+=ws_const; 
+  }
+  //for( j=0; j<N; j++ ) { w+=ws[j]; W[hs[j]-1]+=ws[j]; }
+
+  for( i=0; i<H; i++ ) g+=gini3(W[i]); vBst=vInit=(1-g/w/w);
+    //printf("main loop\n");
+  // loop over features, then thresholds (data is sorted by feature value)
+  for( i=0; i<F; i++ ) {
+    //order1=(uint32*) order+i*N; 
+      //printf("order1 %d %d\n", i, F);
+    order1=order[i]; 
+    //data1=(float*) data+i*size_t(N);
+    for( j=0; j<H; j++ ) { Wl[j]=0; Wr[j]=W[j]; } 
+    gl=wl=0; gr=g; wr=w;
+
+    for( j=0; j<N-1; j++ ) {
+      j1=order1[j]; j2=order1[j+1]; 
+      //printf("hs %d %d %d\n", j1, N, j);
+      h=hs[j1];
+      //if(split==0) {
+        // gini = 1-\sum_h p_h^2; v = gini_l*pl + gini_r*pr
+        wl+=ws_const;//ws[j1]; 
+          //printf("Wl %d %d\n", h, H);
+        gl-=gini3(Wl[h]); 
+        Wl[h]+=ws_const;//ws[j1]; 
+        gl+=gini3(Wl[h]);
+
+        wr-=ws_const;//ws[j1]; 
+        gr-=gini3(Wr[h]); 
+        Wr[h]-=ws_const;//ws[j1]; 
+        gr+=gini3(Wr[h]);
+        v = (wl-gl/wl)/w + (wr-gr/wr)/w;
+      /*} else if (split==1) {
+        // entropy = -\sum_h p_h log(p_h); v = entropy_l*pl + entropy_r*pr
+        v = gl/w + gr/w;
+      } else if (split==2) {
+        // twoing: v = pl*pr*\sum_h(|p_h_left - p_h_right|)^2 [slow if H>>0]
+        j1=order1[j]; j2=order1[j+1]; h=hs[j1]-1;
+        wl+=ws[j1]; Wl[h]+=ws[j1]; wr-=ws[j1]; Wr[h]-=ws[j1];
+        g=0; for( int h1=0; h1<H; h1++ ) g+=fabs(Wl[h1]/wl-Wr[h1]/wr);
+        v = - wl/w*wr/w*g*g;
+      }*/
+      //printf("data %d %d %d %d %d\n", j1, j1, data_idx.size(), i, F);
+      float d1 = data->at(data_idx[j1])[i];
+      float d2 = data->at(data_idx[j2])[i];
+      if( v<vBst && d2 - d1>=1e-6f ) {
+      //if( v<vBst && data->at(i)[j2]-data->at(i)[j1]>=1e-6f ) {
+        vBst=v; fid=i; thr=0.5f*(d1 + d2); }
+        //vBst=v; fid=i+1; thr=0.5f*(data->at(i)[j1]+data->at(i)[j2]); }
+        //vBst=v; fid=i+1; thr=0.5f*(data1[j1]+data1[j2]); }
+    }
+  }
+
+    //printf("main loop End\n");
+  //printf("freee1\n");
+  delete [] Wl; 
+  //printf("freee2\n");
+  delete [] Wr; 
+  //printf("freee3\n");
+  delete [] W; 
+  gain = vInit-vBst;
+  //printf("freee end\n");
+}
+
+
+
 TreeNode *DecisionTree::buildnode(
         //const std::vector<InputData> &data, 
         const std::vector<int> &data_idx, 
@@ -145,9 +237,14 @@ TreeNode *DecisionTree::buildnode(
         if(i%10 == 0) cv::waitKey();
     }*/
 
+    //printf("Start OF node\n");
     int num_of_classes, seg_idx;
     std::vector<int> labels(segments.size(), 0);
+#ifdef DECISION_TREE_DEBUG
+    printf("Start OF sel %d %d\n", segments.size(), data_idx.size());
+#endif
     selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);
+    //printf("end OF sel\n");
 
     double current_score = this->ginii(labels, num_of_classes);
 #ifdef DECISION_TREE_DEBUG
@@ -155,7 +252,6 @@ TreeNode *DecisionTree::buildnode(
 #endif
     double best_gain = 0.0;
     //std::vector<InputData>  ms1, ms2;
-    std::vector<int> ml1, ml2;
     //std::vector<cv::Mat> ml1, ml2;
     InputValue best_value;
     int best_col = -1;
@@ -166,37 +262,66 @@ TreeNode *DecisionTree::buildnode(
     int *class_freqsL = new int[num_of_classes];
     int *class_freqsR = new int[num_of_classes];
     int num_of_samplesL = 0, num_of_samplesR = 0;
-
+    //int **idxs = getOrderedIdxs(&data, f_idxs, idxs_old);
+#ifdef DECISION_TREE_DEBUG
+    printf("start sort\n");
+#endif
+    std::vector<int> f_idxs(m_small); 
     for(int col_idx = 0; col_idx < m_small; col_idx++){
         int col = (int)rand() % this->train_data->at(0).size();
+        f_idxs.at(col_idx) = col;
+    }
+    std::vector<int> idxs_old(data_idx.size());
+    for(int i = 0; i < idxs_old.size(); i++) {idxs_old[i] = i;}
+    int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
+#ifdef DECISION_TREE_DEBUG
+    printf("end sort\n");
+#endif
+
+    int fid = -1;
+    printf("Start FFT\n");
+    forestFindThr(num_of_classes, data_idx.size(), m_small, this->train_data, data_idx, labels, idxs, 1.0,  fid, best_value, best_gain);
+    best_col = f_idxs[fid];
+    printf("ENd FFT\n");
+
+    /*for(int col_idx = 0; col_idx < m_small; col_idx++){
+        int col = f_idxs.at(col_idx);//(int)rand() % this->train_data->at(0).size();
 #ifdef DECISION_TREE_DEBUG2
         if(col_idx % 500 == 0)
             printf("col %d %d\n", col_idx, this->uvalues[col].size());
 #endif
 
-        std::set<InputValue> val_set;
+        //std::set<InputValue> val_set;
         //for(auto &val : this->uvalues[col]){
-        for(int val_idx : data_idx){
-            InputValue val = this->train_data->at(val_idx).at(col);
-            if(val_set.find(val) != val_set.end()) continue;
-            val_set.insert(val);
+        //for(int val_idx : data_idx){
+        InputValue val0 = this->train_data->at(idxs[col_idx][0])[col]; // oh =(
+        for(int val_idx = 1; val_idx < data_idx.size(); val_idx++){
+            //if(idxs[col_idx][val_idx] >= this->train_data->size()) printf("!!!\n");
+            //printf("%d %d %d %d\n", idxs[col_idx][val_idx], col_idx, val_idx, col);
+
+            val0 = this->train_data->at(idxs[col_idx][val_idx - 1])[col]; // oh =(
+            InputValue val = this->train_data->at(idxs[col_idx][val_idx])[col]; // oh =(
+            //InputValue val = this->train_data->at(val_idx).at(col);
+            //if(val_set.find(val) != val_set.end()) continue;
+            //val_set.insert(val);
             //std::vector<int> i1, i2;
             //std::vector<OutputData> l1, l2;
             //std::vector<cv::Mat>    g1, g2;
-            /*this->divideSet(data_idx, labels, 
-                    //segments, 
-                    col, val, 
-                    &l1, &l2, //&g1, &g2, 
-                    &i1, &i2);*/
-            /*for(int ii = 0; ii < num_of_classes; ii++){
-                class_freqsL[ii] = 0;
-                class_freqsR[ii] = 0;
-            }*/
+            //this->divideSet(data_idx, labels, 
+            //        //segments, 
+            //        col, val, 
+            //        &l1, &l2, //&g1, &g2, 
+            //        &i1, &i2);
+            //for(int ii = 0; ii < num_of_classes; ii++){
+            //    class_freqsL[ii] = 0;
+            //    class_freqsR[ii] = 0;
+            // }
             memset(class_freqsR, 0, sizeof(int) * num_of_classes);
             memset(class_freqsL, 0, sizeof(int) * num_of_classes);
             num_of_samplesR = 0; num_of_samplesL = 0;
+            if(val - val0 < 1e-6f) {val0 = val ; continue;}
             for(int ii = 0; ii < data_idx.size(); ii++){
-                if((this->train_data->at(data_idx[ii]))[col] >= val){
+                if((this->train_data->at(data_idx[ii]))[col] >= val0){
                     class_freqsR[labels[ii]]++;
                     num_of_samplesR++;
                 }
@@ -217,7 +342,8 @@ TreeNode *DecisionTree::buildnode(
             if (gain > best_gain &&
                     num_of_samplesR > 0 && num_of_samplesL > 0){
                     //l1.size() > 0 && l2.size() > 0){
-                best_value = val;
+                //best_value = val;
+                best_value = val0 + 0.5f*(val - val0);
                 best_gain = gain;
                 best_col = col;
                 //ml1.clear();
@@ -226,81 +352,92 @@ TreeNode *DecisionTree::buildnode(
                 //ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
                 //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
             }
+            val0 = val;
             //i1.clear(); i2.clear();
         }
     }
-    delete [] class_freqsR;
-    delete [] class_freqsL;
+    delete [] class_freqsR;delete [] class_freqsL;
+    */
+    for(int i = 0; i < f_idxs.size(); i++){
+        delete[] idxs[i];
+    }
+    delete[] idxs;
+    //printf("END OF div\n");
     if (best_gain > 0 && depth < 64){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
         std::vector<OutputData> l1, l2; 
-        ml1.clear(); ml2.clear();
+        std::vector<int> ml1, ml2;
+        //ml1.clear(); ml2.clear();
         //this->divideSet(data_idx, labels, 
         finalDivide(data_idx, labels, 
                 //segments, 
                 best_col, best_value, 
                 &l1, &l2, //&g1, &g2, 
                 &ml1, &ml2);
-        //std::vector<InputData> s1, s2;
+        if(ml1.size() > 0 && ml2.size() > 0){
+            //std::vector<InputData> s1, s2;
 #ifdef NODE_SHOW_DEBUG
-        char name[100];
+            char name[100];
 #endif
-        cv::destroyAllWindows();
-        for(int i = 0; i < l1.size(); i++){
-            g1.push_back(segments[l1[i]]);
+            cv::destroyAllWindows();
+            for(int i = 0; i < l1.size(); i++){
+                g1.push_back(segments[l1[i]]);
 #ifdef NODE_SHOW_DEBUG
-            if(i < 12){
-                sprintf(name, "g1 %i", i);
-                cv::Mat tmp;
-                cv::pyrUp(g1[i], tmp);
-                cv::pyrUp(tmp, tmp);
-                cv::pyrUp(tmp, tmp);
-                cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
-                printf("g1 %d %d %d l(%d) %f %f %d\n", i, ml1[i], 
-                        best_col, best_value, l1[i],
-                        this->train_data->at(ml1[i])[best_col], 
-                        this->train_data->at(ml1[i])[best_col] >= best_value);
-                cv::imshow(name, tmp);
-            }
+                if(i < 12){
+                    sprintf(name, "g1 %i", i);
+                    cv::Mat tmp;
+                    cv::pyrUp(g1[i], tmp);
+                    cv::pyrUp(tmp, tmp);
+                    cv::pyrUp(tmp, tmp);
+                    cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
+                    printf("g1 %d %d %d l(%d) %f %f %d\n", i, ml1[i], 
+                            best_col, best_value, l1[i],
+                            this->train_data->at(ml1[i])[best_col], 
+                            this->train_data->at(ml1[i])[best_col] >= best_value);
+                    cv::imshow(name, tmp);
+                }
 #endif                
-            //s1.push_back(data[ml1[i]]);
-        }
-        for(int i = 0; i < l2.size(); i++){
-            g2.push_back(segments[l2[i]]);
-#ifdef NODE_SHOW_DEBUG
-            if(i < 12){
-                sprintf(name, "g2 %i", i);
-                cv::Mat tmp;
-                cv::pyrUp(g2[i], tmp);
-                cv::pyrUp(tmp, tmp);
-                cv::pyrUp(tmp, tmp);
-                cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
-                printf("g2 %d %d %d l(%d) %f %f %d\n", i, ml2[i], 
-                        best_col, best_value, labels[l2[i]],
-                        this->train_data->at(ml2[i])[best_col], 
-                        this->train_data->at(ml2[i])[best_col] < best_value);
-                cv::imshow(name, tmp);
+                //s1.push_back(data[ml1[i]]);
             }
-#endif
-            //s2.push_back(data[ml2[i]]);
-        }
+            for(int i = 0; i < l2.size(); i++){
+                g2.push_back(segments[l2[i]]);
 #ifdef NODE_SHOW_DEBUG
-        cv::waitKey();
+                if(i < 12){
+                    sprintf(name, "g2 %i", i);
+                    cv::Mat tmp;
+                    cv::pyrUp(g2[i], tmp);
+                    cv::pyrUp(tmp, tmp);
+                    cv::pyrUp(tmp, tmp);
+                    cv::normalize(tmp, tmp, 0, 255, cv::NORM_MINMAX);
+                    printf("g2 %d %d %d l(%d) %f %f %d\n", i, ml2[i], 
+                            best_col, best_value, labels[l2[i]],
+                            this->train_data->at(ml2[i])[best_col], 
+                            this->train_data->at(ml2[i])[best_col] < best_value);
+                    cv::imshow(name, tmp);
+                }
+#endif
+                //s2.push_back(data[ml2[i]]);
+            }
+#ifdef NODE_SHOW_DEBUG
+            cv::waitKey();
 #endif
 
-        res->left  = buildnode(ml2, g2, depth + 1);
-        //res->left  = buildnode(ms2, ml2);
-        res->right = buildnode(ml1, g1, depth + 1);
-        //res->right = buildnode(ms1, ml1);
-        res->col = best_col;
-        res->value = best_value;
-        return res;
+            //printf("END OF branch\n");
+            res->left  = buildnode(ml2, g2, depth + 1);
+            //res->left  = buildnode(ms2, ml2);
+            res->right = buildnode(ml1, g1, depth + 1);
+            //res->right = buildnode(ms1, ml1);
+            res->col = best_col;
+            res->value = best_value;
+            return res;
+        }
     }
     TreeLeaf *res = new TreeLeaf();
     res->freqs = this->getFreq(labels, num_of_classes);
     res->len = num_of_classes;
     res->patch = segments[seg_idx].clone();
+        //printf("END OF leaf\n");
     return res;
 }
 

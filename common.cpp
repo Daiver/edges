@@ -30,7 +30,7 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
 void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img_patches, std::vector<cv::Mat> *gt_patches){
     int gt_w = 16;
     int img_w = 32;
-    const int stride = 2;
+    const int stride = 8;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
     /*for (int i = 50; i < 200; i+=4){

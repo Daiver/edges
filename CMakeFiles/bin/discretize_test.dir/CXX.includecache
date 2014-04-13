@@ -11,6 +11,8 @@ defines.h
 /home/daiver/coding/edges/defines.h
 decisiontree.h
 /home/daiver/coding/edges/decisiontree.h
+dimSort.h
+/home/daiver/coding/edges/dimSort.h
 unistd.h
 -
 stdio.h
@@ -47,6 +49,20 @@ treenode.h
 /home/daiver/coding/edges/treenode.h
 
 /home/daiver/coding/edges/defines.h
+
+/home/daiver/coding/edges/dimSort.h
+stdio.h
+-
+iostream
+-
+algorithm
+-
+vector
+-
+stdlib.h
+-
+string.h
+-
 
 /home/daiver/coding/edges/discretize.h
 stdio.h
