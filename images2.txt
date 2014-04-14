@@ -2,3 +2,5 @@
 /home/daiver/BSR/BSDS500/data/groundImages/train/
 100075
 113044
+317080
+368078

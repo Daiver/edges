@@ -26,22 +26,77 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
 
 }
 
+void cutPatchesFromImage3(cv::Mat img, cv::Mat gtruth,
+        std::vector<cv::Mat>* img_patches, 
+        std::vector<cv::Mat> *gt_patches, int n_samples, int p_samples){
+    int gt_w = 16;
+    int img_w = 32;
+    srand(NULL);
+    const int stride = 4;
+    for (int i = 0; i < 2; i++){
+        for (int j = 0; j < ((i == 0)?n_samples:p_samples); j++){
+    /*for (int i = 50; i < 200; i+=4){
+        for (int j = 50; j < 200; j+=4){*/
+            int rI = (rand() % img.rows) ;
+            int rJ = (rand() % img.cols) ;
+            //printf("i %d j %d r %d c %d\n", rI, rJ, img.rows, img.cols);
+            cv::Mat tileCopy = img(
+                    cv::Range(rI, std::min(rI + img_w, img.rows)),
+                    cv::Range(rJ, std::min(rJ + img_w, img.cols)));//.clone();
+            if (tileCopy.rows == img_w && tileCopy.cols == img_w){
+                //continue;
+                int cI = rI + img_w/2;
+                int cJ = rJ + img_w/2;
+                cv::Scalar mean, std;
+                cv::meanStdDev(gt_patches[i], mean, std);
+                //printf("%f\n", std[0]);
+                if(std[0] != 0.0 && i == 0) {
+                    j--;
+                    continue;
+                }
+                if(std[0] == 0.0 && i == 1) {
+                    j--;
+                    continue;
+                }
+                    //if(neg_size < 400 || std[0] != 0.0
+                cv::Mat gt_tile = gtruth(
+                        cv::Range(cI - gt_w/2, cI + gt_w/2),
+                        cv::Range(cJ - gt_w/2, cJ + gt_w/2));//.clone();
+                if(gt_tile.rows == gt_w && gt_tile.cols == gt_w){
+                    img_patches->push_back(tileCopy);
+                    //cv::Canny(gt_tile, gt_tile, 0, 1);
+                    gt_patches->push_back(gt_tile);
+                }
+            }
+        }
+    }
+}
+
+
 
 void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img_patches, std::vector<cv::Mat> *gt_patches){
     int gt_w = 16;
     int img_w = 32;
-    const int stride = 8;
+    srand(NULL);
+    const int stride = 4;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
     /*for (int i = 50; i < 200; i+=4){
         for (int j = 50; j < 200; j+=4){*/
+            int rI = (rand() % img.rows) ;
+            int rJ = (rand() % img.cols) ;
+            //printf("i %d j %d r %d c %d\n", rI, rJ, img.rows, img.cols);
             cv::Mat tileCopy = img(
-                    cv::Range(i, std::min(i + img_w, img.rows)),
-                    cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
+                    cv::Range(rI, std::min(rI + img_w, img.rows)),
+                    cv::Range(rJ, std::min(rJ + img_w, img.cols)));//.clone();
             if (tileCopy.rows == img_w && tileCopy.cols == img_w){
                 //continue;
-                int cI = i + img_w/2;
-                int cJ = j + img_w/2;
+                int cI = rI + img_w/2;
+                int cJ = rJ + img_w/2;
+                //int cI = i + img_w/2;
+                //int cJ = j + img_w/2;
+                //int cI = (rand() % img.rows) + img_w/2;
+                //int cJ = (rand() % img.cols) + img_w/2;
                 //printf("continue %d %d\n", i, j);
                 //printf("c %d %d\n", cI, cJ);
                 //printf("c %d %d %d %d\n", cI - gt_w/2, cJ - gt_w/2, cI + gt_w/2, cJ + gt_w/2);

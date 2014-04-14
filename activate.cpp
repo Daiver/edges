@@ -21,7 +21,7 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
 
     int gt_w = 16;
     int img_w = 32;
-    int stride = 8;
+    int stride = 4;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
             cv::Mat tileCopy = img(
@@ -36,10 +36,10 @@ cv::Mat reproduce3(RandomForest &tree, cv::Mat img_o){
                 std::vector<cv::Mat> ress = tree.predict(desc);
                 auto res = ress[ress.size() - 1];
                 cv::Mat edges, tmp2, tmpO;
-                cv::Canny(res, edges, 0, 1);
-                //cv::Mat tmp;
-                //gradientMag(res, edges, tmp, 0, 0.005);
-                //edges = edges > 0.01;
+                //cv::Canny(res, edges, 0, 1);
+                cv::Mat tmp;
+                gradientMag(res, edges, tmp, 0, 0.005);
+                edges = edges > 0.01;
                 //edges = res;
                 cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
                 cv::pyrUp(tmp2, tmp2);
@@ -302,7 +302,7 @@ void testDesc(){
     patchesToVec(test_img, &tmp);
 }
 
-int main(){
+int main(int argc, char** argv){
     //convTriTest(); return 0;
     //gradMagTest(); return 0;
     //gradMagTest2(); return 0;
@@ -313,11 +313,13 @@ int main(){
     tree.load("../model/forest");
 
     //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    cv::Mat test_img = cv::imread(argv[1]);
     cv::Mat test_res = reproduce3(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
+    cv::imwrite("res.jpg", test_res);
     cv::waitKey();
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
