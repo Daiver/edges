@@ -53,7 +53,7 @@ cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
 
 int main(){
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images5.txt", &images, &gtruth);
+    read_imgList2("images6.txt", &images, &gtruth);
     /*for(int i = 0; i < images.size(); i++){
         //cv::imshow("image", images[i]);
         cv::Mat tmp;
@@ -63,7 +63,7 @@ int main(){
     }*/
     std::vector<cv::Mat> img_patches, gt_patches;
     for(int i = 0; i < images.size(); i++){
-        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 200, 200);
+        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 50, 50);
     }
     //printf("%d %d\n", img_patches[0].channels(), img_patches[0].depth() == CV_8U);
     /*for(int i = 0; i < img_patches.size(); i++){
@@ -134,7 +134,7 @@ int main(){
     tree.train(data, gt_patches);
     tree.save("../model/forest");
     for(int i = 0; i < 8;i++){
-        tree.ansamble[i].head->show();
+        //tree.ansamble[i].head->show();
     }
     return 0;
 
