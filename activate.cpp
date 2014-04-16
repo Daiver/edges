@@ -309,7 +309,7 @@ int main(int argc, char** argv){
 #ifdef DESC_DEBUG_ACT
     testDesc(); return 0;
 #endif
-    RandomForest tree(8);
+    RandomForest tree(32);
     tree.load("../model/forest");
 
     //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
