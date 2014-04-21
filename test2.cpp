@@ -4,6 +4,7 @@
 #include "decisiontree.h"
 #include "randomforest.h"
 #include "desc.h"
+#include "detect.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,41 +16,6 @@
 #include <iostream>
 #include <unistd.h>
 
-
-cv::Mat reproduce(RandomForest &forest, cv::Mat img_o){
-    int img_w = 32;
-    int gt_w = 16;
-    cv::Mat img;
-    cv::cvtColor(img_o, img, CV_BGR2Luv);
-    cv::Mat res = cv::Mat::zeros(img.rows, img.cols, CV_8U);
-    std::vector<float> desc;
-    for (int i = 0; i < img.rows; i+=16){
-        for (int j = 0; j < img.cols; j+=16){
-            cv::Mat tileCopy = img(
-                cv::Range(i, std::min(i + img_w, img.rows)),
-                cv::Range(j, std::min(j + img_w, img.cols)));//.clone();
-            if (tileCopy.rows == img_w && tileCopy.cols == img_w){
-                patchesToVec(tileCopy, &desc);
-                std::vector<cv::Mat> ress = forest.predict(desc);
-                cv::Mat edges;
-                cv::Canny(ress[ress.size() - 1], edges, 0, 1);
-                cv::imshow("1", ress[ress.size() - 1]);
-                cv::imshow("2", edges);
-                //cv::waitKey();
-                for(int ii = 0; ii < gt_w; ii++){
-                    for(int jj = 0; jj < gt_w; jj++){
-                        res.at<uchar>(i + ii, j + jj) = 
-                            edges.at<uchar>(ii, jj);
-                    }
-                }
-            }
-        }
-    }
-    cv::Scalar mean, std;
-    cv::meanStdDev(res, mean, std);
-    printf(">>>%f %f\n", std[0], mean[0]);
-    return res;
-}
 
 int main(){
     std::vector<cv::Mat> images, gtruth;
@@ -63,7 +29,7 @@ int main(){
     }*/
     std::vector<cv::Mat> img_patches, gt_patches;
     for(int i = 0; i < images.size(); i++){
-        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 1000, 1000);
+        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 2000, 2000);
     }
     //printf("%d %d\n", img_patches[0].channels(), img_patches[0].depth() == CV_8U);
     /*for(int i = 0; i < img_patches.size(); i++){
@@ -136,14 +102,20 @@ int main(){
     for(int i = 0; i < 8;i++){
         //tree.ansamble[i].head->show();
     }
+    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    cv::Mat test_res = detect(tree, test_img);
+    cv::imwrite("test1.jpg", test_res);
+    test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    test_res = detect(tree, test_img);
+    cv::imwrite("test2.jpg", test_res);
     return 0;
 
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
-    cv::Mat test_res = reproduce(tree, test_img);
-    cv::imshow("ORIG", test_img);
-    cv::imshow("rep", test_res);
-    cv::waitKey();
+    //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
+    //cv::Mat test_res = reproduce(tree, test_img);
+    //cv::imshow("ORIG", test_img);
+    //cv::imshow("rep", test_res);
+    //cv::waitKey();
     for(int i = 0; i < data.size(); i++){
         cv::Mat tmp;
         cv::pyrUp(img_patches[i], tmp);

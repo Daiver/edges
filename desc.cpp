@@ -41,22 +41,31 @@ cv::Mat convTri(cv::Mat img, float r){
     return res;
 }
 
+/*
+template <int T>
 void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normConst){
 #ifdef GRAD_MAG_DEBUG
     printf("Compute channels\n");
 #endif
-    cv::Mat chnls[] = {
-        cv::Mat::zeros(img.rows, img.cols, img.depth()),
-        cv::Mat::zeros(img.rows, img.cols, img.depth()),
-        cv::Mat::zeros(img.rows, img.cols, img.depth()),
-    };
-    int chnls_size = sizeof(chnls)/sizeof(cv::Mat);
+    int chnls_size = img.channels();//3;//sizeof(chnls)/sizeof(cv::Mat);
+    ///cv::Mat chnls[] = {
+    //    cv::Mat::zeros(img.rows, img.cols, img.depth()),
+    //    cv::Mat::zeros(img.rows, img.cols, img.depth()),
+    //    cv::Mat::zeros(img.rows, img.cols, img.depth()),
+    //};/
+    printf("CHNSK %d\n", chnls_size);
+    cv::Mat *chnls = new cv::Mat[chnls_size];
+    for(int i = 0; i < chnls_size; i++) {
+        chnls[i] = cv::Mat::zeros(img.rows, img.cols, img.depth());
+    }
+
 
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             cv::Vec3b p = img.at<cv::Vec3b>(i, j);
             for(int k = 0; k < chnls_size; k++){
-                chnls[k].at<uchar>(i, j) = p[k];//WARN
+                chnls[k].at<T>(i, j) = p[k];//WARN
+                //chnls[k].at<uchar>(i, j) = p[k];//WARN
             }
         }
     }
@@ -114,9 +123,10 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
             if (O.at<float>(i, j) < 0) printf("--- %f\n", O.at<float>(i,j));
             if (O.at<float>(i, j) >3.15) printf("++ %f\n", O.at<float>(i,j));
         }
-    }*/
+    }
     //O = (3.14 + O)/2.;
 }
+*/
 
 void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     cv::Mat img = img_o;
@@ -186,7 +196,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
         //printf("1 %d img %d %d\n", shrink, img.rows, img.cols);
         // img 16
         cv::Mat mag, ori;
-        gradientMag(img, mag, ori, 4, 0.01);
+        gradientMag<uchar>(img, mag, ori, 4, 0.01);
         //printf("2 %d mag %d %d\n", shrink, mag.rows, mag.cols);
         // mag 16 ori 16
         //cv::magnitude(Sx, Sy, mag);
