@@ -34,7 +34,6 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
         chnls[i] = cv::Mat::zeros(img.rows, img.cols, img.depth());
     }
 
-
     for(int i = 0; i < img.rows; i++){
         for(int j = 0; j < img.cols; j++){
             cv::Vec3b p = img.at<cv::Vec3b>(i, j);

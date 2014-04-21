@@ -123,38 +123,38 @@ clean: CMakeFiles/bin/discretize_test.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/bin/test2.dir
+# Target rules for target CMakeFiles/bin/train.dir
 
 # All Build rule for target.
-CMakeFiles/bin/test2.dir/all:
-	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/depend
-	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/build
+CMakeFiles/bin/train.dir/all:
+	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/depend
+	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/daiver/coding/edges/CMakeFiles  13 14 15 16 17 18 19
-	@echo "Built target bin/test2"
-.PHONY : CMakeFiles/bin/test2.dir/all
+	@echo "Built target bin/train"
+.PHONY : CMakeFiles/bin/train.dir/all
 
 # Include target in all.
-all: CMakeFiles/bin/test2.dir/all
+all: CMakeFiles/bin/train.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/bin/test2.dir/rule: cmake_check_build_system
+CMakeFiles/bin/train.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 7
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/bin/test2.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/bin/train.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/daiver/coding/edges/CMakeFiles 0
-.PHONY : CMakeFiles/bin/test2.dir/rule
+.PHONY : CMakeFiles/bin/train.dir/rule
 
 # Convenience name for target.
-bin/test2: CMakeFiles/bin/test2.dir/rule
-.PHONY : bin/test2
+bin/train: CMakeFiles/bin/train.dir/rule
+.PHONY : bin/train
 
 # clean rule for target.
-CMakeFiles/bin/test2.dir/clean:
-	$(MAKE) -f CMakeFiles/bin/test2.dir/build.make CMakeFiles/bin/test2.dir/clean
-.PHONY : CMakeFiles/bin/test2.dir/clean
+CMakeFiles/bin/train.dir/clean:
+	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/clean
+.PHONY : CMakeFiles/bin/train.dir/clean
 
 # clean rule for target.
-clean: CMakeFiles/bin/test2.dir/clean
+clean: CMakeFiles/bin/train.dir/clean
 .PHONY : clean
 
 #=============================================================================

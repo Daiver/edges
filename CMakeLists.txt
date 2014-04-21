@@ -18,7 +18,7 @@ else(NOT TBB_FOUND)
     add_executable(bin/discretize_test discretize_test.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp )
-    add_executable(bin/test2 test2.cpp 
+    add_executable(bin/train train.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp 
         randomforest.cpp desc.cpp)
@@ -28,7 +28,7 @@ else(NOT TBB_FOUND)
         randomforest.cpp desc.cpp)
 
     target_link_libraries(bin/discretize_test ${OpenCV_LIBS})
-    target_link_libraries(bin/test2 ${OpenCV_LIBS} tbb)
+    target_link_libraries(bin/train ${OpenCV_LIBS} tbb)
     target_link_libraries(bin/activate ${OpenCV_LIBS} tbb)
     #target_link_libraries(bin/test2 ${TBB_LIBS})
     link_directories(${TBB_LIBRARY_DIRS})
