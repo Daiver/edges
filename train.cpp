@@ -19,7 +19,7 @@
 
 int main(){
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images5.txt", &images, &gtruth);
+    read_imgList2("images4.txt", &images, &gtruth);
     /*for(int i = 0; i < images.size(); i++){
         //cv::imshow("image", images[i]);
         cv::Mat tmp;

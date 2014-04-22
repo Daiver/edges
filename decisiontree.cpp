@@ -263,7 +263,8 @@ TreeNode *DecisionTree::buildnode(
     int best_col = -1;
 
     //for(int col = 0; col < this->train_data[0].size(); col++){
-    int m_small = (int)sqrt(this->train_data[0].size());
+    //int m_small = (int)sqrt(this->train_data[0].size());
+    int m_small = (this->train_data[0].size())/5;
 
     int *class_freqsL = new int[num_of_classes];
     int *class_freqsR = new int[num_of_classes];

@@ -6,34 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/daiver/coding/edges/common.cpp
-common.h
-/home/daiver/coding/edges/common.h
-iostream
--
-
-/home/daiver/coding/edges/common.h
-stdio.h
--
-string.h
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
--
-opencv2/imgproc/imgproc.hpp
--
-iostream
--
-fstream
--
-sstream
--
-vector
--
-string
--
-
 /home/daiver/coding/edges/decisiontree.cpp
 defines.h
 /home/daiver/coding/edges/defines.h
@@ -92,12 +64,6 @@ stdlib.h
 string.h
 -
 
-/home/daiver/coding/edges/discretize.cpp
-discretize.h
-/home/daiver/coding/edges/discretize.h
-defines.h
-/home/daiver/coding/edges/defines.h
-
 /home/daiver/coding/edges/discretize.h
 stdio.h
 -
@@ -112,32 +78,8 @@ opencv2/highgui/highgui.hpp
 opencv2/imgproc/imgproc.hpp
 -
 
-/home/daiver/coding/edges/discretize_test.cpp
-stdio.h
--
-opencv2/core/core.hpp
--
-opencv2/highgui/highgui.hpp
--
-opencv2/imgproc/imgproc.hpp
--
-vector
--
-discretize.h
-/home/daiver/coding/edges/discretize.h
-common.h
-/home/daiver/coding/edges/common.h
-decisiontree.h
-/home/daiver/coding/edges/decisiontree.h
-
 /home/daiver/coding/edges/dtreetypedefs.h
 vector
--
-
-/home/daiver/coding/edges/treenode.cpp
-treenode.h
-/home/daiver/coding/edges/treenode.h
-stdio.h
 -
 
 /home/daiver/coding/edges/treenode.h

@@ -1,6 +1,8 @@
 #include "defines.h"
 
 #include "randomforest.h"
+#include "common.h"
+#include "desc.h"
 #include "discretize.h"
 #include <string.h>
 #include <stdlib.h>
@@ -61,53 +63,29 @@ std::vector<InputData> RandomForest::getRandSamples(std::vector<InputData> data,
     return res;
 }
 
-void RandomForest::train_one_tree(const std::vector<InputData>& data, const std::vector<cv::Mat>& label, int tree_num){
-    int frame_size = data.size() ;
+void RandomForest::train_one_tree(const std::vector<InputData>&, const std::vector<cv::Mat>& , int tree_num){
+    //int frame_size = data.size() ;
     int i = tree_num;
     printf("Tree num %d\n", i);
-    //sleep(10);
-    //printf("after\n");
-    //auto indxs = getRandIndxs(data[0].size());
-    //auto ndata = this->getRandSamples(data, indxs);
-    //indxss[i] = indxs;
-    //std::vector<InputData> n_data_idx; //(data.size()/this->ansamble_length);
-    std::vector<int> n_data_idx; //(data.size()/this->ansamble_length);
-    std::vector<cv::Mat> n_labels; //(data.size()/this->ansamble_length);
+    std::vector<cv::Mat> images, gtruth;
+    read_imgList2("images2.txt", &images, &gtruth);
 
-    //sleep(10000);
-    
-    int neg_size = 0;
-    for(int j = 0; j < frame_size; j++){
-        int indx = rand() % data.size();
-        //printf("indx %d\n", indx);
-        cv::Scalar mean, std;
-        cv::meanStdDev(label[indx], mean, std);
-        //printf("%f\n", std[0]);
-        if(std[0] == 0.0) {
-            neg_size++;
-            if (neg_size > (data.size()/2)) {j--; continue;}
-        }
-        n_data_idx.push_back(indx);
-        n_labels.push_back(label[indx]);
+    std::vector<cv::Mat> img_patches, gt_patches;
+    for(int i = 0; i < images.size(); i++){
+        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 2000, 2000);
     }
-    for(auto &x : n_labels){
-        cv::Mat tmp;
-        cv::normalize(x, tmp, 0, 255, cv::NORM_MINMAX);
-        cv::pyrUp(tmp, tmp);
-        cv::pyrUp(tmp, tmp);
-
-        //cv::imshow("", tmp);cv::waitKey();
+    std::vector<std::vector<float>> data(img_patches.size());
+    for(int i = 0; i < data.size(); i++){
+        patchesToVec(img_patches[i], &data[i]);
     }
-    /*for(int j = (frame_size/2) * (i); 
-            j < (frame_size/2)*(i + 1); j++){
-        if (j >= data.size()) continue;
-        n_data.push_back(data[j]);
-        n_labels.push_back(label[j]);
+   
+    printf("dataset size: %d\n", data.size());
+    printf("features len: %d\n", data[0].size());
+    std::vector<int> data_idx;
+    for(int i = 0; i < data.size();i++){
+        data_idx.push_back(i);
     }
-    printf("%d: tree dt size %d\n", i, n_data.size());*/
-    //sleep(10);
-    //printf("after\n");
-    this->ansamble[i].train(&data, n_data_idx, n_labels);
+    this->ansamble[i].train(&data, data_idx, gt_patches);
     printf("=======FINISH Tree num %d========\n", i);
     //this->ansamble[i].train(data, label);
 
