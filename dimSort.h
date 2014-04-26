@@ -1,3 +1,5 @@
+#include "defines.h"
+
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
@@ -30,9 +32,15 @@ int **dimSort(const std::vector<std::vector<float>> *data,
         const std::vector<int> &idxs_old){
     size_t inner_size = f_idxs.size();
     int **idxs = new int*[inner_size];
+#ifdef SORT_DEBUG
+    printf("In sort inner_size %d\n", inner_size);
+#endif
     for(int fid = 0; fid < inner_size; fid++){
         idxs[fid] = new int[idxs_old.size()];
         memcpy(idxs[fid], &(idxs_old.at(0)), sizeof(idxs_old.at(0)) * idxs_old.size());
+#ifdef SORT_DEBUG
+        printf("Sorting # %di %d\n", fid, f_idxs[fid]);
+#endif
         std::sort(idxs[fid], 
                 idxs[fid] + idxs_old.size(), 
                 sortHandler(data, f_idxs[fid], data_idxs));

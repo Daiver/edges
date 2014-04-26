@@ -29,6 +29,14 @@ set
 -
 opencv2/core/core.hpp
 -
+tbb/task_scheduler_init.h
+/home/daiver/coding/edges/tbb/task_scheduler_init.h
+tbb/parallel_for.h
+/home/daiver/coding/edges/tbb/parallel_for.h
+tbb/blocked_range.h
+/home/daiver/coding/edges/tbb/blocked_range.h
+tbb/task_group.h
+/home/daiver/coding/edges/tbb/task_group.h
 
 /home/daiver/coding/edges/decisiontree.h
 dtreetypedefs.h
@@ -51,6 +59,8 @@ treenode.h
 /home/daiver/coding/edges/defines.h
 
 /home/daiver/coding/edges/dimSort.h
+defines.h
+/home/daiver/coding/edges/defines.h
 stdio.h
 -
 iostream
@@ -63,6 +73,12 @@ stdlib.h
 -
 string.h
 -
+
+/home/daiver/coding/edges/discretize.cpp
+discretize.h
+/home/daiver/coding/edges/discretize.h
+defines.h
+/home/daiver/coding/edges/defines.h
 
 /home/daiver/coding/edges/discretize.h
 stdio.h

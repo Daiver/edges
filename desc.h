@@ -10,6 +10,8 @@
 #include <vector>
 #include <iostream>
 
+void patchesToVectors(cv::Mat img, std::vector<std::vector<float>> *ress);
+
 void patchesToVec(cv::Mat img, std::vector<float> *res);
 cv::Mat convTri(cv::Mat, float);
 

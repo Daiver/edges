@@ -27,7 +27,7 @@ else(NOT TBB_FOUND)
         discretize.cpp 
         randomforest.cpp desc.cpp)
 
-    target_link_libraries(bin/discretize_test ${OpenCV_LIBS})
+    target_link_libraries(bin/discretize_test ${OpenCV_LIBS} tbb)
     target_link_libraries(bin/train ${OpenCV_LIBS} tbb)
     target_link_libraries(bin/activate ${OpenCV_LIBS} tbb)
     #target_link_libraries(bin/test2 ${TBB_LIBS})

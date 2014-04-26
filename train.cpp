@@ -29,7 +29,7 @@ int main(){
     }*/
     std::vector<cv::Mat> img_patches, gt_patches;
     for(int i = 0; i < images.size(); i++){
-        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 2000, 2000);
+        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 4000, 4000);
     }
     //printf("%d %d\n", img_patches[0].channels(), img_patches[0].depth() == CV_8U);
     /*for(int i = 0; i < img_patches.size(); i++){
@@ -108,6 +108,9 @@ int main(){
     test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     test_res = detect(tree, test_img);
     cv::imwrite("test2.jpg", test_res);
+    test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/22090.jpg");
+    test_res = detect(tree, test_img);
+    cv::imwrite("test3.jpg", test_res);
     return 0;
 
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");

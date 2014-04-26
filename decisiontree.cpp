@@ -12,6 +12,13 @@
 #include <set>
 #include <opencv2/core/core.hpp>
 
+#ifdef ENABLE_TBB_NODES
+#include "tbb/task_scheduler_init.h"
+#include "tbb/parallel_for.h"
+#include "tbb/blocked_range.h"
+#include "tbb/task_group.h"
+#endif
+
 double ginii2(int *freqs, int num_of_classes, int num_of_samples){
     //int* freqs = this->getFreq(labels, num_of_classes);
     double imp = 0;
@@ -264,22 +271,35 @@ TreeNode *DecisionTree::buildnode(
 
     //for(int col = 0; col < this->train_data[0].size(); col++){
     //int m_small = (int)sqrt(this->train_data[0].size());
-    int m_small = (this->train_data[0].size())/5;
+    int m_small = (this->train_data->at(0).size())/2;
 
     int *class_freqsL = new int[num_of_classes];
     int *class_freqsR = new int[num_of_classes];
     int num_of_samplesL = 0, num_of_samplesR = 0;
     //int **idxs = getOrderedIdxs(&data, f_idxs, idxs_old);
 #ifdef DECISION_TREE_DEBUG
-    printf("start sort\n");
+    printf("before sort\n");
 #endif
     std::vector<int> f_idxs(m_small); 
-    for(int col_idx = 0; col_idx < m_small; col_idx++){
-        int col = (int)rand() % this->train_data->at(0).size();
+    int features_size = this->train_data->at(0).size();
+    std::vector<int> fi_vis(features_size, 0);
+#ifdef DECISION_TREE_DEBUG
+    printf("Choosing features %d\n", m_small);
+#endif
+    for(int col_idx = 0; col_idx < m_small; ){
+        int col = (int)rand() % features_size;
+        if(fi_vis[col] != 0){
+            continue;
+        }
+        fi_vis[col]  = 1;
         f_idxs.at(col_idx) = col;
+        col_idx++;
     }
     std::vector<int> idxs_old(data_idx.size());
     for(int i = 0; i < idxs_old.size(); i++) {idxs_old[i] = i;}
+#ifdef DECISION_TREE_DEBUG
+    printf("start sort\n");
+#endif
     int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
     /*for(int f = 0; f < f_idxs.size(); f++){
         int val0 = this->train_data->at(data_idx[idxs[f][0]])[f_idxs[f]];
@@ -450,9 +470,31 @@ TreeNode *DecisionTree::buildnode(
             cv::waitKey();
 #endif
             //printf("END OF branch\n");
+#ifndef ENABLE_TBB_NODES
             res->left  = buildnode(ml2, g2, depth + 1);
-            //res->left  = buildnode(ms2, ml2);
             res->right = buildnode(ml1, g1, depth + 1);
+#endif
+
+#ifdef ENABLE_TBB_NODES
+            tbb::task_group g;
+            if(ml2.size() > 50){
+                g.run([&]{
+                    res->left  = buildnode(ml2, g2, depth + 1);
+                }); // spawn a task
+            }else{
+                res->left  = buildnode(ml2, g2, depth + 1);
+            }
+            if(ml1.size() > 50){
+                g.run([&]{
+                    res->right = buildnode(ml1, g1, depth + 1);
+                }); // spawn another task
+            }else{
+                res->right = buildnode(ml1, g1, depth + 1);
+            }
+            g.wait();                // wait for both tasks to complete
+
+#endif
+
             //res->right = buildnode(ms1, ml1);
             res->col = best_col;
             res->value = best_value;

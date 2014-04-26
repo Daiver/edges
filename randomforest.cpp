@@ -68,11 +68,11 @@ void RandomForest::train_one_tree(const std::vector<InputData>&, const std::vect
     int i = tree_num;
     printf("Tree num %d\n", i);
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images2.txt", &images, &gtruth);
+    read_imgList2("images3.txt", &images, &gtruth);
 
     std::vector<cv::Mat> img_patches, gt_patches;
     for(int i = 0; i < images.size(); i++){
-        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 2000, 2000);
+        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 270, 270);
     }
     std::vector<std::vector<float>> data(img_patches.size());
     for(int i = 0; i < data.size(); i++){

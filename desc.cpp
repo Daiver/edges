@@ -303,3 +303,7 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
     }
 }
 
+
+void patchesToVectors(cv::Mat img, std::vector<std::vector<float>> *ress){
+}
+
