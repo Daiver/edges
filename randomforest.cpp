@@ -72,7 +72,7 @@ void RandomForest::train_one_tree(const std::vector<InputData>&, const std::vect
 
     std::vector<cv::Mat> img_patches, gt_patches;
     for(int i = 0; i < images.size(); i++){
-        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 270, 270);
+        cutPatchesFromImage3(images[i], gtruth[i], &img_patches, &gt_patches, 500, 500);
     }
     std::vector<std::vector<float>> data(img_patches.size());
     for(int i = 0; i < data.size(); i++){
