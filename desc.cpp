@@ -304,6 +304,115 @@ void patchesToVec(cv::Mat img_o, std::vector<float> *res){
 }
 
 
-void patchesToVectors(cv::Mat img, std::vector<std::vector<float>> *ress){
+void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat> *chnSim){
+    std::vector<cv::Mat> res;
+    cv::Mat imShrink, img;
+    img_o.convertTo(img, CV_32F);
+    cv::pyrDown(img, imShrink);
+    std::vector<cv::Mat> sep_channels;
+    cv::split(img, sep_channels);
+    cv::split(imShrink, res);
+    /*for(int k = 0; k < sep_channels.size(); k++){
+        sep_channels[k] = convTri(sep_channels[k]);
+    }*/
+    for(int shr = 0; shr < 2; shr++){
+        if(shr == 1) 
+            img = imShrink;
+        cv::Mat M, O;
+        gradientMag<float>(img, M, O, 4, .01);
+        cv::Mat d[4];
+        for(int k = 0; k < 4; k++){
+            d[k] = cv::Mat::zeros(M.rows, M.cols, CV_32F);
+        }
+        for(int i = 0; i < M.rows; i++){
+            for(int j = 0; j < M.cols; j++){
+                float p = M.at<float>(i, j);
+                float f = O.at<float>(i, j);
+                //float f = cv::fastAtan2(gradY.at<short>(i, j), gradX.at<short>(i, j));
+                //printf("%d %d %f\n", i, j, f);
+                if(p > 1.0){
+                    if(f < 90.0)
+                        d[0].at<float>(i, j) = p;
+                    else if(f >= 90.0 && f < 180.0)
+                        d[1].at<float>(i, j) = p;
+                    else if(f >= 180.0 && f < 270.0)
+                        d[2].at<float>(i, j) = p;
+                    else if(f >= 270.0 && f < 360.0)
+                        d[3].at<float>(i, j) = p;
+                }
+            }
+        }
+        if(shr == 0){
+            cv::pyrDown(M,M);
+            cv::pyrDown(O,O);
+            for(int k = 0; k < 4; k++) cv::pyrDown(d[k], d[k]);
+        }
+
+        res.push_back(M);
+        res.push_back(O);
+        for(int k = 0; k < 4; k++) res.push_back(d[k]);
+    }
+    for(auto &im : res){
+        chnReg->push_back(convTri(im, 1));
+        chnSim->push_back(convTri(im, 4));
+    }
 }
 
+void chnsToVecs(std::vector<cv::Mat> &chns, cv::Mat &gtruth, 
+        std::vector<std::vector<float>> *descs, 
+        std::vector<cv::Mat> *gt_patches,
+        int n_samples, int p_samples){
+
+    int gt_w = 16;
+    int img_w = 32/2;
+    srand(NULL);
+    const int stride = 4;
+    for (int i = 0; i < 2; i++){
+        for (int j = 0; j < ((i == 0)?n_samples:p_samples); ){
+            int rI = (rand() % chns[0].rows) ;
+            int rJ = (rand() % chns[0].cols) ;
+            int cI = (rI*2 + img_w);
+            int cJ = (rJ*2 + img_w);
+            //printf("i %d j %d r %d c %d\n", rI, rJ, img.rows, img.cols);
+            if(     img_w == std::min(rI + img_w, chns[0].rows) && 
+                    img_w == std::min(rJ + img_w, chns[0].cols) &&
+                    (cI - gt_w/2) >= 0 && (cI + gt_w/2) < gtruth.rows &&
+                    (cJ - gt_w/2) >= 0 && (cJ + gt_w/2) < gtruth.cols){
+                cv::Mat gt_tile = gtruth(
+                        cv::Range(cI - gt_w/2, cI + gt_w/2),
+                        cv::Range(cJ - gt_w/2, cJ + gt_w/2));//.clone();
+                if(gt_tile.rows == gt_w && gt_tile.cols == gt_w){
+                    cv::Scalar mean, std;
+                    cv::meanStdDev(gt_tile, mean, std);
+                    //printf("%f\n", std[0]);
+                    if(std[0] != 0.0 && i == 0) {
+                        continue;
+                    }
+                    if(std[0] == 0.0 && i == 1) {
+                        continue;
+                    }
+                    //img_patches->push_back(tileCopy);                
+                    //cv::Canny(gt_tile, gt_tile, 0, 1);
+                    j++;
+                    gt_patches->push_back(gt_tile);
+                    descs->push_back(std::vector<float>());
+                    for(int ch = 0; ch < chns.size(); ch++){
+                        cv::Mat tileCopy = chns[ch](
+                            cv::Range(rI, std::min(rI + img_w, chns[ch].rows)),
+                            cv::Range(rJ, std::min(rJ + img_w, chns[ch].cols)));//.clone();
+                        for(int ii = 0; ii < tileCopy.rows; ii++){
+                            for(int jj = 0; jj < tileCopy.cols; jj++){
+                                descs->at(descs->size() - 1).push_back(tileCopy.at<float>(ii,jj));
+                            }
+                        }
+                        //continue;
+                            //if(neg_size < 400 || std[0] != 0.0
+                        //printf("i %d j %d r %d c %d\n", cI, cJ, img.rows, img.cols);
+                    }
+                }
+                else{
+                }
+            }
+        }
+    }
+}
