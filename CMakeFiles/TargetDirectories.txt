@@ -1,3 +1,4 @@
 /home/daiver/coding/edges/CMakeFiles/bin/activate.dir
 /home/daiver/coding/edges/CMakeFiles/bin/discretize_test.dir
+/home/daiver/coding/edges/CMakeFiles/bin/test.dir
 /home/daiver/coding/edges/CMakeFiles/bin/train.dir

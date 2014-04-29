@@ -46,5 +46,6 @@ SET(CMAKE_MAKEFILE_PRODUCTS
 SET(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/bin/activate.dir/DependInfo.cmake"
   "CMakeFiles/bin/discretize_test.dir/DependInfo.cmake"
+  "CMakeFiles/bin/test.dir/DependInfo.cmake"
   "CMakeFiles/bin/train.dir/DependInfo.cmake"
   )

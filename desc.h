@@ -59,6 +59,7 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
         cv::Sobel(chnls[k], Sy[k], CV_32F, 0, 1);
         cv::magnitude(Sx[k], Sy[k], mag[k]);
     }
+    delete[] chnls;
 #ifdef GRAD_MAG_DEBUG
     printf("Compute max mag\n");
 #endif
@@ -103,5 +104,13 @@ void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normCon
     }*/
     //O = (3.14 + O)/2.;
 }
+
+void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat> *chnSim);
+void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat>&,
+        cv::Mat &image,
+        cv::Mat &gtruth, 
+        std::vector<std::vector<float>> *descs, 
+        std::vector<cv::Mat> *gt_patches,
+        int n_samples, int p_samples);
 
 #endif

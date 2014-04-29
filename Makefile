@@ -125,6 +125,19 @@ bin/discretize_test/fast:
 .PHONY : bin/discretize_test/fast
 
 #=============================================================================
+# Target rules for targets named bin/test
+
+# Build rule for target.
+bin/test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 bin/test
+.PHONY : bin/test
+
+# fast build rule for target.
+bin/test/fast:
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/build
+.PHONY : bin/test/fast
+
+#=============================================================================
 # Target rules for targets named bin/train
 
 # Build rule for target.
@@ -168,6 +181,7 @@ common.o: common.cpp.o
 common.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/common.cpp.o
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/common.cpp.o
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/common.cpp.o
 .PHONY : common.cpp.o
 
@@ -178,6 +192,7 @@ common.i: common.cpp.i
 common.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/common.cpp.i
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/common.cpp.i
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/common.cpp.i
 .PHONY : common.cpp.i
 
@@ -188,6 +203,7 @@ common.s: common.cpp.s
 common.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/common.cpp.s
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/common.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/common.cpp.s
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/common.cpp.s
 .PHONY : common.cpp.s
 
@@ -198,6 +214,7 @@ decisiontree.o: decisiontree.cpp.o
 decisiontree.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/decisiontree.cpp.o
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/decisiontree.cpp.o
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/decisiontree.cpp.o
 .PHONY : decisiontree.cpp.o
 
@@ -208,6 +225,7 @@ decisiontree.i: decisiontree.cpp.i
 decisiontree.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/decisiontree.cpp.i
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/decisiontree.cpp.i
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/decisiontree.cpp.i
 .PHONY : decisiontree.cpp.i
 
@@ -218,6 +236,7 @@ decisiontree.s: decisiontree.cpp.s
 decisiontree.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/decisiontree.cpp.s
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/decisiontree.cpp.s
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/decisiontree.cpp.s
 .PHONY : decisiontree.cpp.s
 
@@ -227,6 +246,7 @@ desc.o: desc.cpp.o
 # target to build an object file
 desc.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/desc.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/desc.cpp.o
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/desc.cpp.o
 .PHONY : desc.cpp.o
 
@@ -236,6 +256,7 @@ desc.i: desc.cpp.i
 # target to preprocess a source file
 desc.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/desc.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/desc.cpp.i
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/desc.cpp.i
 .PHONY : desc.cpp.i
 
@@ -245,6 +266,7 @@ desc.s: desc.cpp.s
 # target to generate assembly for a file
 desc.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/desc.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/desc.cpp.s
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/desc.cpp.s
 .PHONY : desc.cpp.s
 
@@ -255,6 +277,7 @@ discretize.o: discretize.cpp.o
 discretize.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/discretize.cpp.o
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/discretize.cpp.o
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/discretize.cpp.o
 .PHONY : discretize.cpp.o
 
@@ -265,6 +288,7 @@ discretize.i: discretize.cpp.i
 discretize.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/discretize.cpp.i
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/discretize.cpp.i
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/discretize.cpp.i
 .PHONY : discretize.cpp.i
 
@@ -275,6 +299,7 @@ discretize.s: discretize.cpp.s
 discretize.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/discretize.cpp.s
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/discretize.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/discretize.cpp.s
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/discretize.cpp.s
 .PHONY : discretize.cpp.s
 
@@ -308,6 +333,7 @@ randomforest.o: randomforest.cpp.o
 # target to build an object file
 randomforest.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/randomforest.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/randomforest.cpp.o
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/randomforest.cpp.o
 .PHONY : randomforest.cpp.o
 
@@ -317,6 +343,7 @@ randomforest.i: randomforest.cpp.i
 # target to preprocess a source file
 randomforest.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/randomforest.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/randomforest.cpp.i
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/randomforest.cpp.i
 .PHONY : randomforest.cpp.i
 
@@ -326,8 +353,33 @@ randomforest.s: randomforest.cpp.s
 # target to generate assembly for a file
 randomforest.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/randomforest.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/randomforest.cpp.s
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/randomforest.cpp.s
 .PHONY : randomforest.cpp.s
+
+test.o: test.cpp.o
+.PHONY : test.o
+
+# target to build an object file
+test.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/test.cpp.o
+.PHONY : test.cpp.o
+
+test.i: test.cpp.i
+.PHONY : test.i
+
+# target to preprocess a source file
+test.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/test.cpp.i
+.PHONY : test.cpp.i
+
+test.s: test.cpp.s
+.PHONY : test.s
+
+# target to generate assembly for a file
+test.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/test.cpp.s
+.PHONY : test.cpp.s
 
 train.o: train.cpp.o
 .PHONY : train.o
@@ -360,6 +412,7 @@ treenode.o: treenode.cpp.o
 treenode.cpp.o:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/treenode.cpp.o
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/treenode.cpp.o
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/treenode.cpp.o
 .PHONY : treenode.cpp.o
 
@@ -370,6 +423,7 @@ treenode.i: treenode.cpp.i
 treenode.cpp.i:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/treenode.cpp.i
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/treenode.cpp.i
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/treenode.cpp.i
 .PHONY : treenode.cpp.i
 
@@ -380,6 +434,7 @@ treenode.s: treenode.cpp.s
 treenode.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/treenode.cpp.s
 	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/treenode.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/treenode.cpp.s
 	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/treenode.cpp.s
 .PHONY : treenode.cpp.s
 
@@ -391,6 +446,7 @@ help:
 	@echo "... depend"
 	@echo "... bin/activate"
 	@echo "... bin/discretize_test"
+	@echo "... bin/test"
 	@echo "... bin/train"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
@@ -415,6 +471,9 @@ help:
 	@echo "... randomforest.o"
 	@echo "... randomforest.i"
 	@echo "... randomforest.s"
+	@echo "... test.o"
+	@echo "... test.i"
+	@echo "... test.s"
 	@echo "... train.o"
 	@echo "... train.i"
 	@echo "... train.s"
