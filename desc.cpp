@@ -389,7 +389,7 @@ void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat> &simChns,
                 if(gt_tile.rows == gt_w && gt_tile.cols == gt_w){
                     cv::Scalar mean, std;
                     cv::meanStdDev(gt_tile, mean, std);
-                    printf("%d %f\n", i, std[0]);
+                    //printf("%d %f\n", i, std[0]);
                     if(std[0] != 0.0 && i == 0) {
                         continue;
                     }
@@ -410,10 +410,10 @@ void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat> &simChns,
                     cv::pyrUp(tmp, tmp);
                     cv::imshow("Orig", tmp);
                     cv::meanStdDev(tmp, mean, std);
-                    printf("%d %f\n", i, std[0]);
+                    //printf("%d %f\n", i, std[0]);
                     cv::Mat tileCopy = image(
-                        cv::Range(rI, std::min(rI + img_w, image.rows)),
-                        cv::Range(rJ, std::min(rJ + img_w, image.cols)));//.clone();
+                        cv::Range(2*rI, std::min(2*(rI + img_w), image.rows)),
+                        cv::Range(2*rJ, std::min(2*(rJ + img_w), image.cols)));//.clone();
                     cv::normalize(tileCopy, tmp, 0, 255, cv::NORM_MINMAX);
                     cv::pyrUp(tmp, tmp);
                     cv::pyrUp(tmp, tmp);
@@ -438,6 +438,24 @@ void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat> &simChns,
                             for(int jj = 0; jj < tileCopy.cols; jj++){
                                 descs->at(descs->size() - 1).push_back(
                                         tileCopy.at<float>(ii,jj));
+                            }
+                        }
+                        cv::Mat reduced = simChns[ch](
+                            cv::Range(rI, std::min(rI + img_w, chns[ch].rows)),
+                            cv::Range(rJ, std::min(rJ + img_w, chns[ch].cols)));
+                        cv::resize(reduced, reduced, cv::Size(5,5));
+                        for(int i2 = 0; i2 < 25; i2++){
+                            int x1 = i2/5;
+                            int y1 = i2%5;
+                            float p1 = reduced.at<float>(x1, y1);
+                            for(int j2 = i2; j2 < 25; j2++){
+                                int x2 = j2/5;
+                                int y2 = j2%5;
+                                if(x1 == x2 && y1 == y2) continue;
+                                float p2 = reduced.at<float>(x2, y2);
+                                descs->at(descs->size() - 1).push_back(p1-p2);
+                                //res->push_back(p1 - p2);
+                                //res->push_back(round(p1 - p2));
                             }
                         }
                     }

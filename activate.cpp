@@ -121,7 +121,7 @@ int main(int argc, char** argv){
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_img = cv::imread(argv[1]);
-    cv::Mat test_res = detect(tree, test_img);
+    cv::Mat test_res = detect2(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
     cv::imwrite("res.jpg", test_res);

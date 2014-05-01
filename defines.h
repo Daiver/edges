@@ -14,6 +14,6 @@
     //#define DECISION_TREE_DEBUG
     //#define SORT_DEBUG
     //#define DISCRETIZE_DEBUG
-    #define CHNS2VECS_DEBUG
+    //#define CHNS2VECS_DEBUG
 #endif
 #endif
