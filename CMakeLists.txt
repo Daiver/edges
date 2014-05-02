@@ -30,7 +30,13 @@ else(NOT TBB_FOUND)
         discretize.cpp 
         randomforest.cpp desc.cpp)
 
+    add_executable(bin/gradTest gradMexTest.cpp 
+        common.cpp decisiontree.cpp treenode.cpp
+        discretize.cpp 
+        randomforest.cpp desc.cpp)
+
     target_link_libraries(bin/discretize_test ${OpenCV_LIBS} tbb)
+    target_link_libraries(bin/gradTest ${OpenCV_LIBS} tbb)
     target_link_libraries(bin/test ${OpenCV_LIBS} tbb)
     target_link_libraries(bin/train ${OpenCV_LIBS} tbb)
     target_link_libraries(bin/activate ${OpenCV_LIBS} tbb)
