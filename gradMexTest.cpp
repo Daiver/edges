@@ -45,7 +45,7 @@ int main(){
     cv::imshow("2", M);
     //cv::normalize(O, O, 0, .5, cv::NORM_MINMAX);
     //std::cout << O;
-    //cv::imshow("3", O);
+    cv::imshow("3", O);
     cv::waitKey();
     //img.put(0,0,buf1);
     printf("End\n");
