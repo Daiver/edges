@@ -113,15 +113,15 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
     printf("Extracting....\n");
     int gt_w = 16;
     int img_w = 32;
-    int stride = 4;
+    int stride = 8;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
             if(i/2 + img_w/2 >= img.rows/2 || j/2 + img_w/2 >= img.cols/2) continue;
             std::vector<float> desc;
             for(int ch = 0; ch < 13; ch++){
                 cv::Mat tileCopy = chnReg[ch](
-                        cv::Range(i/2, std::min(i/2 + img_w/2, chnReg[0].rows)),
-                        cv::Range(j/2, std::min(j/2 + img_w/2, chnReg[0].cols)));//.clone();
+                        cv::Range(i/2, std::min(i/2 + img_w/2, chnReg[ch].rows)),
+                        cv::Range(j/2, std::min(j/2 + img_w/2, chnReg[ch].cols)));//
                 for(int ii = 0; ii < tileCopy.rows; ii++){
                     for(int jj = 0; jj < tileCopy.cols; jj++){
                         desc.push_back(
@@ -129,8 +129,8 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
                     }
                 }
                 cv::Mat reduced = chnSim[ch](
-                        cv::Range(i/2, std::min(i/2 + img_w/2, chnReg[0].rows)),
-                        cv::Range(j/2, std::min(j/2 + img_w/2, chnReg[0].cols)));//.clone();
+                        cv::Range(i/2, std::min(i/2 + img_w/2, chnReg[ch].rows)),
+                        cv::Range(j/2, std::min(j/2 + img_w/2, chnReg[ch].cols)));//.
                 cv::resize(reduced, reduced, cv::Size(5,5));
                 for(int i2 = 0; i2 < 25; i2++){
                     int x1 = i2/5;

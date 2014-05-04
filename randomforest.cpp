@@ -68,7 +68,7 @@ void RandomForest::train_one_tree(const std::vector<InputData>&, const std::vect
     int i = tree_num;
     printf("Tree num %d\n", i);
     std::vector<cv::Mat> images, gtruth;
-    read_imgList2("images3.txt", &images, &gtruth);
+    read_imgList2("images5.txt", &images, &gtruth);
 
     std::vector<cv::Mat> img_patches, gt_patches;
     //std::vector<std::vector<float>> data(img_patches.size());
@@ -82,7 +82,7 @@ void RandomForest::train_one_tree(const std::vector<InputData>&, const std::vect
     for(int i = 0; i < images.size(); i++){
         std::vector<cv::Mat> chnReg, chnSim;
         imageChns(images[i], &chnReg, &chnSim);
-        chnsToVecs(chnReg, chnSim, images[i], gtruth[i], &data, &gt_patches, 100, 100);
+        chnsToVecs(chnReg, chnSim, images[i], gtruth[i], &data, &gt_patches, 2000, 2000);
     }
    
     printf("dataset size: %d\n", data.size());

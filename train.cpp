@@ -111,6 +111,29 @@ int main(){
     test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/22090.jpg");
     test_res = detect2(tree, test_img);
     cv::imwrite("test3.jpg", test_res);
+
+
+    {
+        std::vector<cv::Mat> images, gtruth;
+        read_imgList2("images5.txt", &images, &gtruth);
+
+        std::vector<cv::Mat> img_patches, gt_patches;
+        std::vector<std::vector<float>> data;
+        for(int i = 0; i < images.size(); i++){
+            std::vector<cv::Mat> chnReg, chnSim;
+            imageChns(images[i], &chnReg, &chnSim);
+            chnsToVecs(chnReg, chnSim, images[i], gtruth[i], &data, &gt_patches, 2000, 2000);
+        }
+       
+        printf("dataset size: %d\n", data.size());
+        printf("features len: %d\n", data[0].size());
+        std::vector<int> data_idx;
+        for(int i = 0; i < data.size();i++){
+            data_idx.push_back(i);
+        }
+
+    }
+
     return 0;
 
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");

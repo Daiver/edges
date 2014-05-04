@@ -260,6 +260,7 @@ TreeNode *DecisionTree::buildnode(
     //printf("end OF sel\n");
 
     double current_score = this->ginii(labels, num_of_classes);
+    printf("Start OF node %d %d %f \n", segments.size(), depth, current_score);
 #ifdef DECISION_TREE_DEBUG
     printf("score %f %d depth %d\n", current_score, labels.size(), depth);
 #endif
@@ -410,6 +411,7 @@ TreeNode *DecisionTree::buildnode(
     //printf("END OF div\n");
     //if(best_gain <= 0)
     //{printf("bad gain %f\n", best_gain);}
+    const int min_child = 8;
     if (best_gain > 0 && depth < 64){
         TreeBranch *res = new TreeBranch();
         std::vector<cv::Mat> g1, g2;
@@ -422,7 +424,7 @@ TreeNode *DecisionTree::buildnode(
                 best_col, best_value, 
                 &l1, &l2, //&g1, &g2, 
                 &ml1, &ml2);
-        if(ml1.size() > 0 && ml2.size() > 0){
+        if(ml1.size() > min_child && ml2.size() > min_child){
             //std::vector<InputData> s1, s2;
 #ifdef NODE_SHOW_DEBUG
             char name[100];
@@ -500,7 +502,7 @@ TreeNode *DecisionTree::buildnode(
             res->value = best_value;
             return res;
         }
-        printf("bad thr\n");
+        //printf("bad thr\n");
     }
     TreeLeaf *res = new TreeLeaf();
     res->freqs = this->getFreq(labels, num_of_classes);
