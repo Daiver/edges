@@ -422,47 +422,46 @@ void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat> &simChns,
                     cv::imshow("i", tmp);
 #endif
                     descs->push_back(std::vector<float>());
-                    for(int ch = 0; ch < chns.size(); ch++){
-                        cv::Mat tileCopy = chns[ch](
-                            cv::Range(rI, std::min(rI + img_w, chns[ch].rows)),
-                            cv::Range(rJ, std::min(rJ + img_w, chns[ch].cols)));//.clone();
-#ifdef CHNS2VECS_DEBUG
-                        sprintf(name, "%d", ch);
-                        cv::normalize(tileCopy, tmp, 0, 1.0, cv::NORM_MINMAX);
-                        cv::pyrUp(tmp, tmp);
-                        cv::pyrUp(tmp, tmp);
-                        cv::pyrUp(tmp, tmp);
-                        cv::imshow(name, tmp);
-#endif
-                        for(int ii = 0; ii < tileCopy.rows; ii++){
-                            for(int jj = 0; jj < tileCopy.cols; jj++){
-                                descs->at(descs->size() - 1).push_back(
-                                        tileCopy.at<float>(ii,jj));
-                            }
-                        }
-                        cv::Mat reduced = simChns[ch](
-                            cv::Range(rI, std::min(rI + img_w, chns[ch].rows)),
-                            cv::Range(rJ, std::min(rJ + img_w, chns[ch].cols)));
-                        cv::resize(reduced, reduced, cv::Size(5,5));
-                        for(int i2 = 0; i2 < 25; i2++){
-                            int x1 = i2/5;
-                            int y1 = i2%5;
-                            float p1 = reduced.at<float>(x1, y1);
-                            for(int j2 = i2; j2 < 25; j2++){
-                                int x2 = j2/5;
-                                int y2 = j2%5;
-                                if(x1 == x2 && y1 == y2) continue;
-                                float p2 = reduced.at<float>(x2, y2);
-                                descs->at(descs->size() - 1).push_back(p1-p2);
-                                //res->push_back(p1 - p2);
-                                //res->push_back(round(p1 - p2));
-                            }
-                        }
-                    }
+                    tileDesc(chns, simChns, rI, rJ, &(descs->at(descs->size() - 1)));
 #ifdef CHNS2VECS_DEBUG
                     cv::waitKey();
 #endif
                 }
+            }
+        }
+    }
+}
+
+void tileDesc(
+        std::vector<cv::Mat> &chnReg,
+        std::vector<cv::Mat> &chnSim,
+        int rI, int rJ,
+        std::vector<float> *desc
+        ){
+    const int img_w = 16;
+    for(int ch = 0; ch < chnReg.size(); ch++){
+        cv::Mat tileCopy = chnReg[ch](
+            cv::Range(rI, std::min(rI + img_w, chnReg[ch].rows)),
+            cv::Range(rJ, std::min(rJ + img_w, chnReg[ch].cols)));//.clone();
+        for(int ii = 0; ii < tileCopy.rows; ii++){
+            for(int jj = 0; jj < tileCopy.cols; jj++){
+                desc->push_back(tileCopy.at<float>(ii,jj));
+            }
+        }
+        cv::Mat reduced = chnSim[ch](
+            cv::Range(rI, std::min(rI + img_w, chnSim[ch].rows)),
+            cv::Range(rJ, std::min(rJ + img_w, chnSim[ch].cols)));
+        cv::resize(reduced, reduced, cv::Size(5,5));
+        for(int i2 = 0; i2 < 25; i2++){
+            int x1 = i2/5;
+            int y1 = i2%5;
+            float p1 = reduced.at<float>(x1, y1);
+            for(int j2 = i2; j2 < 25; j2++){
+                int x2 = j2/5;
+                int y2 = j2%5;
+                if(x1 == x2 && y1 == y2) continue;
+                float p2 = reduced.at<float>(x2, y2);
+                desc->push_back(p1-p2);
             }
         }
     }

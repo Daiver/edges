@@ -260,7 +260,6 @@ TreeNode *DecisionTree::buildnode(
     //printf("end OF sel\n");
 
     double current_score = this->ginii(labels, num_of_classes);
-    printf("Start OF node %d %d %f \n", segments.size(), depth, current_score);
 #ifdef DECISION_TREE_DEBUG
     printf("score %f %d depth %d\n", current_score, labels.size(), depth);
 #endif
@@ -327,6 +326,7 @@ TreeNode *DecisionTree::buildnode(
             idxs, 
             1.0/2109,  
             fid, best_value, best_gain);
+    printf("node %d %d %f \n", segments.size(), depth, best_gain);
     best_col = f_idxs[fid];
     //printf("ENd FFT\n");
 

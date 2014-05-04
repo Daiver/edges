@@ -118,7 +118,8 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
         for (int j = 0; j < img.cols; j+=stride){
             if(i/2 + img_w/2 >= img.rows/2 || j/2 + img_w/2 >= img.cols/2) continue;
             std::vector<float> desc;
-            for(int ch = 0; ch < 13; ch++){
+            tileDesc(chnReg, chnSim, i/2, j/2, &desc);
+            /*for(int ch = 0; ch < 13; ch++){
                 cv::Mat tileCopy = chnReg[ch](
                         cv::Range(i/2, std::min(i/2 + img_w/2, chnReg[ch].rows)),
                         cv::Range(j/2, std::min(j/2 + img_w/2, chnReg[ch].cols)));//
@@ -146,7 +147,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
                         //res->push_back(round(p1 - p2));
                     }
                 }
-            }
+            }*/
             //printf("dl %d\n", desc.size());
                 //continue;
             int cI = i + img_w/2;

@@ -113,4 +113,11 @@ void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat>&,
         std::vector<cv::Mat> *gt_patches,
         int n_samples, int p_samples);
 
+void tileDesc(
+                std::vector<cv::Mat> &chnReg,
+                std::vector<cv::Mat> &chnSim,
+                int rI, int rJ,
+                std::vector<float> *desc
+            );
+
 #endif
