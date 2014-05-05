@@ -7,7 +7,7 @@
 #include "common.h"
 #include "decisiontree.h"
 
-int main(){
+void test1(){
     std::vector<cv::Mat> images;
     std::vector<cv::Mat> patches;
     read_imgList("images.txt", &images);
@@ -42,5 +42,29 @@ int main(){
 
         cv::destroyAllWindows();
     }
+}
+
+void test2(){
+    std::vector<cv::Mat> images;
+    char name[128];
+    for(int i = 0; i < 20; i++){
+        sprintf(name, "/home/daiver/dump2/neg-%d.png", i);
+        images.push_back(cv::imread(name, 0));
+    }
+    for(int i = 0; i < 20; i++){
+        sprintf(name, "/home/daiver/dump2/pos-%d.png", i);
+        images.push_back(cv::imread(name, 0));
+    }
+
+    std::vector<int> hs(images.size(), 0);
+    int num_of_classes, seg_idx;
+    selectFeaturesFromPatches(images, &hs, &num_of_classes, &seg_idx);
+    for(int i = 0 ; i < hs.size(); i++){
+        printf("%d\n", hs[i]);
+    }
+}
+
+int main(){
+    test2();
     return 0;
 }
