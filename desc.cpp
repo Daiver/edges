@@ -369,7 +369,7 @@ void chnsToVecs(std::vector<cv::Mat> &chns, std::vector<cv::Mat> &simChns,
 
     int gt_w = 16;
     int img_w = 32/2;
-    srand(NULL);
+    //srand(time(NULL));
     const int stride = 4;
     for (int i = 0; i < 2; i++){
         for (int j = 0; j < ((i == 0)?n_samples:p_samples); ){

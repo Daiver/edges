@@ -36,7 +36,7 @@ void cutPatchesFromImage3(cv::Mat img, cv::Mat gtruth,
         std::vector<cv::Mat> *gt_patches, int n_samples, int p_samples){
     int gt_w = 16;
     int img_w = 32;
-    srand(NULL);
+    //srand(time(NULL));
     const int stride = 4;
     for (int i = 0; i < 2; i++){
         for (int j = 0; j < ((i == 0)?n_samples:p_samples); ){
@@ -84,7 +84,7 @@ void cutPatchesFromImage3(cv::Mat img, cv::Mat gtruth,
 void cutPatchesFromImage2(cv::Mat img, cv::Mat gtruth, std::vector<cv::Mat>* img_patches, std::vector<cv::Mat> *gt_patches){
     int gt_w = 16;
     int img_w = 32;
-    srand(NULL);
+    //srand(NULL);
     const int stride = 4;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){

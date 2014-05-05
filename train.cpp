@@ -94,8 +94,7 @@ int main(){
     //printf("After reading desc\n");
     //sleep(10);
 
-    srand(NULL);
-
+    srand(time(NULL));
     RandomForest tree(8);
     tree.train(data, gt_patches);
     tree.save("../model/forest");

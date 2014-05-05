@@ -324,7 +324,7 @@ TreeNode *DecisionTree::buildnode(
             labels, 
             f_idxs,
             idxs, 
-            1.0/2109,  
+            1.0/this->train_data->size(),  
             fid, best_value, best_gain);
     printf("node %d %d %f \n", segments.size(), depth, best_gain);
     best_col = f_idxs[fid];
