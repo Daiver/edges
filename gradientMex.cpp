@@ -468,7 +468,10 @@ void gradientMagnitude(cv::Mat &img, cv::Mat &M, cv::Mat &O){
     float *img_buf = extractRawData(img);
     gradMag(img_buf, (float *)M.data, (float *)O.data, orig_size.width, orig_size.height,img.channels(),1);
 
-    //gradMagNorm(M,S,h,w,norm);
+    //normRad = 4
+    cv::Mat S = convTri(M, 4);
+
+    gradMagNorm((float *)M.data,(float *)S.data,orig_size.width,orig_size.height, 0.01);
     delete[] img_buf;
 }
 
