@@ -47,10 +47,10 @@ void test1(){
 void test2(){
     std::vector<cv::Mat> images;
     char name[128];
-    for(int i = 0; i < 20; i++){
+    /*for(int i = 0; i < 20; i++){
         sprintf(name, "/home/daiver/dump2/neg-%d.png", i);
         images.push_back(cv::imread(name, 0));
-    }
+    }*/
     for(int i = 0; i < 20; i++){
         sprintf(name, "/home/daiver/dump2/pos-%d.png", i);
         images.push_back(cv::imread(name, 0));
@@ -60,7 +60,7 @@ void test2(){
     int num_of_classes, seg_idx;
     selectFeaturesFromPatches(images, &hs, &num_of_classes, &seg_idx);
     for(int i = 0 ; i < hs.size(); i++){
-        printf("%d\n", hs[i]);
+        printf("%d: %d\n", i,  hs[i]);
     }
 }
 

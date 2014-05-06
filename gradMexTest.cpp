@@ -34,6 +34,7 @@ int main(){
     cv::Mat img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg", 0);
     cv::imshow("1", img);
     //cv::cvtColor(img, img, CV_BGR2Luv);
+    //cv::transpose(img, img);
     img.convertTo(img, CV_32FC1);
     cv::Size orig_size = img.size();
     cv::Mat M = cv::Mat::zeros(orig_size, CV_32F);
@@ -47,7 +48,7 @@ int main(){
     //for(int i = 0; i < orig_size.width * orig_size.height/2; i++){
     //    img_buf[i*3] = 0.2;
     //}
-    gradMag(img_buf, M_buf, O_buf, orig_size.height, orig_size.width,1,1);
+    gradMag(img_buf, M_buf, O_buf, orig_size.width, orig_size.height,1,1);
     /*for(int i = 0; i < orig_size.width * orig_size.height/2; i++){
         M_buf[i*3] = 0.2;
     }*/
