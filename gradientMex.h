@@ -1,3 +1,6 @@
+#ifndef __GRADMEX_H__ //spike1111
+#define __GRADMEX_H__
+
 /*******************************************************************************
 * Piotr's Image&Video Toolbox      Version 3.24
 * Copyright 2013 Piotr Dollar & Ron Appel.  [pdollar-at-caltech.edu]
@@ -422,4 +425,6 @@ void mexFunction( int nl, mxArray *pl[], int nr, const mxArray *pr[] ) {
   else if(!strcmp(action,"gradientHist")) mGradHist(nl,pl,nr,pr);
   else mexErrMsgTxt("Invalid action.");
 }
+#endif
+
 #endif
