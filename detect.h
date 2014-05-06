@@ -3,6 +3,7 @@
 
 #include "decisiontree.h"
 #include "randomforest.h"
+#include "convTri.h"
 #include "desc.h"
 
 #include <stdio.h>

@@ -2,6 +2,7 @@
 #define __DESC_H__
 
 #include "defines.h"
+#include "convTri.h"
 
 #include <stdio.h>
 #include <opencv2/core/core.hpp>
@@ -13,7 +14,7 @@
 void patchesToVectors(cv::Mat img, std::vector<std::vector<float>> *ress);
 
 void patchesToVec(cv::Mat img, std::vector<float> *res);
-cv::Mat convTri(cv::Mat, float);
+//cv::Mat convTri(cv::Mat, float);
 
 //template <int T>
 //void gradientMag(cv::Mat img, cv::Mat &M, cv::Mat &O, int normRad, float normConst);

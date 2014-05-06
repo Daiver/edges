@@ -24,6 +24,8 @@ CMakeFiles/bin/discretize_test.dir/discretize_test.cpp.o
  /home/daiver/coding/edges/dtreetypedefs.h
  /home/daiver/coding/edges/treenode.h
 CMakeFiles/bin/discretize_test.dir/gradientMex.cpp.o
+ /home/daiver/coding/edges/convTri.h
+ /home/daiver/coding/edges/defines.h
  /home/daiver/coding/edges/gradientMex.cpp
  /home/daiver/coding/edges/sse.hpp
  /home/daiver/coding/edges/wrappers.hpp

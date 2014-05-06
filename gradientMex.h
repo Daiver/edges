@@ -9,7 +9,7 @@
 #include <vector>
 #include <string.h>
 
-//#include "gradientMex.h"
+#include "convTri.h"
 
 float* extractRawData(cv::Mat &img);
 void splitRawArray(float *arr, int rows, int cols, int dims, std::vector<cv::Mat> *res);

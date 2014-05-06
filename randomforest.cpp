@@ -2,6 +2,7 @@
 
 #include "randomforest.h"
 #include "common.h"
+#include "convTri.h"
 #include "desc.h"
 #include "discretize.h"
 #include <string.h>

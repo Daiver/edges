@@ -6,11 +6,13 @@
 * Please email me if you find bugs, or have suggestions or questions!
 * Licensed under the Simplified BSD License [see external/bsd.txt]
 *******************************************************************************/
+
 #include "wrappers.hpp"
 #include <math.h>
 #include "string.h"
 #include "sse.hpp"
 
+//#include "convTri.h"
 #define PI 3.14159265f
 
 // compute x and y gradients for just one column (uses sse)
@@ -434,6 +436,7 @@ void mexFunction( int nl, mxArray *pl[], int nr, const mxArray *pr[] ) {
 #include <iostream>
 #include <vector>
 #include <string.h>
+//#include "gradientMex.h"
 
 float* extractRawData(cv::Mat &img){
     std::vector<cv::Mat> channels;
@@ -457,12 +460,15 @@ void splitRawArray(float *arr, int rows, int cols, int dims, std::vector<cv::Mat
     }
 }
 
+#include "convTri.h"
 void gradientMagnitude(cv::Mat &img, cv::Mat &M, cv::Mat &O){
     cv::Size orig_size = img.size();
     M = cv::Mat::zeros(orig_size, CV_32F);
     O = cv::Mat::zeros(orig_size, CV_32F);
     float *img_buf = extractRawData(img);
     gradMag(img_buf, (float *)M.data, (float *)O.data, orig_size.width, orig_size.height,img.channels(),1);
+
+    //gradMagNorm(M,S,h,w,norm);
     delete[] img_buf;
 }
 
