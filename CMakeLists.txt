@@ -18,26 +18,31 @@ else(NOT TBB_FOUND)
     add_executable(bin/test test.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp desc.cpp randomforest.cpp 
+        gradientMex.cpp
         )
     add_executable(bin/discretize_test discretize_test.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp 
+        gradientMex.cpp
         )
     add_executable(bin/train train.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp 
         randomforest.cpp desc.cpp 
+        gradientMex.cpp
         )
     add_executable(bin/activate activate.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp 
         randomforest.cpp desc.cpp 
+        gradientMex.cpp
         )
 
     add_executable(bin/gradTest gradMexTest.cpp 
         common.cpp decisiontree.cpp treenode.cpp
         discretize.cpp 
         randomforest.cpp desc.cpp 
+        gradientMex.cpp
         )
 
     target_link_libraries(bin/discretize_test ${OpenCV_LIBS} tbb)

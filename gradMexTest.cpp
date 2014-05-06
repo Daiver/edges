@@ -1,5 +1,5 @@
-#include "gradWork.h"
-//#include "gradientMex.h"
+//#include "gradWork.cpp"
+#include "gradientMex.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>

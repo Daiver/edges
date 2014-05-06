@@ -4,6 +4,7 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/bin/discretize_test.dir/decisiontree.cpp.o"
   "CMakeFiles/bin/discretize_test.dir/treenode.cpp.o"
   "CMakeFiles/bin/discretize_test.dir/discretize.cpp.o"
+  "CMakeFiles/bin/discretize_test.dir/gradientMex.cpp.o"
   "bin/discretize_test.pdb"
   "bin/discretize_test"
 )

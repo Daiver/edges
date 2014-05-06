@@ -376,6 +376,42 @@ gradMexTest.cpp.s:
 	$(MAKE) -f CMakeFiles/bin/gradTest.dir/build.make CMakeFiles/bin/gradTest.dir/gradMexTest.cpp.s
 .PHONY : gradMexTest.cpp.s
 
+gradientMex.o: gradientMex.cpp.o
+.PHONY : gradientMex.o
+
+# target to build an object file
+gradientMex.cpp.o:
+	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/gradientMex.cpp.o
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/gradientMex.cpp.o
+	$(MAKE) -f CMakeFiles/bin/gradTest.dir/build.make CMakeFiles/bin/gradTest.dir/gradientMex.cpp.o
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/gradientMex.cpp.o
+	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/gradientMex.cpp.o
+.PHONY : gradientMex.cpp.o
+
+gradientMex.i: gradientMex.cpp.i
+.PHONY : gradientMex.i
+
+# target to preprocess a source file
+gradientMex.cpp.i:
+	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/gradientMex.cpp.i
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/gradientMex.cpp.i
+	$(MAKE) -f CMakeFiles/bin/gradTest.dir/build.make CMakeFiles/bin/gradTest.dir/gradientMex.cpp.i
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/gradientMex.cpp.i
+	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/gradientMex.cpp.i
+.PHONY : gradientMex.cpp.i
+
+gradientMex.s: gradientMex.cpp.s
+.PHONY : gradientMex.s
+
+# target to generate assembly for a file
+gradientMex.cpp.s:
+	$(MAKE) -f CMakeFiles/bin/activate.dir/build.make CMakeFiles/bin/activate.dir/gradientMex.cpp.s
+	$(MAKE) -f CMakeFiles/bin/discretize_test.dir/build.make CMakeFiles/bin/discretize_test.dir/gradientMex.cpp.s
+	$(MAKE) -f CMakeFiles/bin/gradTest.dir/build.make CMakeFiles/bin/gradTest.dir/gradientMex.cpp.s
+	$(MAKE) -f CMakeFiles/bin/test.dir/build.make CMakeFiles/bin/test.dir/gradientMex.cpp.s
+	$(MAKE) -f CMakeFiles/bin/train.dir/build.make CMakeFiles/bin/train.dir/gradientMex.cpp.s
+.PHONY : gradientMex.cpp.s
+
 randomforest.o: randomforest.cpp.o
 .PHONY : randomforest.o
 
@@ -527,6 +563,9 @@ help:
 	@echo "... gradMexTest.o"
 	@echo "... gradMexTest.i"
 	@echo "... gradMexTest.s"
+	@echo "... gradientMex.o"
+	@echo "... gradientMex.i"
+	@echo "... gradientMex.s"
 	@echo "... randomforest.o"
 	@echo "... randomforest.i"
 	@echo "... randomforest.s"
