@@ -461,12 +461,13 @@ void splitRawArray(float *arr, int rows, int cols, int dims, std::vector<cv::Mat
 }
 
 #include "convTri.h"
-void gradientMagnitude(cv::Mat &img, cv::Mat &M, cv::Mat &O){
+void gradientMagnitude(cv::Mat &img_o, cv::Mat &M, cv::Mat &O){
+    cv::Mat img = img_o.clone();
     cv::Size orig_size = img.size();
     M = cv::Mat::zeros(orig_size, CV_32F);
     O = cv::Mat::zeros(orig_size, CV_32F);
     float *img_buf = extractRawData(img);
-    gradMag(img_buf, (float *)M.data, (float *)O.data, orig_size.width, orig_size.height,img.channels(),1);
+    gradMag(img_buf, (float *)M.data, (float *)O.data, orig_size.width, orig_size.height,img.channels(),0);
 
     //normRad = 4
     cv::Mat S = convTri(M, 4);
@@ -475,7 +476,9 @@ void gradientMagnitude(cv::Mat &img, cv::Mat &M, cv::Mat &O){
     delete[] img_buf;
 }
 
-void gradientHist(cv::Mat &M, cv::Mat &O, int s, std::vector<cv::Mat> *res){
+void gradientHist(cv::Mat &M_o, cv::Mat &O_o, int s, std::vector<cv::Mat> *res){
+    cv::Mat M = M_o.clone();
+    cv::Mat O = O_o.clone();
     cv::Size orig_size = M.size();
     int h = orig_size.width; int w = orig_size.height;
     const int shrink = 2; //const int s = 2;
@@ -485,7 +488,7 @@ void gradientHist(cv::Mat &M, cv::Mat &O, int s, std::vector<cv::Mat> *res){
     int hb = h/binSize; int wb = w/binSize;
     int nChns = nOrients;
     float *H_buf = new float[hb * wb * nChns];
-    gradHist((float *)M.data, (float *)O.data, H_buf, h, w, binSize, nOrients, softBin, 1);
+    gradHist((float *)M.data, (float *)O.data, H_buf, h, w, binSize, nOrients, softBin, 0);
     splitRawArray(H_buf, wb, hb, nOrients, res);
     delete[] H_buf;
 }

@@ -16,8 +16,8 @@
 #include <unistd.h>
 
 void chnTest(){
-    // cv::Mat img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
-    cv::Mat img = cv::imread("imgs/img/1.jpg");
+     cv::Mat img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
+    //cv::Mat img = cv::imread("imgs/img/1.jpg");
     //img.convertTo(img, CV_32FC3);
     cv::cvtColor(img, img, CV_BGR2Luv);
 
@@ -28,15 +28,16 @@ void chnTest(){
     cv::imwrite("tmp.bmp", chnReg[4]);
     for (int i = 0; i < chnReg.size();i++){
         char name[100];
-        sprintf(name, "r %d", i);
-        std::cout << chnReg[i];
+        sprintf(name, "r %d\n", i);
+        printf(name);
+        //std::cout << chnReg[i];
         cv::Mat tmp;
         cv::normalize(chnReg[i], tmp, 0, 1.0, cv::NORM_MINMAX);
         cv::imshow(name, tmp);
-        cv::normalize(chnSim[i], tmp, 0, 1.0, cv::NORM_MINMAX);
-        sprintf(name, "s %d", i);
-        cv::imshow(name, tmp);
-    cv::waitKey();
+        //cv::normalize(chnSim[i], tmp, 0, 1.0, cv::NORM_MINMAX);
+        //sprintf(name, "s %d", i);
+        //cv::imshow(name, tmp);
+        cv::waitKey();
     }
     cv::waitKey();
 }
@@ -59,7 +60,7 @@ void patchesTest(){
 }
 
 int main(){
-    //chnTest();
-    patchesTest();
+    chnTest();
+    //patchesTest();
     return 0;
 }

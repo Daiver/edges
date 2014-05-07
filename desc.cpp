@@ -189,6 +189,9 @@ void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat>
     std::vector<cv::Mat> res;
     cv::Mat imShrink, img;
     img_o.convertTo(img, CV_32FC3);
+    img = img(
+            cv::Range(0, img.rows - img.rows%32),
+            cv::Range(0, img.cols - img.cols%32));
     //img = img_o;
     cv::pyrDown(img, imShrink);
     std::vector<cv::Mat> sep_channels;
@@ -203,9 +206,13 @@ void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat>
             img = imShrink;
         cv::Mat M, O;
         //gradientMag<float>(img, M, O, 4, .01);
+        //printf("before grads\n");
         gradientMagnitude(img, M, O);
+        //printf("after grads1\n");
         std::vector<cv::Mat> ori;
-        gradientHist(M, O, shr, &ori);
+        gradientHist(M, O, 2, &ori);
+        //gradientHist(M, O, shr+1, &ori);
+        //printf("after grads\n");
         /*for(auto &im : ori){
             
         }*/
@@ -235,6 +242,7 @@ void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat>
             cv::pyrDown(M,M);
             cv::pyrDown(O,O);
             //for(int k = 0; k < 4; k++) cv::pyrDown(d[k], d[k]);
+            for(int k = 0; k < ori.size(); k++) cv::pyrDown(ori[k], ori[k]);
         }
 
         res.push_back(M);
@@ -243,6 +251,7 @@ void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat>
         //for(int k = 0; k < 4; k++) res.push_back(d[k]);
     }
     for(auto &im : res){
+        //chnReg->push_back(im);
         chnReg->push_back(convTri(im, 1));
         chnSim->push_back(convTri(im, 4));
     }
