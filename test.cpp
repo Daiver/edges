@@ -17,9 +17,10 @@
 #include <unistd.h>
 
 void dimSortTest(){
+    printf("Start\n");
     std::vector<std::vector<float>> train_data;
-    int dt_size = 10000;
-    int ft_size = 7228;
+    int dt_size = 30000; int ft_size = 7228;
+    //int dt_size = 10; int ft_size = 7;
     srand(time(NULL));
     for(int i = 0; i < dt_size; i++){
         std::vector<float> tmp;
@@ -29,22 +30,39 @@ void dimSortTest(){
         train_data.push_back(tmp);
     }
     std::vector<int> f_idxs;
-    for(int i = 0; i < ft_size/3; i++){
+    for(int i = 0; i < ft_size/5; i++){
         f_idxs.push_back(rand() % ft_size);
     }
     std::vector<int> data_idx;
-    for(int i = 0; i < dt_size/5; i++){
+    for(int i = 0; i < dt_size/3; i++){
         data_idx.push_back(rand() % dt_size);
     }
+    /*
+    for(auto x:train_data){
+        for(auto y:x){
+            printf("%f ", y);
+        }
+        printf("\n");
+    }*/
     int **idxs = dimSort(&train_data, f_idxs, &data_idx);
+    //idxs[0][0] = 0;
     for(int fid = 0; fid < f_idxs.size(); fid++){
         for(int i = 1; i < data_idx.size(); i++){
             float val0 = train_data[data_idx[idxs[fid][i - 1]]][f_idxs[fid]];
             float val1 = train_data[data_idx[idxs[fid][i]]][f_idxs[fid]];
-            if(val1 < val0)
-                printf("ERRR\n");
+            //printf("%d %d %f %f\n", f_idxs[fid], data_idx[idxs[fid][i]], val0, val1);
+            if(val1 < val0){
+                printf("ERRR \n");
+                printf("%d %d %f %f\n", f_idxs[fid], data_idx[idxs[fid][i]], val0, val1);
+            }
         }
+        //printf("\n");
     }
+    printf("End\n");
+}
+
+void dimSortTest2(){
+    for(int i = 0; i < 10; i++) dimSortTest();
 }
 
 void chnTest(){
@@ -92,7 +110,7 @@ void patchesTest(){
 }
 
 int main(){
-    dimSortTest();
+    dimSortTest2();
     //chnTest();
     //patchesTest();
     return 0;
