@@ -296,13 +296,14 @@ TreeNode *DecisionTree::buildnode(
         f_idxs.at(col_idx) = col;
         col_idx++;
     }
-    std::vector<int> idxs_old(data_idx.size());
-    for(int i = 0; i < idxs_old.size(); i++) {idxs_old[i] = i;}
+    //std::vector<int> idxs_old(data_idx.size());
+    //for(int i = 0; i < idxs_old.size(); i++) {idxs_old[i] = i;}
 #ifdef DECISION_TREE_DEBUG
     printf("start sort\n");
 #endif
     //printf("start sort\n");
-    int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
+    int **idxs = dimSort(this->train_data, f_idxs, &data_idx);
+    //int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
     /*for(int f = 0; f < f_idxs.size(); f++){
         int val0 = this->train_data->at(data_idx[idxs[f][0]])[f_idxs[f]];
         for(int i = 1; i < data_idx.size(); i++){

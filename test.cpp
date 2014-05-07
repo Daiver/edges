@@ -4,6 +4,7 @@
 #include "randomforest.h"
 #include "desc.h"
 #include "detect.h"
+#include "dimSort.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +15,37 @@
 #include <vector>
 #include <iostream>
 #include <unistd.h>
+
+void dimSortTest(){
+    std::vector<std::vector<float>> train_data;
+    int dt_size = 10000;
+    int ft_size = 7228;
+    srand(time(NULL));
+    for(int i = 0; i < dt_size; i++){
+        std::vector<float> tmp;
+        for(int j = 0; j < ft_size; j++){
+            tmp.push_back(rand() % 1000);
+        }
+        train_data.push_back(tmp);
+    }
+    std::vector<int> f_idxs;
+    for(int i = 0; i < ft_size/3; i++){
+        f_idxs.push_back(rand() % ft_size);
+    }
+    std::vector<int> data_idx;
+    for(int i = 0; i < dt_size/5; i++){
+        data_idx.push_back(rand() % dt_size);
+    }
+    int **idxs = dimSort(&train_data, f_idxs, &data_idx);
+    for(int fid = 0; fid < f_idxs.size(); fid++){
+        for(int i = 1; i < data_idx.size(); i++){
+            float val0 = train_data[data_idx[idxs[fid][i - 1]]][f_idxs[fid]];
+            float val1 = train_data[data_idx[idxs[fid][i]]][f_idxs[fid]];
+            if(val1 < val0)
+                printf("ERRR\n");
+        }
+    }
+}
 
 void chnTest(){
      cv::Mat img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
@@ -60,7 +92,8 @@ void patchesTest(){
 }
 
 int main(){
-    chnTest();
+    dimSortTest();
+    //chnTest();
     //patchesTest();
     return 0;
 }
