@@ -25,8 +25,8 @@ void chnTest(){
     std::vector<cv::Mat> chnReg, chnSim;
     imageChns(img, &chnReg, &chnSim);
     printf("%d %d \n", chnReg.size(), chnSim.size());
-    cv::imwrite("tmp.bmp", chnReg[4]);
-    for (int i = 3; i < chnReg.size();i++){
+    //cv::imwrite("tmp.bmp", chnReg[4]);
+    for (int i = 0; i < chnReg.size();i++){
         char name[100];
         sprintf(name, "r %d\n", i);
         printf(name);
@@ -35,9 +35,9 @@ void chnTest(){
         cv::normalize(chnReg[i], tmp, 0, 1.0, cv::NORM_MINMAX);
         cv::imshow(name, tmp);
         //cv::normalize(chnSim[i], tmp, 0, 1.0, cv::NORM_MINMAX);
-        //sprintf(name, "s %d", i);
-        //cv::imshow(name, tmp);
-        cv::waitKey();
+        sprintf(name, "s %d", i);
+        cv::imshow(name, tmp);
+        //cv::waitKey();
     }
     cv::waitKey();
 }

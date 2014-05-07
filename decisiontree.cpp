@@ -277,6 +277,7 @@ TreeNode *DecisionTree::buildnode(
     int *class_freqsR = new int[num_of_classes];
     int num_of_samplesL = 0, num_of_samplesR = 0;
     //int **idxs = getOrderedIdxs(&data, f_idxs, idxs_old);
+    //printf("before sort\n");
 #ifdef DECISION_TREE_DEBUG
     printf("before sort\n");
 #endif
@@ -300,6 +301,7 @@ TreeNode *DecisionTree::buildnode(
 #ifdef DECISION_TREE_DEBUG
     printf("start sort\n");
 #endif
+    //printf("start sort\n");
     int **idxs = dimSort(this->train_data, f_idxs, &data_idx, idxs_old);
     /*for(int f = 0; f < f_idxs.size(); f++){
         int val0 = this->train_data->at(data_idx[idxs[f][0]])[f_idxs[f]];
@@ -310,6 +312,7 @@ TreeNode *DecisionTree::buildnode(
             val0 = val;
         }
     }*/
+    //printf("end sort\n");
 #ifdef DECISION_TREE_DEBUG
     printf("end sort\n");
 #endif
