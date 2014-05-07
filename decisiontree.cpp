@@ -479,14 +479,14 @@ TreeNode *DecisionTree::buildnode(
 
 #ifdef ENABLE_TBB_NODES
             tbb::task_group g;
-            if(ml2.size() > 50){
+            if(ml2.size() > 100){
                 g.run([&]{
                     res->left  = buildnode(ml2, g2, depth + 1);
                 }); // spawn a task
             }else{
                 res->left  = buildnode(ml2, g2, depth + 1);
             }
-            if(ml1.size() > 50){
+            if(ml1.size() > 100){
                 g.run([&]{
                     res->right = buildnode(ml1, g1, depth + 1);
                 }); // spawn another task

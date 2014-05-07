@@ -26,7 +26,7 @@ void chnTest(){
     imageChns(img, &chnReg, &chnSim);
     printf("%d %d \n", chnReg.size(), chnSim.size());
     cv::imwrite("tmp.bmp", chnReg[4]);
-    for (int i = 0; i < chnReg.size();i++){
+    for (int i = 3; i < chnReg.size();i++){
         char name[100];
         sprintf(name, "r %d\n", i);
         printf(name);

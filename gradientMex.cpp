@@ -11,6 +11,7 @@
 #include <math.h>
 #include "string.h"
 #include "sse.hpp"
+#include <stdio.h>
 
 //#include "convTri.h"
 #define PI 3.14159265f
@@ -158,6 +159,7 @@ void gradQuantize( float *O, float *M, int *O0, int *O1, float *M0, float *M1,
 }
 
 // compute nOrients gradient histograms per bin x bin block of pixels
+#include <string.h>
 void gradHist( float *M, float *O, float *H, int h, int w,
   int bin, int nOrients, int softBin, bool full )
 {
@@ -166,12 +168,17 @@ void gradHist( float *M, float *O, float *H, int h, int w,
   float *H0, *H1, *M0, *M1; int x, y; int *O0, *O1;
   O0=(int*)alMalloc(h*sizeof(int),16); M0=(float*) alMalloc(h*sizeof(float),16);
   O1=(int*)alMalloc(h*sizeof(int),16); M1=(float*) alMalloc(h*sizeof(float),16);
+  memset(O0, 0, h*sizeof(int));
+  memset(O1, 0, h*sizeof(int));
+  memset(M0, 0, h*sizeof(int));
+  memset(M1, 0, h*sizeof(int));
   // main loop
   for( x=0; x<w0; x++ ) {
     // compute target orientation bins for entire column - very fast
     gradQuantize(O+x*h,M+x*h,O0,O1,M0,M1,nb,h0,sInv2,nOrients,full,softBin>=0);
 
-    if( softBin<0 && softBin%2==0 ) {
+    /*if( softBin<0 && softBin%2==0 ) {
+        printf("HERE\n");
       // no interpolation w.r.t. either orienation or spatial bin
       H1=H+(x/bin)*hb;
       #define GH H1[O0[y]]+=M0[y]; y++;
@@ -182,18 +189,25 @@ void gradHist( float *M, float *O, float *H, int h, int w,
       else for( y=0; y<h0;) { for( int y1=0; y1<bin; y1++ ) { GH; } H1++; }
       #undef GH
 
-    } else if( softBin%2==0 || bin==1 ) {
+    } else*/ if( softBin%2==0 || bin==1 ) {
       // interpolate w.r.t. orientation only, not spatial bin
       H1=H+(x/bin)*hb;
       #define GH H1[O0[y]]+=M0[y]; H1[O1[y]]+=M1[y]; y++;
-      if( bin==1 )      for(y=0; y<h0;) { GH; H1++; }
-      else if( bin==2 ) for(y=0; y<h0;) { GH; GH; H1++; }
-      else if( bin==3 ) for(y=0; y<h0;) { GH; GH; GH; H1++; }
-      else if( bin==4 ) for(y=0; y<h0;) { GH; GH; GH; GH; H1++; }
-      else for( y=0; y<h0;) { for( int y1=0; y1<bin; y1++ ) { GH; } H1++; }
+      if( bin==1 )      { 
+        for(y=0; y<h0;) { GH; H1++; }
+      } /*else if( bin==2 ) {
+        for(y=0; y<h0;) { GH; GH; H1++; }
+      } else if( bin==3 ) {
+        for(y=0; y<h0;) { GH; GH; GH; H1++; }
+      } else if( bin==4 ) { 
+        for(y=0; y<h0;) { GH; GH; GH; GH; H1++; }
+      } else {
+        for( y=0; y<h0;) { for( int y1=0; y1<bin; y1++ ) { GH; } H1++; }
+      }*/
+      
       #undef GH
 
-    } else {
+    } /*else {
       // interpolate using trilinear interpolation
       float ms[4], xyd, xb, yb, xd, yd, init; __m128 _m, _m0, _m1;
       bool hasLf, hasRt; int xb0, yb0;
@@ -231,16 +245,16 @@ void gradHist( float *M, float *O, float *H, int h, int w,
       }
       #undef GHinit
       #undef GH
-    }
+    }*/
   }
   alFree(O0); alFree(O1); alFree(M0); alFree(M1);
   // normalize boundary bins which only get 7/8 of weight of interior bins
-  if( softBin%2!=0 ) for( int o=0; o<nOrients; o++ ) {
+  /*if( softBin%2!=0 ) for( int o=0; o<nOrients; o++ ) {
     x=0; for( y=0; y<hb; y++ ) H[o*nb+x*hb+y]*=8.f/7.f;
     y=0; for( x=0; x<wb; x++ ) H[o*nb+x*hb+y]*=8.f/7.f;
     x=wb-1; for( y=0; y<hb; y++ ) H[o*nb+x*hb+y]*=8.f/7.f;
     y=hb-1; for( x=0; x<wb; x++ ) H[o*nb+x*hb+y]*=8.f/7.f;
-  }
+  }*/
 }
 
 /******************************************************************************/
@@ -435,8 +449,7 @@ void mexFunction( int nl, mxArray *pl[], int nr, const mxArray *pr[] ) {
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <string.h>
-//#include "gradientMex.h"
+#include "gradientMex.h"
 
 float* extractRawData(cv::Mat &img){
     std::vector<cv::Mat> channels;
@@ -456,6 +469,10 @@ void splitRawArray(float *arr, int rows, int cols, int dims, std::vector<cv::Mat
     for(int i = 0; i < dims; i++){
         res->push_back(cv::Mat::zeros(rows, cols, CV_32FC1));
         float *buf = (float*)(res->at(i)).data;
+        //float *arr = arr + (rows, cols);
+        //for(int ii = 0 ; ii < rows ; ii++){
+
+        //}
         memcpy(buf, arr + (rows*cols)*i, sizeof(float) * (rows*cols));
     }
 }
@@ -467,20 +484,18 @@ void gradientMagnitude(cv::Mat &img_o, cv::Mat &M, cv::Mat &O){
     M = cv::Mat::zeros(orig_size, CV_32F);
     O = cv::Mat::zeros(orig_size, CV_32F);
     float *img_buf = extractRawData(img);
-    gradMag(img_buf, (float *)M.data, (float *)O.data, orig_size.width, orig_size.height,img.channels(),0);
+    gradMag(img_buf, (float *)M.data, (float *)O.data, orig_size.width, orig_size.height,img.channels(),1);
 
     //normRad = 4
     cv::Mat S = convTri(M, 4);
-
     gradMagNorm((float *)M.data,(float *)S.data,orig_size.width,orig_size.height, 0.01);
     delete[] img_buf;
 }
 
-void gradientHist(cv::Mat &M_o, cv::Mat &O_o, int s, std::vector<cv::Mat> *res){
-    cv::Mat M = M_o.clone();
-    cv::Mat O = O_o.clone();
+void gradientHist(cv::Mat &M, cv::Mat &O, int s, std::vector<cv::Mat> *res){
     cv::Size orig_size = M.size();
     int h = orig_size.width; int w = orig_size.height;
+    //int h = orig_size.height; int w = orig_size.width;
     const int shrink = 2; //const int s = 2;
     int binSize = std::max(1, shrink/s); //shrink = 2 ; //s {1, 2}
     int nOrients = 4;
@@ -488,7 +503,8 @@ void gradientHist(cv::Mat &M_o, cv::Mat &O_o, int s, std::vector<cv::Mat> *res){
     int hb = h/binSize; int wb = w/binSize;
     int nChns = nOrients;
     float *H_buf = new float[hb * wb * nChns];
-    gradHist((float *)M.data, (float *)O.data, H_buf, h, w, binSize, nOrients, softBin, 0);
+    memset(H_buf,0,hb*wb*nChns * sizeof(float));
+    gradHist((float *)M.data, (float *)O.data, H_buf, h, w, binSize, nOrients, softBin, 1);
     splitRawArray(H_buf, wb, hb, nOrients, res);
     delete[] H_buf;
 }
