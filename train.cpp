@@ -103,13 +103,13 @@ int main(){
     }
     cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     cv::Mat test_res = detect2(tree, test_img);
-    cv::imwrite("test1.jpg", test_res);
+    cv::imwrite("test1.png", test_res);
     test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     test_res = detect2(tree, test_img);
-    cv::imwrite("test2.jpg", test_res);
+    cv::imwrite("test2.png", test_res);
     test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/22090.jpg");
     test_res = detect2(tree, test_img);
-    cv::imwrite("test3.jpg", test_res);
+    cv::imwrite("test3.png", test_res);
 
 
     {

@@ -78,15 +78,18 @@ void chnTest(){
     //cv::imwrite("tmp.bmp", chnReg[4]);
     for (int i = 0; i < chnReg.size();i++){
         char name[100];
-        sprintf(name, "r %d\n", i);
+        sprintf(name, "dump/r-%d.png\n", i);
         printf(name);
         //std::cout << chnReg[i];
         cv::Mat tmp;
-        cv::normalize(chnReg[i], tmp, 0, 1.0, cv::NORM_MINMAX);
+        cv::normalize(chnReg[i], tmp, 0, 255.0, cv::NORM_MINMAX);
+        cv::imwrite(name, tmp);
+
         cv::imshow(name, tmp);
-        //cv::normalize(chnSim[i], tmp, 0, 1.0, cv::NORM_MINMAX);
-        sprintf(name, "s %d", i);
+        cv::normalize(chnSim[i], tmp, 0, 255.0, cv::NORM_MINMAX);
+        sprintf(name, "dump/s-%d.png\n", i);
         cv::imshow(name, tmp);
+        cv::imwrite(name, tmp);
         //cv::waitKey();
     }
     cv::waitKey();

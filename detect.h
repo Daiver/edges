@@ -106,6 +106,7 @@ cv::Mat detect(RandomForest &tree, cv::Mat img_o){
 cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
     cv::Mat img, fin_edges;
     fin_edges = cv::Mat::zeros(img_o.rows, img_o.cols, CV_8U);
+    //fin_edges = cv::Mat::zeros(img_o.rows, img_o.cols, CV_32F);
     cv::cvtColor(img_o, img, CV_BGR2Luv);
     std::vector<cv::Mat> chnReg, chnSim;
     imageChns(img, &chnReg, &chnSim);
@@ -155,7 +156,19 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             int cJ = j + img_w/2;
             //patchesToVec(tileCopy, &desc);
             std::vector<cv::Mat> ress = tree.predict(desc);
-            auto res = ress[ress.size() - 1];
+            //auto res = ress[ress.size() - 1];
+            //cv::Mat res = cv::Mat::zeros(ress[0].rows, ress[0].cols, CV_32F);
+            cv::Mat res = cv::Mat::zeros(ress[0].rows, ress[0].cols, CV_8U);
+            for(int fff = 0; fff < ress.size() -1;fff++){
+                cv::Mat tmp;
+                cv::Canny(ress[fff], tmp, 0, 1);
+                tmp /= 255;
+                res+= tmp;
+            }
+            //std::cout << res;
+            res /=2;//((ress.size() - 1)/2);
+            res *= 50;
+            //res = res > 1;
             //res.convertTo(res, CV_32F);
             //float minE = *std::min_element(res.begin<float>(), res.end<float>());
             //float maxE = *std::max_element(res.begin<float>(), res.end<float>());
@@ -163,7 +176,8 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             //res = (res - minE) / maxE;
             //cv::normalize(res, res, 0.0, 1.0, cv::NORM_MINMAX);
             cv::Mat edges, tmp2, tmpO;
-            cv::Canny(res, edges, 0, 1);
+            //cv::Canny(res, edges, 0, 1);
+            edges = res;
             cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
             cv::pyrUp(tmp2, tmp2);
             cv::pyrUp(tmp2, tmp2);
@@ -182,13 +196,15 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             int sj = cJ - gt_w/2;
             if(edges.cols != 16 || edges.rows != 16){printf("Bad edges size %d %d\n", edges.rows, edges.cols);}
             if(edges.channels() > 1) printf("ERR edges ch %d\n", edges.channels());
-            //if(edges.depth() != CV_8U) printf("ERR\n");
+            if(edges.depth() != CV_8U) printf("ERR\n");
             for(int ii = 0; ii < 16;ii++){
                 for(int  jj = 0; jj < 16;jj++){
                     //if (edges.at<float>(ii, jj) < 0){
                     //    printf("sub zero %d %d %f\n", ii, jj, edges.at<float>(ii, jj));
                     // }
+                        //fin_edges.at<float>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
                         fin_edges.at<uchar>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
+                        
                         //fin_edges.at<float>(ii + si, jj + sj) = edges.at<float>(ii, jj);
                         //fin_edges.at<uchar>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
                         //printf("is 1\n");
@@ -200,7 +216,8 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             }
         }
     }
-
+    if(fin_edges.depth() != CV_32F)
+        fin_edges.convertTo(fin_edges, CV_32F);
     return  convTri(fin_edges, 1);
 }
 

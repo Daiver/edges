@@ -137,7 +137,7 @@ void DecisionTree::finalDivide(
 }
 
 
-#define gini3(p) p*p
+#define gini3(p) (p)*(p)
 typedef unsigned int uint32;
 // perform actual computation
 void forestFindThr( int H, int N, int F, 
@@ -186,27 +186,17 @@ void forestFindThr( int H, int N, int F,
       h=hs[j1];
       //if(split==0) {
         // gini = 1-\sum_h p_h^2; v = gini_l*pl + gini_r*pr
-        wl+=ws_const;//ws[j1]; 
+      wl+=ws_const;//ws[j1]; 
           //printf("Wl %d %d\n", h, H);
-        gl-=gini3(Wl[h]); 
-        Wl[h]+=ws_const;//ws[j1]; 
-        gl+=gini3(Wl[h]);
+      gl-=gini3(Wl[h]); 
+      Wl[h]+=ws_const;//ws[j1]; 
+      gl+=gini3(Wl[h]);
 
-        wr-=ws_const;//ws[j1]; 
-        gr-=gini3(Wr[h]); 
-        Wr[h]-=ws_const;//ws[j1]; 
-        gr+=gini3(Wr[h]);
-        v = (wl-gl/wl)/w + (wr-gr/wr)/w;
-      /*} else if (split==1) {
-        // entropy = -\sum_h p_h log(p_h); v = entropy_l*pl + entropy_r*pr
-        v = gl/w + gr/w;
-      } else if (split==2) {
-        // twoing: v = pl*pr*\sum_h(|p_h_left - p_h_right|)^2 [slow if H>>0]
-        j1=order1[j]; j2=order1[j+1]; h=hs[j1]-1;
-        wl+=ws[j1]; Wl[h]+=ws[j1]; wr-=ws[j1]; Wr[h]-=ws[j1];
-        g=0; for( int h1=0; h1<H; h1++ ) g+=fabs(Wl[h1]/wl-Wr[h1]/wr);
-        v = - wl/w*wr/w*g*g;
-      }*/
+      wr-=ws_const;//ws[j1]; 
+      gr-=gini3(Wr[h]); 
+      Wr[h]-=ws_const;//ws[j1]; 
+      gr+=gini3(Wr[h]);
+      v = (wl-gl/wl)/w + (wr-gr/wr)/w;
       //printf("data %d %d %d %d %d\n", j1, j1, data_idx.size(), i, F);
       float d1 = data->at(data_idx[j1])[f_idxs[i]];
       float d2 = data->at(data_idx[j2])[f_idxs[i]];
@@ -230,6 +220,7 @@ void forestFindThr( int H, int N, int F,
   //printf("freee3\n");
   delete [] W; 
   gain = vInit-vBst;
+  printf("GAIN %f %f %f\n", vInit, vBst, gain);
   //printf("ini %f bst %f\n", vInit, vBst);
   //printf("freee end\n");
 }

@@ -125,7 +125,7 @@ int main(int argc, char** argv){
     cv::Mat test_res = detect2(tree, test_img);
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
-    cv::imwrite("res.jpg", test_res);
+    cv::imwrite("res.png", test_res);
     cv::waitKey();
     std::vector<cv::Mat> images, gtruth;
     read_imgList2("images2.txt", &images, &gtruth);
