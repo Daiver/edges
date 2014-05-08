@@ -177,7 +177,7 @@ void gradHist( float *M, float *O, float *H, int h, int w,
     // compute target orientation bins for entire column - very fast
     gradQuantize(O+x*h,M+x*h,O0,O1,M0,M1,nb,h0,sInv2,nOrients,full,softBin>=0);
 
-    /*if( softBin<0 && softBin%2==0 ) {
+    if( softBin<0 && softBin%2==0 ) {
         printf("HERE\n");
       // no interpolation w.r.t. either orienation or spatial bin
       H1=H+(x/bin)*hb;
@@ -189,13 +189,13 @@ void gradHist( float *M, float *O, float *H, int h, int w,
       else for( y=0; y<h0;) { for( int y1=0; y1<bin; y1++ ) { GH; } H1++; }
       #undef GH
 
-    } else*/ if( softBin%2==0 || bin==1 ) {
+    } else if( softBin%2==0 || bin==1 ) {
       // interpolate w.r.t. orientation only, not spatial bin
       H1=H+(x/bin)*hb;
       #define GH H1[O0[y]]+=M0[y]; H1[O1[y]]+=M1[y]; y++;
       if( bin==1 )      { 
         for(y=0; y<h0;) { GH; H1++; }
-      } /*else if( bin==2 ) {
+      } else if( bin==2 ) {
         for(y=0; y<h0;) { GH; GH; H1++; }
       } else if( bin==3 ) {
         for(y=0; y<h0;) { GH; GH; GH; H1++; }
@@ -203,11 +203,11 @@ void gradHist( float *M, float *O, float *H, int h, int w,
         for(y=0; y<h0;) { GH; GH; GH; GH; H1++; }
       } else {
         for( y=0; y<h0;) { for( int y1=0; y1<bin; y1++ ) { GH; } H1++; }
-      }*/
+      }
       
       #undef GH
 
-    } /*else {
+    } else {
       // interpolate using trilinear interpolation
       float ms[4], xyd, xb, yb, xd, yd, init; __m128 _m, _m0, _m1;
       bool hasLf, hasRt; int xb0, yb0;
@@ -245,16 +245,16 @@ void gradHist( float *M, float *O, float *H, int h, int w,
       }
       #undef GHinit
       #undef GH
-    }*/
+    }
   }
   alFree(O0); alFree(O1); alFree(M0); alFree(M1);
   // normalize boundary bins which only get 7/8 of weight of interior bins
-  /*if( softBin%2!=0 ) for( int o=0; o<nOrients; o++ ) {
+  if( softBin%2!=0 ) for( int o=0; o<nOrients; o++ ) {
     x=0; for( y=0; y<hb; y++ ) H[o*nb+x*hb+y]*=8.f/7.f;
     y=0; for( x=0; x<wb; x++ ) H[o*nb+x*hb+y]*=8.f/7.f;
     x=wb-1; for( y=0; y<hb; y++ ) H[o*nb+x*hb+y]*=8.f/7.f;
     y=hb-1; for( x=0; x<wb; x++ ) H[o*nb+x*hb+y]*=8.f/7.f;
-  }*/
+  }
 }
 
 /******************************************************************************/

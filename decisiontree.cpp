@@ -114,7 +114,7 @@ void DecisionTree::divideSet(
 
 void DecisionTree::finalDivide(
         const std::vector<int> &data_idx, 
-        const std::vector<OutputData> &labels,
+        //const std::vector<OutputData> &labels,
         //const std::vector<cv::Mat> &seg,
         int col, InputValue value, 
         std::vector<OutputData> *l1, std::vector<OutputData> *l2,
@@ -210,10 +210,12 @@ void forestFindThr( int H, int N, int F,
       //printf("data %d %d %d %d %d\n", j1, j1, data_idx.size(), i, F);
       float d1 = data->at(data_idx[j1])[f_idxs[i]];
       float d2 = data->at(data_idx[j2])[f_idxs[i]];
+      if (d2 < d1) {printf("ERRR");}
       //printf("d1 %f\n", d1);
       if( v<vBst && d2 - d1>=1e-6f ) {
       //if( v<vBst && data->at(i)[j2]-data->at(i)[j1]>=1e-6f ) {
-        vBst=v; fid=i; thr=0.5f*(d1 + d2); }
+        vBst=v; fid=i; thr=0.5f*(d1 + d2); 
+      }
         //vBst=v; fid=i+1; thr=0.5f*(data->at(i)[j1]+data->at(i)[j2]); }
         //vBst=v; fid=i+1; thr=0.5f*(data1[j1]+data1[j2]); }
     }
@@ -259,7 +261,7 @@ TreeNode *DecisionTree::buildnode(
     selectFeaturesFromPatches(segments, &labels, &num_of_classes, &seg_idx);
     //printf("end OF sel\n");
 
-    double current_score = this->ginii(labels, num_of_classes);
+    //double current_score = this->ginii(labels, num_of_classes);
 #ifdef DECISION_TREE_DEBUG
     printf("score %f %d depth %d\n", current_score, labels.size(), depth);
 #endif
@@ -273,9 +275,9 @@ TreeNode *DecisionTree::buildnode(
     //int m_small = (int)sqrt(this->train_data[0].size());
     int m_small = (this->train_data->at(0).size())/2;
 
-    int *class_freqsL = new int[num_of_classes];
-    int *class_freqsR = new int[num_of_classes];
-    int num_of_samplesL = 0, num_of_samplesR = 0;
+    //int *class_freqsL = new int[num_of_classes];
+    //int *class_freqsR = new int[num_of_classes];
+    //int num_of_samplesL = 0, num_of_samplesR = 0;
     //int **idxs = getOrderedIdxs(&data, f_idxs, idxs_old);
     //printf("before sort\n");
 #ifdef DECISION_TREE_DEBUG
@@ -333,81 +335,6 @@ TreeNode *DecisionTree::buildnode(
     printf("node %d %d %f \n", segments.size(), depth, best_gain);
     best_col = f_idxs[fid];
     //printf("ENd FFT\n");
-
-    /*for(int col_idx = 0; col_idx < m_small; col_idx++){
-        int col = f_idxs.at(col_idx);//(int)rand() % this->train_data->at(0).size();
-#ifdef DECISION_TREE_DEBUG2
-        if(col_idx % 500 == 0)
-            printf("col %d %d\n", col_idx, this->uvalues[col].size());
-#endif
-
-        //std::set<InputValue> val_set;
-        //for(auto &val : this->uvalues[col]){
-        //for(int val_idx : data_idx){
-        InputValue val0 = this->train_data->at(idxs[col_idx][0])[col]; // oh =(
-        for(int val_idx = 1; val_idx < data_idx.size(); val_idx++){
-            //if(idxs[col_idx][val_idx] >= this->train_data->size()) printf("!!!\n");
-            //printf("%d %d %d %d\n", idxs[col_idx][val_idx], col_idx, val_idx, col);
-
-            val0 = this->train_data->at(idxs[col_idx][val_idx - 1])[col]; // oh =(
-            InputValue val = this->train_data->at(idxs[col_idx][val_idx])[col]; // oh =(
-            //InputValue val = this->train_data->at(val_idx).at(col);
-            //if(val_set.find(val) != val_set.end()) continue;
-            //val_set.insert(val);
-            //std::vector<int> i1, i2;
-            //std::vector<OutputData> l1, l2;
-            //std::vector<cv::Mat>    g1, g2;
-            //this->divideSet(data_idx, labels, 
-            //        //segments, 
-            //        col, val, 
-            //        &l1, &l2, //&g1, &g2, 
-            //        &i1, &i2);
-            //for(int ii = 0; ii < num_of_classes; ii++){
-            //    class_freqsL[ii] = 0;
-            //    class_freqsR[ii] = 0;
-            // }
-            memset(class_freqsR, 0, sizeof(int) * num_of_classes);
-            memset(class_freqsL, 0, sizeof(int) * num_of_classes);
-            num_of_samplesR = 0; num_of_samplesL = 0;
-            if(val - val0 < 1e-6f) {val0 = val ; continue;}
-            for(int ii = 0; ii < data_idx.size(); ii++){
-                if((this->train_data->at(data_idx[ii]))[col] >= val0){
-                    class_freqsR[labels[ii]]++;
-                    num_of_samplesR++;
-                }
-                else{
-                    class_freqsL[labels[ii]]++;
-                    num_of_samplesL++;
-                }
-            }
-            if(num_of_samplesL == 0 || num_of_samplesR == 0) continue;
-            //double p = ((double)(l1.size()))/data_idx.size();
-            double p = ((double)(num_of_samplesR))/data_idx.size();
-            double gain = current_score - 
-                p*ginii2(class_freqsR, num_of_classes, num_of_samplesR) - 
-                (1 - p) * ginii2(class_freqsL, num_of_classes, num_of_samplesL);
-                //p*this->ginii(l1, num_of_classes) - 
-                //(1 - p) * this->ginii(l2, num_of_classes);
-            //printf("gain %f %d %d %d %d\n", gain, s1.size(), s2.size(), col, val);
-            if (gain > best_gain &&
-                    num_of_samplesR > 0 && num_of_samplesL > 0){
-                    //l1.size() > 0 && l2.size() > 0){
-                //best_value = val;
-                best_value = val0 + 0.5f*(val - val0);
-                best_gain = gain;
-                best_col = col;
-                //ml1.clear();
-                //ml2.clear();
-                //ml1 = i1; ml2 = i2;// ms1 = s1; ms2 = s2;
-                //ml1 = g1; ml2 = g2; ms1 = s1; ms2 = s2;
-                //ml1 = l1; ml2 = l2; ms1 = s1; ms2 = s2;
-            }
-            val0 = val;
-            //i1.clear(); i2.clear();
-        }
-    }
-    delete [] class_freqsR;delete [] class_freqsL;
-    */
     for(int i = 0; i < f_idxs.size(); i++){
         delete[] idxs[i];
     }
@@ -423,7 +350,8 @@ TreeNode *DecisionTree::buildnode(
         std::vector<int> ml1, ml2;
         //ml1.clear(); ml2.clear();
         //this->divideSet(data_idx, labels, 
-        finalDivide(data_idx, labels, 
+        finalDivide(data_idx, 
+                //labels, 
                 //segments, 
                 best_col, best_value, 
                 &l1, &l2, //&g1, &g2, 

@@ -110,8 +110,8 @@ void patchesTest(){
 }
 
 int main(){
-    dimSortTest2();
-    //chnTest();
+    //dimSortTest2();
+    chnTest();
     //patchesTest();
     return 0;
 }
