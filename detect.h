@@ -166,8 +166,8 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
                 res+= tmp;
             }
             //std::cout << res;
-            res /=2;//((ress.size() - 1)/2);
-            res *= 50;
+            res /=3;//((ress.size() - 1)/2);
+            res *= 20;
             //res = res > 1;
             //res.convertTo(res, CV_32F);
             //float minE = *std::min_element(res.begin<float>(), res.end<float>());
@@ -203,7 +203,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
                     //    printf("sub zero %d %d %f\n", ii, jj, edges.at<float>(ii, jj));
                     // }
                         //fin_edges.at<float>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
-                        fin_edges.at<uchar>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
+                        fin_edges.at<uchar>(ii + si, jj + sj) += edges.at<uchar>(ii, jj);
                         
                         //fin_edges.at<float>(ii + si, jj + sj) = edges.at<float>(ii, jj);
                         //fin_edges.at<uchar>(ii + si, jj + sj) = edges.at<uchar>(ii, jj);
@@ -216,9 +216,11 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             }
         }
     }
-    if(fin_edges.depth() != CV_32F)
-        fin_edges.convertTo(fin_edges, CV_32F);
-    return  convTri(fin_edges, 1);
+    cv::GaussianBlur(fin_edges, fin_edges, cv::Size(3,3), 0, 0);
+    return fin_edges;
+    //if(fin_edges.depth() != CV_32F)
+    //    fin_edges.convertTo(fin_edges, CV_32F);
+    //return  convTri(fin_edges, 1);
 }
 
 cv::Mat reproduce2(RandomForest &tree, cv::Mat img_o){

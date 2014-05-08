@@ -115,14 +115,16 @@ int main(int argc, char** argv){
 #ifdef DESC_DEBUG_ACT
     testDesc(); return 0;
 #endif
-    RandomForest tree(32);
+    RandomForest tree(8);
     tree.load("../model/forest");
 
     //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_img = cv::imread(argv[1]);
+    printf("BEFORE detect");
     cv::Mat test_res = detect2(tree, test_img);
+    printf("after detect");
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
     cv::imwrite("res.png", test_res);

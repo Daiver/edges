@@ -110,6 +110,9 @@ int main(){
     test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/22090.jpg");
     test_res = detect2(tree, test_img);
     cv::imwrite("test3.png", test_res);
+    test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/113044.jpg");
+    test_res = detect2(tree, test_img);
+    cv::imwrite("test4.png", test_res);
 
 
     {
