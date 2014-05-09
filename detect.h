@@ -217,6 +217,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
         }
     }
     cv::GaussianBlur(fin_edges, fin_edges, cv::Size(3,3), 0, 0);
+    cv::normalize(fin_edges, fin_edges, 0, 255, cv::NORM_MINMAX);
     return fin_edges;
     //if(fin_edges.depth() != CV_32F)
     //    fin_edges.convertTo(fin_edges, CV_32F);
