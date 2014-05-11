@@ -20,6 +20,7 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
     std::cout << img_dir_name << std::endl << gT_dir_name << std::endl;
     while (std::getline(file, line)) {
         for(int i = 1; i < 2; i++){
+            //printf("%s\n", (img_dir_name+line+".jpg").c_str());
             images->push_back(cv::imread(img_dir_name + line + ".jpg"));
             cv::cvtColor(images->at(images->size() - 1), images->at(images->size() - 1), CV_BGR2Luv);
             char name[512];

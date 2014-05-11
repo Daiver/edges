@@ -115,7 +115,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
     printf("Extracting....\n");
     int gt_w = 16;
     int img_w = 32;
-    int stride = 8;
+    int stride = 4;
     for (int i = 0; i < img.rows; i+=stride){
         for (int j = 0; j < img.cols; j+=stride){
             if(i/2 + img_w/2 >= img.rows/2 || j/2 + img_w/2 >= img.cols/2) continue;
@@ -159,15 +159,17 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             //auto res = ress[ress.size() - 1];
             //cv::Mat res = cv::Mat::zeros(ress[0].rows, ress[0].cols, CV_32F);
             cv::Mat res = cv::Mat::zeros(ress[0].rows, ress[0].cols, CV_8U);
-            for(int fff = 0; fff < ress.size() -1;fff++){
+            for(int fff = 0; fff < ress.size();fff++){
+            //for(int fff = 0; fff < ress.size() -1;fff++){
                 cv::Mat tmp;
                 cv::Canny(ress[fff], tmp, 0, 1);
                 tmp /= 255;
                 res+= tmp;
             }
             //std::cout << res;
-            res /=3;//((ress.size() - 1)/2);
-            res *= 20;
+            //res /=3.5;//((ress.size() - 1)/2);
+            //res = res > 2;
+            //res *= 20;
             //res = res > 1;
             //res.convertTo(res, CV_32F);
             //float minE = *std::min_element(res.begin<float>(), res.end<float>());
@@ -178,7 +180,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             cv::Mat edges, tmp2, tmpO;
             //cv::Canny(res, edges, 0, 1);
             edges = res;
-            cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
+            /*cv::normalize(res, tmp2, 0, 255, cv::NORM_MINMAX);
             cv::pyrUp(tmp2, tmp2);
             cv::pyrUp(tmp2, tmp2);
             cv::pyrUp(tmp2, tmp2);
@@ -187,7 +189,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             cv::pyrUp(tmp2, tmp2);
             cv::pyrUp(tmp2, tmp2);
             cv::imshow("E", tmp2);
-            cv::imshow("RR", fin_edges);
+            cv::imshow("RR", fin_edges);*/
             //cv::waitKey();
             //printf("i %d\n", i);
             //int sti = (i /(fin_edges.cols/8))*8;
@@ -216,6 +218,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             }
         }
     }
+    fin_edges = fin_edges > 7;
     cv::GaussianBlur(fin_edges, fin_edges, cv::Size(3,3), 0, 0);
     cv::normalize(fin_edges, fin_edges, 0, 255, cv::NORM_MINMAX);
     return fin_edges;
