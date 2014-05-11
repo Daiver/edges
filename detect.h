@@ -218,7 +218,7 @@ cv::Mat detect2(RandomForest &tree, cv::Mat img_o){
             }
         }
     }
-    fin_edges = fin_edges > 7;
+    fin_edges = fin_edges > 6;
     cv::GaussianBlur(fin_edges, fin_edges, cv::Size(3,3), 0, 0);
     cv::normalize(fin_edges, fin_edges, 0, 255, cv::NORM_MINMAX);
     return fin_edges;
