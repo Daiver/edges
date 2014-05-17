@@ -99,6 +99,25 @@ void gradMagTest2(){
     //cv::waitKey();
 }
 
+void massDetect(RandomForest *forest){
+    std::vector<cv::Mat> images, gtruth;
+    read_imgList2("test_images.txt", &images, &gtruth);
+    for(int i = 0; i < images.size(); i++){
+        //printf("r %d c %d\n", images[i].rows, images[i].cols);
+        if(images[i].cols == 0){
+           continue; 
+        }
+        auto res = detect2(*forest, images[i]);
+        char name[100];
+        sprintf(name, "../test_res/%d-res.png");
+        cv::imwrite(name, res);
+        sprintf(name, "../test_res/%d-ori.png");
+        cv::imwrite(name, images[i]);
+        sprintf(name, "../test_res/%d-tst.png");
+        cv::imwrite(name, gtruth[i]);
+    }
+}
+
 void testDesc(){
     cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/coding/edges/imgs/img/1.jpg");
@@ -122,9 +141,10 @@ int main(int argc, char** argv){
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/train/100075.jpg");
     //cv::Mat test_img = cv::imread("/home/daiver/BSR/BSDS500/data/images/test/29030.jpg");
     cv::Mat test_img = cv::imread(argv[1]);
-    printf("BEFORE detect");
+    if(strcmp(argv[1], "-t") == 0){
+        massDetect(&tree);
+    }
     cv::Mat test_res = detect2(tree, test_img);
-    printf("after detect");
     cv::imshow("ORIG", test_img);
     cv::imshow("rep", test_res);
     cv::imwrite("res.png", test_res);

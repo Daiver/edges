@@ -189,6 +189,7 @@ void imageChns(cv::Mat img_o, std::vector<cv::Mat> *chnReg, std::vector<cv::Mat>
     std::vector<cv::Mat> res;
     cv::Mat imShrink, img;
     img_o.convertTo(img, CV_32FC3);
+    //cv::cvtColor(img, img, CV_BGR2Luv);
     img = img(
             cv::Range(0, img.rows - img.rows%64),
             cv::Range(0, img.cols - img.cols%64));

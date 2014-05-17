@@ -17,11 +17,14 @@ void read_imgList2(const std::string& filename, std::vector<cv::Mat>* images,
     std::string line, img_dir_name, gT_dir_name;
     std::getline(file, img_dir_name);
     std::getline(file, gT_dir_name);
-    std::cout << img_dir_name << std::endl << gT_dir_name << std::endl;
+    std::cout << img_dir_name << std::endl << gT_dir_name << std::endl << std::endl;
     while (std::getline(file, line)) {
         for(int i = 1; i < 2; i++){
-            //printf("%s\n", (img_dir_name+line+".jpg").c_str());
             images->push_back(cv::imread(img_dir_name + line + ".jpg"));
+            printf("%s %d %d\n", (img_dir_name+line+".jpg").c_str(), 
+                    cv::imread(img_dir_name + line + ".jpg").rows,
+                    cv::imread(img_dir_name + line + ".jpg").cols
+                    );
             cv::cvtColor(images->at(images->size() - 1), images->at(images->size() - 1), CV_BGR2Luv);
             char name[512];
             sprintf(name, "%s%s.mat_%d.png", gT_dir_name.c_str(), line.c_str(), i);
